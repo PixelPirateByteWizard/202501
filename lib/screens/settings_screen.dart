@@ -4,6 +4,11 @@ import 'settings/help_screen.dart';
 import 'settings/terms_screen.dart';
 import 'settings/privacy_policy_screen.dart';
 import 'settings/feedback_screen.dart';
+import '../JoyeeIAP/SetDisparateBottomReference.dart';
+import 'settings/account_settings_screen.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../services/apple_auth_service.dart';
+import 'settings/ai_chat_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,7 +19,103 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final AppleAuthService _authService = AppleAuthService();
   String searchQuery = '';
+  bool _isLoading = true;
+  bool _isLoggedIn = false;
+  Map<String, String?> _userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserState();
+  }
+
+  Future<void> _loadUserState() async {
+    final isLoggedIn = await _authService.isLoggedIn();
+    final userData = await _authService.getUserData();
+    setState(() {
+      _isLoggedIn = isLoggedIn;
+      _userData = userData;
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _handleSignIn() async {
+    setState(() => _isLoading = true);
+    final success = await _authService.signInWithApple();
+    if (success) {
+      await _loadUserState();
+    } else {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign in failed. Please try again.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleSignOut() async {
+    await _authService.signOut();
+    await _loadUserState();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Successfully signed out')),
+      );
+    }
+  }
+
+  Future<void> _showDeleteAccountConfirmation() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+          'Are you sure you want to delete your account? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true) {
+      await _handleDeleteAccount();
+    }
+  }
+
+  Future<void> _handleDeleteAccount() async {
+    await _authService.deleteAccount();
+    await _loadUserState();
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Account Deletion Request'),
+          content: const Text(
+            'We have received your account deletion request. It will be processed within 48 business hours. You have been signed out.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -208,6 +309,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   children: [
+                    _buildAccountCard(),
+                    const SizedBox(height: 20),
                     _buildAboutCard(context),
                     const SizedBox(height: 20),
                     _buildHelpSupportCard(context),
@@ -286,8 +389,173 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Widget _buildAccountCard() {
+    return Card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Account',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: _isLoggedIn
+                            ? Colors.green.withOpacity(0.1)
+                            : Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        _isLoggedIn ? Icons.check_circle : Icons.person_outline,
+                        color: _isLoggedIn ? Colors.green : Colors.grey,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _isLoggedIn ? 'Signed In' : 'Not Signed In',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          if (_isLoggedIn &&
+                              _userData['name']?.isNotEmpty == true)
+                            Text(
+                              _userData['name']!,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                if (!_isLoggedIn)
+                  SignInWithAppleButton(
+                    onPressed: _handleSignIn,
+                    style: SignInWithAppleButtonStyle.black,
+                  )
+                else
+                  Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.logout, color: Colors.blue),
+                        title: const Text('Sign Out'),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: _handleSignOut,
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading:
+                            const Icon(Icons.delete_forever, color: Colors.red),
+                        title: const Text(
+                          'Delete Account',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: _showDeleteAccountConfirmation,
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAboutCard(BuildContext context) {
     final List<Widget> items = [
+      ListTile(
+        leading: const Icon(Icons.diamond_outlined, color: Color(0xFF7C4DFF)),
+        title: const Text('Premium Store'),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFFF6B6B), Color(0xFF7C4DFF)],
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Text(
+            'NEW',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const ContinueSimilarMultiplicationList()),
+          );
+        },
+      ),
+      const Divider(height: 1),
+      ListTile(
+        leading: const Icon(Icons.smart_toy_outlined, color: Color(0xFF6A4C93)),
+        title: const Text('AI Assistant'),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF6A4C93).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.auto_awesome,
+                size: 14,
+                color: Color(0xFF6A4C93),
+              ),
+              SizedBox(width: 4),
+              Text(
+                'AI',
+                style: TextStyle(
+                  color: Color(0xFF6A4C93),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AIChatScreen()),
+          );
+        },
+      ),
+      const Divider(height: 1),
       ListTile(
         leading: const Icon(Icons.info_outline, color: Colors.blue),
         title: const Text('About App'),
