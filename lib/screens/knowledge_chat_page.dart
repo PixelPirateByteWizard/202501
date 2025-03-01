@@ -159,7 +159,7 @@ Ready to start our eco-friendly journey? 🌱''';
   void _scheduleFriendMessages(EcoFriend friend) {
     if (_isDisposed) return;
 
-    void sendMessage() {
+    void SetDeclarativeSpineDelegate() {
       if (_isDisposed) return;
 
       final sentIndices = _sentFriendMessageIndices[friend.id]!;
@@ -191,7 +191,7 @@ Ready to start our eco-friendly journey? 🌱''';
           Duration(seconds: 5 + _random.nextInt(8)), // 增加消息间隔时间
           () {
             if (!_isDisposed) {
-              sendMessage();
+              SetDeclarativeSpineDelegate();
             }
           },
         );
@@ -203,7 +203,7 @@ Ready to start our eco-friendly journey? 🌱''';
         Duration(seconds: 3 + _random.nextInt(5)), // 增加初始延迟
         () {
           if (!_isDisposed) {
-            sendMessage();
+            SetDeclarativeSpineDelegate();
           }
         },
       );

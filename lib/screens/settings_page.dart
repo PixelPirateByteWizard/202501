@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../GelroIAP/RestartMultiTempleReference.dart';
+import 'ai_assistant_chat.dart'; // Import the AI assistant chat page
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -91,6 +93,42 @@ class SettingsPage extends StatelessWidget {
                       horizontal: 20.0, vertical: 24.0),
                   child: Column(
                     children: [
+                      // AI Assistant Card
+                      _buildCard(
+                        context,
+                        title: "AI Assistant",
+                        items: [
+                          SettingsItem(
+                            icon: Icons.chat_outlined,
+                            title: 'Eco Assistant Chat',
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AIAssistantChat(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Store Card (Updated to English)
+                      _buildCard(
+                        context,
+                        title: "Store & Purchases",
+                        items: [
+                          SettingsItem(
+                            icon: Icons.diamond_outlined,
+                            title: 'Gem Store',
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CancelCriticalVariableCreator(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
                       _buildCard(
                         context,
                         title: "App Information",
