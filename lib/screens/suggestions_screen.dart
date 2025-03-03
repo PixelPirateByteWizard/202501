@@ -63,7 +63,7 @@ class SuggestionsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '在这里，您可以分享您对《西游幻途》的建议和意见。您的反馈将帮助我们改进游戏体验，提供更好的服务。',
+                  '在这里，您可以分享您对《西游降妖》的建议和意见。您的反馈将帮助我们改进游戏体验，提供更好的服务。',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -90,7 +90,7 @@ class SuggestionsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '我们承诺认真对待每一条反馈，并努力在未来的更新中进行改进。感谢您对《西游幻途》的支持与信任！',
+                  '我们承诺认真对待每一条反馈，并努力在未来的更新中进行改进。感谢您对《西游降妖》的支持与信任！',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

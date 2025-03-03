@@ -63,7 +63,7 @@ class GameStrategyScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '在本节中，您将找到帮助您在"西游幻途"旅程中取得成功的基本策略和提示。无论您是初学者还是经验丰富的玩家，这些策略都将增强您的游戏体验，提高您的胜利机会。',
+                  '在本节中，您将找到帮助您在"西游降妖"旅程中取得成功的基本策略和提示。无论您是初学者还是经验丰富的玩家，这些策略都将增强您的游戏体验，提高您的胜利机会。',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -113,7 +113,7 @@ class GameStrategyScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '通过这些策略和提示，您将朝着成为"西游幻途"大师的目标迈进。祝您好运，愿您的冒险充满兴奋与荣耀！',
+                  '通过这些策略和提示，您将朝着成为"西游降妖"大师的目标迈进。祝您好运，愿您的冒险充满兴奋与荣耀！',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

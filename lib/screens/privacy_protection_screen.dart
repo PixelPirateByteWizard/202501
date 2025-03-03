@@ -63,7 +63,7 @@ class PrivacyProtectionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '在《西游幻途》中，我们承诺保护您的个人信息和隐私。请阅读以下隐私政策，以了解我们如何收集、使用和保护您的信息。',
+                  '在《西游降妖》中，我们承诺保护您的个人信息和隐私。请阅读以下隐私政策，以了解我们如何收集、使用和保护您的信息。',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -125,7 +125,7 @@ class PrivacyProtectionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '如有任何疑问或担忧，请随时与我们联系。感谢您对《西游幻途》的支持与信任！',
+                  '如有任何疑问或担忧，请随时与我们联系。感谢您对《西游降妖》的支持与信任！',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

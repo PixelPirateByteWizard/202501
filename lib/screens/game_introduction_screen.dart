@@ -54,7 +54,7 @@ class GameIntroductionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '欢迎来到"西游幻途"的世界！在这款游戏中，您将踏上一段史诗般的旅程，穿越一个充满挑战、冒险和难忘角色的神秘领域。',
+                  '欢迎来到"西游降妖"的世界！在这款游戏中，您将踏上一段史诗般的旅程，穿越一个充满挑战、冒险和难忘角色的神秘领域。',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -104,7 +104,7 @@ class GameIntroductionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '现在就加入我们，开始您的"西游幻途"冒险吧！愿您的旅程充满兴奋与荣耀！',
+                  '现在就加入我们，开始您的"西游降妖"冒险吧！愿您的旅程充满兴奋与荣耀！',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

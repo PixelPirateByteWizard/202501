@@ -351,7 +351,7 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
                       const SizedBox(height: 16), // 添加间距
                       // 第二行：主标题
                       Text(
-                        '西游幻途',
+                        '西游降妖',
                         style: TextStyle(
                           fontSize: 28,
                           fontFamily: 'ZHSGuFeng',

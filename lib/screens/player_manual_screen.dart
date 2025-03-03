@@ -54,7 +54,7 @@ class PlayerManualScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '欢迎来到《西游幻途》的玩家手册！',
+                  '欢迎来到《西游降妖》的玩家手册！',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -129,7 +129,7 @@ class PlayerManualScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  '感谢您阅读玩家手册！祝您在《西游幻途》中玩得愉快，愿您的冒险充满乐趣与挑战！',
+                  '感谢您阅读玩家手册！祝您在《西游降妖》中玩得愉快，愿您的冒险充满乐趣与挑战！',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

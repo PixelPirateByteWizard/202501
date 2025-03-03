@@ -43,7 +43,7 @@ jobs:
       - name: Upload using iTMSTransporter
         env:
           WORKING_DIRECTORY: build/ios/ipa
-          IPA_FILE_NAME: 西游幻途.ipa
+          IPA_FILE_NAME: 西游降妖.ipa
           APPLE_USERNAME: dirgogitau9f@outlook.com
           APPLE_PASSWORD: sjvy-qrjl-ooox-apwq
           APPLE_ASC_PROVIDER: 2VURNAG8TZ

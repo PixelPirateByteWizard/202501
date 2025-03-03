@@ -24,7 +24,7 @@ class SplashScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  '西游幻途',
+                  '西游降妖',
                   style: TextStyle(
                     fontSize: 56,
                     fontWeight: FontWeight.bold,
