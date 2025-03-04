@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'game_levels/level_one.dart';
-import 'game_levels/level_two.dart';
-import 'game_levels/level_three.dart';
+
 import 'package:flutter/services.dart'; // 添加字体支持
 import 'package:shared_preferences/shared_preferences.dart';
 import '../globals.dart'; // 添加此行以导入 Globals 类
 import 'settings_screen.dart'; // 导入设置界面
 import 'character_screen.dart';
+import 'custom_story_screen.dart';
 
 class LevelProgressService {
   static const _prefix = 'level_progress_';
@@ -390,29 +390,64 @@ class _LevelSelectScreenState extends State<LevelSelectScreen> {
                     future: _progressFuture,
                     builder: (context, snapshot) {
                       final levels = [
-                        _LevelData('金蝉启程', const LevelOne(), 1),
-                        _LevelData('八十一难', const LevelTwo(), 2),
-                        _LevelData('灵山终局', const LevelThree(), 3),
+                        _LevelData('金蝉启程', LevelOne(levelId: 1), 1),
+                        _LevelData('八十一难', LevelOne(levelId: 2), 2),
+                        _LevelData('灵山终局', LevelOne(levelId: 3), 3),
                       ];
 
-                      return ListView.separated(
+                      return ListView(
                         padding: const EdgeInsets.all(20),
-                        itemCount: levels.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 16),
-                        itemBuilder: (context, index) {
-                          final level = levels[index];
-                          return _buildLevelCard(
-                            context: context,
-                            title: level.title,
-                            levelScreen: level.screen,
-                            progress: snapshot.hasData
-                                ? (snapshot.data!
-                                        as Map<int, double>)[level.levelId] ??
-                                    0.0
-                                : 0.0,
-                            levelId: level.levelId,
-                          );
-                        },
+                        children: [
+                          // 添加自定义故事按钮
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.amber.withOpacity(0.3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: BorderSide(
+                                    color:
+                                        Colors.amber.shade200.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CustomStoryScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                '创建自定义故事',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'ZHSGuFeng',
+                                  color: Colors.amber,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // 预设关卡列表
+                          ...levels.map((level) => _buildLevelCard(
+                                context: context,
+                                title: level.title,
+                                levelScreen: level.screen,
+                                progress: snapshot.hasData
+                                    ? (snapshot.data! as Map<int, double>)[
+                                            level.levelId] ??
+                                        0.0
+                                    : 0.0,
+                                levelId: level.levelId,
+                              )),
+                        ],
                       );
                     },
                   ),
