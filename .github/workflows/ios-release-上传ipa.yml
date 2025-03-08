@@ -33,9 +33,9 @@ jobs:
         env:
           WORKING_DIRECTORY: .
           IPA_FILE_NAME: Runner.ipa
-          APPLE_USERNAME: bibbypietz15@outlook.com
-          APPLE_PASSWORD: jzps-xmkh-rieg-lotm
-          APPLE_ASC_PROVIDER: AW8PL9Z9Y9
+          APPLE_USERNAME: nikkygoehlui@outlook.com
+          APPLE_PASSWORD: dtxd-zrxf-ylhz-fjzk
+          APPLE_ASC_PROVIDER: RGT78RHBXK
         run: |
           cd $WORKING_DIRECTORY
           git clone https://github.com/ZhangLi1984/itsm.git
