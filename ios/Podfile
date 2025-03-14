@@ -28,6 +28,20 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  pod 'TPNiOS','6.4.27'
+  pod 'TPNVungleSDKAdapter','6.4.27'
+  pod 'TPNIronSourceSDKAdapter','6.4.27'
+  pod 'TPNBigoSDKAdapter','6.4.27'
+  pod 'TPNPangleSDKAdapter','6.4.27'
+  pod 'TPNFacebookSDKAdapter','6.4.27'
+  pod 'TPNAdmobSDKAdapter','6.4.27.1'
+  pod 'TPNInmobiSDKAdapter','6.4.27'
+  pod 'TPNApplovinSDKAdapter','6.4.27'
+  pod 'TPNChartboostSDKAdapter','6.4.27'
+  pod 'TPNFyberSDKAdapter','6.4.27'
+  pod 'UMCommon'
+  pod 'UMDevice'
+  pod 'UMAPM'
   use_frameworks!
   use_modular_headers!
 

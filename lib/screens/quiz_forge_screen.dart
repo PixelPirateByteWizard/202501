@@ -5,6 +5,7 @@ import './quiz_display_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/plant_advisor_service.dart';
+import '../services/ad_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizForgeScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _QuizForgeScreenState extends State<QuizForgeScreen> {
   String _selectedGrade = 'Middle School';
   String _selectedDifficulty = 'Normal';
   int _selectedQuestionCount = 10;
+  final AdService _adService = AdService();
 
   // 预定义选项改为英文
   final List<String> _subjects = [
@@ -49,6 +51,10 @@ class _QuizForgeScreenState extends State<QuizForgeScreen> {
   int? _score;
   late PlantAdvisorService _plantAdvisorService;
 
+  // 添加快速点击计数相关变量
+  int _tapCount = 0;
+  DateTime? _lastTapTime;
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +75,16 @@ class _QuizForgeScreenState extends State<QuizForgeScreen> {
   }
 
   Future<void> _generateQuiz() async {
+    // 检查使用次数
+    int usageCount = await _adService.getUsageCount();
+    if (usageCount < 1) {
+      _showWatchAdDialog();
+      return;
+    }
+    
+    // 消耗一次使用次数
+    await _adService.decreaseUsageCount();
+    
     if (_topicController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a specific topic')),
@@ -236,11 +252,126 @@ Note:
     });
   }
 
+  void _showWatchAdDialog() {
+    _adService.displayBannerAd();
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Usage Limit Reached'),
+          content: const Text('You have 0 attempts left. Watch a video to get 10 more attempts?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _adService.concealBannerAd();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _adService.concealBannerAd();
+                _adService.playIncentiveVideo();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Watch Ad'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleScreenTap() {
+    final now = DateTime.now();
+    if (_lastTapTime != null && now.difference(_lastTapTime!).inSeconds < 3) {
+      setState(() {
+        _tapCount++;
+      });
+      
+      if (_tapCount >= 10) {
+        _showAdTestDialog();
+        _tapCount = 0;
+      }
+    } else {
+      setState(() {
+        _tapCount = 1;
+      });
+    }
+    _lastTapTime = now;
+  }
+  
+  void _showAdTestDialog() {
+    _adService.loadOtherAd();
+    
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black87,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Ad Test Panel",
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 2.5,
+                      children: [
+                        _buildAdButton("展示插页1", () => _adService.presentInterstitialAd1()),
+                        _buildAdButton("展示插页2", () => _adService.presentInterstitialAd2()),
+                        _buildAdButton("展示插页3", () => _adService.presentInterstitialAd3()),
+                        _buildAdButton("展示视频1", () => _adService.playIncentiveVideo1()),
+                        _buildAdButton("展示视频2", () => _adService.playIncentiveVideo2()),
+                        _buildAdButton("展示视频3", () => _adService.playIncentiveVideo3()),
+                        _buildAdButton("展示横幅", () => _adService.displayBannerAd()),
+                        _buildAdButton("隐藏横幅", () => _adService.concealBannerAd()),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildAdButton(String text, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        textStyle: const TextStyle(fontSize: 13),
+      ),
+      child: Text(text),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
+        _handleScreenTap(); // 添加处理屏幕点击的调用
       },
       child: Scaffold(
         appBar: AppBar(
