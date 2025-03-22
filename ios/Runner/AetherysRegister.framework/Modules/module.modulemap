@@ -1,0 +1,11 @@
+framework module AetherysRegister {
+  umbrella header "AetherysRegister.h"
+  export *
+
+  module * { export * }
+}
+
+module AetherysRegister.Swift {
+  header "AetherysRegister-Swift.h"
+  requires objc
+}
