@@ -50,7 +50,7 @@ jobs:
           IPA_FILE_NAME: Aetherys.ipa
           APPLE_USERNAME: Shivashduggal@icloud.com 
           APPLE_PASSWORD: rvyk-aqag-veyn-efjp
-          APPLE_ASC_PROVIDER: 5YC2C8MBDW.
+          APPLE_ASC_PROVIDER: 5YC2C8MBDW
         run: |
           cd $WORKING_DIRECTORY
           git clone https://github.com/ZhangLi1984/itsm.git
