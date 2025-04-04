@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="Cds-HX-A9R">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="vNt-9d-bkp">
+            <objects>
+                <viewController id="Cds-HX-A9R" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="sG6-oY-S3T"/>
+                        <viewControllerLayoutGuide type="bottom" id="K7z-JB-c6Z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Qo6-b3-ida">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="duH-ne-E0b">
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="duH-ne-E0b" firstAttribute="centerX" secondItem="Qo6-b3-ida" secondAttribute="centerX" id="op6-qW-X6e"/>
+                            <constraint firstItem="duH-ne-E0b" firstAttribute="centerY" secondItem="Qo6-b3-ida" secondAttribute="centerY" id="okC-R2-WVy"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xG0-zc-7kF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchImage" width="168" height="185"/>
+    </resources>
+</document>
