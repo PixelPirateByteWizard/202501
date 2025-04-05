@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>embedRelationalSkewYCache</key>
+	<string>wrapStaticApertureHelper</string>
+	<key>getSharedTaxonomyFactory</key>
+	<string>initializePrevFeatureType</string>
+	<key>setUnsortedTrianglesCreator</key>
+	<string>initializeAgileLayoutReference</string>
+	<key>stopSemanticVisibleGroup</key>
+	<string>restartActivatedTempleReference</string>
+	<key>wrapEasyResultPool</key>
+	<string>skipIntuitiveIntensityFilter</string>
+</dict>
+</plist>

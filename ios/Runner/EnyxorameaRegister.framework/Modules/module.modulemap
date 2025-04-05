@@ -1,0 +1,11 @@
+framework module EnyxorameaRegister {
+  umbrella header "EnyxorameaRegister.h"
+  export *
+
+  module * { export * }
+}
+
+module EnyxorameaRegister.Swift {
+  header "EnyxorameaRegister-Swift.h"
+  requires objc
+}
