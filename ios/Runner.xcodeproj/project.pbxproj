@@ -11,8 +11,6 @@
 		21LBCY14VG0XSI8GJTFN54T7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = RIOFR74UA5DDTY5WP2S2K5IB /* LaunchScreen.storyboard */; };
 		6GIHSFPK0X985PJI35UJXVEC /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = M432Z5GSKYM9G5MWYE390OO6 /* AppFrameworkInfo.plist */; };
 		6HDFOO1XD2B1LFU805KBJ11K /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771XYEPH424QZC4W8OAF1US0 /* RunnerTests.swift */; };
-		84CCB4D72DA0CD1300327AC1 /* EnyxorameaRegister.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CCB4D62DA0CD1300327AC1 /* EnyxorameaRegister.framework */; };
-		84CCB4D82DA0CD1300327AC1 /* AppMedia.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CCB4D52DA0CD1300327AC1 /* AppMedia.xcassets */; };
 		84CCB4DA2DA0CD4500327AC1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CCB4D92DA0CD4500327AC1 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		84CCB5EB2DA1090800327AC1 /* ShowTensorCapsuleDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CCB5C72DA1090800327AC1 /* ShowTensorCapsuleDelegate.m */; };
 		84CCB5EC2DA1090800327AC1 /* PushSymmetricCurveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CCB5692DA1090800327AC1 /* PushSymmetricCurveManager.m */; };
@@ -191,8 +189,6 @@
 		5UQGZVRO3DKN4NVE5OFTMOHB /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		6KH35K1SJ5S20397IL769LUC /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		771XYEPH424QZC4W8OAF1US0 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
-		84CCB4D52DA0CD1300327AC1 /* AppMedia.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AppMedia.xcassets; sourceTree = "<group>"; };
-		84CCB4D62DA0CD1300327AC1 /* EnyxorameaRegister.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EnyxorameaRegister.framework; sourceTree = "<group>"; };
 		84CCB4D92DA0CD4500327AC1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		84CCB4DB2DA1090800327AC1 /* AddPublicOpacityCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddPublicOpacityCollection.h; sourceTree = "<group>"; };
 		84CCB4DC2DA1090800327AC1 /* AddPublicOpacityCollection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddPublicOpacityCollection.m; sourceTree = "<group>"; };
@@ -486,7 +482,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				84CCB4DA2DA0CD4500327AC1 /* StoreKit.framework in Frameworks */,
-				84CCB4D72DA0CD1300327AC1 /* EnyxorameaRegister.framework in Frameworks */,
 				DQVQC5SYUDUABQXYTOS8M1EV /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -784,8 +779,6 @@
 			isa = PBXGroup;
 			children = (
 				84CCB5EA2DA1090800327AC1 /* SetSecondSliderInstance */,
-				84CCB4D52DA0CD1300327AC1 /* AppMedia.xcassets */,
-				84CCB4D62DA0CD1300327AC1 /* EnyxorameaRegister.framework */,
 				5YLXAG2LR29HNZ8E1PTSN6GR /* Main.storyboard */,
 				NUDFD23Q1GH801NJMXKFPDBZ /* Assets.xcassets */,
 				RIOFR74UA5DDTY5WP2S2K5IB /* LaunchScreen.storyboard */,
@@ -960,7 +953,6 @@
 				21LBCY14VG0XSI8GJTFN54T7 /* LaunchScreen.storyboard in Resources */,
 				6GIHSFPK0X985PJI35UJXVEC /* AppFrameworkInfo.plist in Resources */,
 				DSL9U0C4DOF16DJ5WXDIOLQK /* Assets.xcassets in Resources */,
-				84CCB4D82DA0CD1300327AC1 /* AppMedia.xcassets in Resources */,
 				0FXGHXFLY808F4VY2C2AMA27 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
