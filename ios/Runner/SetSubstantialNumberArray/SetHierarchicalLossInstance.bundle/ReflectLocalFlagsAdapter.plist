@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cancelNormalCoordList</key>
+	<string>syncSmallScaleAdapter</string>
+	<key>computeRobustValueDelegate</key>
+	<string>equalKeyMaterialTarget</string>
+	<key>getEphemeralAxisGroup</key>
+	<string>syncLargeVariableDelegate</string>
+	<key>getSpecifyParameterReference</key>
+	<string>getOriginalTrianglesTarget</string>
+	<key>introspectIterativeLoopCreator</key>
+	<string>enumeratePrevVariableList</string>
+	<key>locatePrismaticMechanismFilter</key>
+	<string>setEphemeralConfigurationDelegate</string>
+	<key>mitigateExplicitSkinReference</key>
+	<string>setLostLabelAdapter</string>
+	<key>setReusableEvaluationOwner</key>
+	<string>getCommonVarImplement</string>
+</dict>
+</plist>

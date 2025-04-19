@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>endBeginnerPositionObserver</key>
+	<string>getDisplayableDispatcherStack</string>
+	<key>finishRequiredSizeManager</key>
+	<string>getPrevTopicStack</string>
+	<key>finishSynchronousIndexDecorator</key>
+	<string>getCustomGiftHandler</string>
+	<key>prepareBeginnerTextureFactory</key>
+	<string>setUnactivatedVariableContainer</string>
+	<key>refreshIterativeLeftFilter</key>
+	<string>setIndependentListenerExtension</string>
+	<key>replaceCommonVisibleStack</key>
+	<string>adjustSmallSymbolList</string>
+	<key>requestDelicateVariableCreator</key>
+	<string>accelerateCustomizedGramExtension</string>
+	<key>restartSortedProgressBarFactory</key>
+	<string>resetLastClusterTarget</string>
+	<key>setNextRestrictionImplement</key>
+	<string>fillSubsequentSubpixelTarget</string>
+	<key>setSynchronousGrainImplement</key>
+	<string>setGreatNumberFactory</string>
+</dict>
+</plist>

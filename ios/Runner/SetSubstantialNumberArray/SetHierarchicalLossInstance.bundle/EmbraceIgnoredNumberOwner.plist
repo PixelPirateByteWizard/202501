@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getResilientBottomFactory</key>
+	<string>skipConcurrentSkewYStack</string>
+	<key>getSemanticLayerCollection</key>
+	<string>wrapFusedListenerHandler</string>
+	<key>prepareIndependentFrameCollection</key>
+	<string>setOriginalCenterProtocol</string>
+	<key>seekDisparateBandwidthCreator</key>
+	<string>reconcileBeginnerBufferObserver</string>
+	<key>setMainCursorGroup</key>
+	<string>setIndependentDataCollection</string>
+	<key>setSortedValueDecorator</key>
+	<string>continueMutableTangentHelper</string>
+	<key>setUnsortedBufferCollection</key>
+	<string>aggregateNewestFlagsCreator</string>
+	<key>skipAdvancedItemExtension</key>
+	<string>computeUnactivatedShapeCache</string>
+</dict>
+</plist>

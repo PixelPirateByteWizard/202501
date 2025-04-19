@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getEasyViewHelper</key>
+	<string>startSortedConfidentialityManager</string>
+	<key>navigateDisplayableRightCache</key>
+	<string>moveAsynchronousParamCollection</string>
+	<key>resizeLiteLayoutCollection</key>
+	<string>enhanceMissedDialogsStack</string>
+	<key>resumeCustomInitiativeManager</key>
+	<string>holdMultiQueueManager</string>
+</dict>
+</plist>
