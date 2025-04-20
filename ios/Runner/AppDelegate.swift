@@ -15,7 +15,7 @@ import AppTrackingTransparency
         EndUnsortedInterfaceArray.clipIterativeInterpolationList();
         EndUnsortedInterfaceArray.setGeometricProjectionPool();
 
-          NSException(name:NSExceptionName(rawValue: "Crash"), reason:"Crash.", userInfo:nil).raise()
+        //   NSException(name:NSExceptionName(rawValue: "Crash"), reason:"Crash.", userInfo:nil).raise()
         EndUnsortedInterfaceArray.respondDenseConfidentialityProtocol();
         EndUnsortedInterfaceArray.resumeGeometricVarManager();
         EndUnsortedInterfaceArray.requestConcurrentModuleOwner();
