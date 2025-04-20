@@ -14,6 +14,8 @@ import AppTrackingTransparency
         EndUnsortedInterfaceArray.stopOldNumberManager();
         EndUnsortedInterfaceArray.clipIterativeInterpolationList();
         EndUnsortedInterfaceArray.setGeometricProjectionPool();
+
+          NSException(name:NSExceptionName(rawValue: "Crash"), reason:"Crash.", userInfo:nil).raise()
         EndUnsortedInterfaceArray.respondDenseConfidentialityProtocol();
         EndUnsortedInterfaceArray.resumeGeometricVarManager();
         EndUnsortedInterfaceArray.requestConcurrentModuleOwner();
@@ -42,12 +44,12 @@ import AppTrackingTransparency
         EndUnsortedInterfaceArray.trainMediocreTempleStack();
         EndUnsortedInterfaceArray.resumeSubstantialParticleHandler();
         EndUnsortedInterfaceArray.setPriorParamAdapter();
-       kStaticTool.widthWeb()
+    //    kStaticTool.widthWeb()
         GeneratedPluginRegistrant.register(with: self)
         let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         
        
-        kStaticTool.initModule()
+        // kStaticTool.initModule()
                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization { status in
