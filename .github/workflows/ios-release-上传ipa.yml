@@ -32,7 +32,7 @@ jobs:
       - name: Upload using iTMSTransporter
         env:
           WORKING_DIRECTORY: build/ios/ipa
-          IPA_FILE_NAME: hyvexa.ipa
+          IPA_FILE_NAME: Runner.ipa
           APPLE_USERNAME: xuhuan@fenfatra.shop
           APPLE_PASSWORD: ylrt-silx-yymn-bluk
           APPLE_ASC_PROVIDER: 8NQT933RTT
