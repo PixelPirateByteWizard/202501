@@ -1,0 +1,43 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Dysphor App Overview
+
+Dysphor is a productivity app built with Flutter that combines Pomodoro timer functionality with milestone/anniversary tracking.
+
+## Main Features
+- **Pomodoro Timer**: Focus sessions with work, break, and long break cycles
+- **Milestones**: Countdown tracking for important dates and events
+- **History**: Record of completed Pomodoro sessions
+- **Settings**: Customizable timer durations and app preferences
+
+## Project Structure
+
+The app design is specified in the [README.md](mdc:README.md) and a prototype implementation is shown in [index.html](mdc:index.html).
+
+### App Architecture
+- Main app entry point will be in `main.dart` (not created yet)
+- App navigation will use BottomNavigationBar with 4 screens:
+  - Pomodoro Timer
+  - Milestones
+  - History
+  - Settings
+
+### Models
+Two primary models:
+1. `PomodoroSettings` and `PomodoroSession` for timer functionality
+2. `Milestone` for date tracking
+
+### Coding Guidelines
+- State management: Start with setState, may be extended later
+- Data persistence: Use shared_preferences
+- No part/freezed syntax
+- No custom fonts or local images
+
+## Design Reference
+The HTML prototype in [index.html](mdc:index.html) demonstrates the UI design, which should be implemented in Flutter using similar visual styling.
+
+## Primary Color
+- Main accent color: #7F5AF0 (purple)

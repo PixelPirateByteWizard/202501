@@ -1,0 +1,48 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Dysphor App Models
+
+This file outlines the data models that will be used in the Dysphor app.
+
+## Pomodoro Models
+
+### PomodoroSettings
+```dart
+class PomodoroSettings {
+  final int workDuration;      // In minutes
+  final int breakDuration;     // In minutes
+  final int longBreakDuration; // In minutes
+  final int sessionsBeforeLongBreak;
+}
+```
+
+### PomodoroSession
+```dart
+class PomodoroSession {
+  final String id;
+  final String title;
+  final String duration;
+  final DateTime completedAt;
+}
+```
+
+## Milestone Model
+
+### Milestone
+```dart
+class Milestone {
+  final String id;
+  final String title;
+  final String description;
+  final DateTime targetDate;
+}
+```
+
+## Data Persistence
+
+All models will be persisted using `shared_preferences` rather than a full database solution. 
+
+For JSON serialization, models should include manual toJson/fromJson methods instead of using the Freezed package or part syntax.

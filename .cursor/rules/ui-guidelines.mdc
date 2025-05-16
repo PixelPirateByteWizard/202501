@@ -1,0 +1,69 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Dysphor UI Guidelines
+
+The UI implementation should follow the design shown in the [index.html](mdc:index.html) prototype. This document outlines key UI elements and style guidelines.
+
+## Color Scheme
+
+- **Primary Color**: #7F5AF0 (purple)
+- **Dark Background**: #16161A (dark neutral)
+- **Card Background**: #24263A (dark card)
+- **Light Text**: #E0E0E0
+- **Subtle Text**: #94A3B8
+- **Accent Green**: #2CB67D (for work timer)
+- **Accent Red**: #FF6B6B (for break timer)
+
+## Screen Structure
+
+### Pomodoro Timer Screen
+- Circular progress indicator showing remaining time
+- Timer display in center (MM:SS format)
+- Status text below timer
+- Control buttons (reset, play/pause, skip)
+- Stats cards showing completed cycles and total focus time
+
+### Milestones Screen
+- List of milestone cards with:
+  - Emoji icon
+  - Title and description
+  - Days remaining count
+- Add button at bottom
+
+### History Screen
+- List of completed pomodoro sessions
+- Each item shows title, completion time, and duration
+- Edit capability for session titles
+- Clear all button in header
+
+### Settings Screen
+- Input fields for timer durations
+- Toggle switches for notification options
+- Stats display (streak count)
+
+## Navigation
+
+Bottom navigation bar with four tabs:
+1. Focus (clock icon)
+2. Milestones (calendar icon)
+3. History (history icon)
+4. Settings (gear icon)
+
+## Widget Styling
+
+- Use rounded corners (borderRadius: 20) for cards
+- Apply shadows to elevate cards
+- Use consistent padding (16-20px)
+- Follow the color scheme strictly
+- Implement proper status indicators and feedback
+
+## Implementation Notes
+
+- Don't use custom fonts (system fonts only)
+- Don't use local images or cached_network_image
+- Simplify notifications (button only, no actual functionality)
+- Use setState for state management
+- Use shared_preferences for data persistence
