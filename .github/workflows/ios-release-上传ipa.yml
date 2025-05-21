@@ -1,0 +1,42 @@
+name: Build and Distribute
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check and prepare IPA file
+        run: |
+          if compgen -G "splitfile*" > /dev/null; then
+            echo "Found split files, merging..."
+            cat splitfile* > Runner.ipa.zip
+            unzip Runner.ipa.zip
+          elif [ ! -f "Runner.ipa" ]; then
+            echo "Error: Neither split files nor Runner.ipa found"
+            exit 1
+          fi
+
+      - name: Archive IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa
+          path: Runner.ipa
+      
+      - name: Upload using iTMSTransporter
+        env:
+          WORKING_DIRECTORY: .
+          IPA_FILE_NAME: Runner.ipa
+          APPLE_USERNAME: yuanhongliang@sammonhk.asia	
+          APPLE_PASSWORD: wnsu-gygj-axcu-yjsz
+          APPLE_ASC_PROVIDER: 3BGM886R2F
+        run: |
+          cd $WORKING_DIRECTORY
+          git clone https://github.com/ZhangLi1984/itsm.git
+          ./itsm/bin/iTMSTransporter -assetFile $IPA_FILE_NAME -u $APPLE_USERNAME -p $APPLE_PASSWORD -m upload -asc_provider $APPLE_ASC_PROVIDER
