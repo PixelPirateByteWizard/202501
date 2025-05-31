@@ -144,83 +144,88 @@ class _HomeScreenState extends State<HomeScreen>
             builder: (context, child) {
               return Opacity(
                 opacity: _fadeAnimation.value,
-                child: child,
-              );
-            },
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Game title
-                      _buildTitle(),
-
-                      const SizedBox(height: 24),
-
-                      // Main menu buttons
-                      _buildMenuButton(
-                        label: 'Start Game',
-                        icon: Icons.play_arrow,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CharacterSelectScreen(),
+                child: Container(
+                  color: Colors.transparent,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildTitle(),
+                              const SizedBox(height: 24),
+                              _buildMenuButton(
+                                label: 'Start Game',
+                                icon: Icons.play_arrow,
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CharacterSelectScreen(),
+                                  ),
+                                ),
+                              ),
+                              _buildMenuButton(
+                                label: 'Achievement System',
+                                icon: Icons.emoji_events,
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AchievementsScreen(),
+                                  ),
+                                ),
+                              ),
+                              _buildMenuButton(
+                                label: 'Game Settings',
+                                icon: Icons.settings,
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SettingsScreen(),
+                                  ),
+                                ),
+                              ),
+                              _buildMenuButton(
+                                label: 'Spirit Gem Store',
+                                icon: Icons.store,
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const GetNextDescriptionHandler(),
+                                  ),
+                                ),
+                              ),
+                              _buildMenuButton(
+                                label: 'Skill & Item Store',
+                                icon: Icons.shopping_bag,
+                                onPressed: _navigateToSkillShop,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Version 1.0.0',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: Colors.white.withOpacity(0.6),
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      _buildMenuButton(
-                        label: 'Achievement System',
-                        icon: Icons.emoji_events,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AchievementsScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildMenuButton(
-                        label: 'Game Settings',
-                        icon: Icons.settings,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SettingsScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildMenuButton(
-                        label: 'Spirit Gem Store',
-                        icon: Icons.store,
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const GetNextDescriptionHandler(),
-                          ),
-                        ),
-                      ),
-                      _buildMenuButton(
-                        label: 'Skill & Item Store',
-                        icon: Icons.shopping_bag,
-                        onPressed: _navigateToSkillShop,
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Version info
-                      Text(
-                        'Version 1.0.0',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.white.withOpacity(0.6),
-                            ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -230,7 +235,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildTitle() {
     return Column(
       children: [
-        // Main title
         Text(
           'Spirit Dream',
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -247,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         const SizedBox(height: 8),
-        // Subtitle
         Text(
           'Ascend to Immortality Through Cultivation',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
