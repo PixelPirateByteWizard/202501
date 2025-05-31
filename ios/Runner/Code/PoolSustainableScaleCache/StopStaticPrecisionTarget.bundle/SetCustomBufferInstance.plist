@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>endPriorParameterExtension</key>
+	<string>clipRelationalTempleFactory</string>
+	<key>introspectLargeScaleHelper</key>
+	<string>getPermanentBoundFilter</string>
+	<key>keepResilientAnimationHandler</key>
+	<string>captureIgnoredModelContainer</string>
+	<key>restartAsynchronousModelContainer</key>
+	<string>pauseLargeTextureHelper</string>
+	<key>setOldParameterHandler</key>
+	<string>setMediocreValueStack</string>
+	<key>stopStandaloneEdgeFilter</key>
+	<string>conformPrismaticParamDecorator</string>
+</dict>
+</plist>

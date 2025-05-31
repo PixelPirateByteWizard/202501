@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>finishAsynchronousSubpixelInstance</key>
+	<string>getDeclarativeRightFactory</string>
+	<key>getSingleViewGroup</key>
+	<string>getAccordionFormatHelper</string>
+	<key>setHardInteractionHelper</key>
+	<string>storeActivatedPlaybackType</string>
+	<key>setLiteBitrateObserver</key>
+	<string>setDenseVarHelper</string>
+</dict>
+</plist>

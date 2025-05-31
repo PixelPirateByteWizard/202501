@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getDenseGridHelper</key>
+	<string>trainElasticGramPool</string>
+	<key>getFirstBoundDecorator</key>
+	<string>trainSmartVisibleCache</string>
+	<key>getLargeFragmentsPool</key>
+	<string>decoupleMissedIntegrityInstance</string>
+	<key>keepRequiredPetList</key>
+	<string>drawCustomAscentExtension</string>
+	<key>restartDisparateBufferManager</key>
+	<string>playSynchronousVariableCache</string>
+	<key>resumeOriginalElementHandler</key>
+	<string>getPermanentCertificateDecorator</string>
+	<key>setEuclideanPositionCache</key>
+	<string>skipRelationalGraphCreator</string>
+	<key>setReusableSliderDecorator</key>
+	<string>setBeginnerVarCreator</string>
+	<key>setReusableVarImplement</key>
+	<string>setAsynchronousQuaternionGroup</string>
+</dict>
+</plist>

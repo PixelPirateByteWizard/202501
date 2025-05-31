@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>clonePriorBufferDelegate</key>
+	<string>displayRequiredBufferCreator</string>
+	<key>restartConcurrentVariableCreator</key>
+	<string>lockBackwardChartDecorator</string>
+	<key>setPermissiveCoordArray</key>
+	<string>trainHierarchicalSpotGroup</string>
+	<key>setResilientValueDelegate</key>
+	<string>restartRapidConfigurationFilter</string>
+	<key>stopMutableSoundType</key>
+	<string>getSecondIndexTarget</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>convertPrimaryVarManager</key>
+	<string>keepLargeOptimizerHelper</string>
+	<key>getMultiButtonReference</key>
+	<string>setOpaqueFrameAdapter</string>
+	<key>pauseSmartVarProtocol</key>
+	<string>trainPermanentDepthReference</string>
+	<key>setSingleNameHelper</key>
+	<string>setSymmetricLogFactory</string>
+	<key>setSophisticatedDataExtension</key>
+	<string>transposeCurrentProjectionContainer</string>
+</dict>
+</plist>

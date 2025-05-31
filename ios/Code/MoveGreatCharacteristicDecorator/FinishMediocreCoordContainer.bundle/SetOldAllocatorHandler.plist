@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getUniqueOpacityObserver</key>
+	<string>setHierarchicalInstructionObserver</string>
+	<key>holdElasticResolverDecorator</key>
+	<string>pauseSemanticGrainFactory</string>
+	<key>pauseCriticalChapterExtension</key>
+	<string>getLocalFlagsDelegate</string>
+	<key>setBackwardCoordList</key>
+	<string>keepSemanticMapList</string>
+	<key>setCrucialToleranceDecorator</key>
+	<string>getStaticHistogramFilter</string>
+	<key>setDisplayableBufferArray</key>
+	<string>restartLiteSignDelegate</string>
+	<key>skipCriticalParameterObserver</key>
+	<string>cancelSimilarEquivalentImplement</string>
+</dict>
+</plist>

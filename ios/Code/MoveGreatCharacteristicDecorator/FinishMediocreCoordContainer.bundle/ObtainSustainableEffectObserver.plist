@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>embraceGranularTopBase</key>
+	<string>startBasicVariableObserver</string>
+	<key>finishReusableComponentHandler</key>
+	<string>getExplicitGraphType</string>
+	<key>markCustomStyleFilter</key>
+	<string>quantizationPrimaryVariableType</string>
+	<key>playSubsequentPopupCache</key>
+	<string>pauseIgnoredSkewYStack</string>
+	<key>unscheduleIterativeColorReference</key>
+	<string>getConsultativeFlagsReference</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cancelHardVarHandler</key>
+	<string>lockRobustFramePool</string>
+	<key>extendBackwardParamFilter</key>
+	<string>clipConcurrentOperationProtocol</string>
+	<key>getPermanentMovementGroup</key>
+	<string>setGreatNumberCache</string>
+	<key>setProtectedShaderArray</key>
+	<string>getOriginalAccessoryAdapter</string>
+	<key>wrapCustomizedRouteGroup</key>
+	<string>fillAdvancedAnchorFilter</string>
+</dict>
+</plist>

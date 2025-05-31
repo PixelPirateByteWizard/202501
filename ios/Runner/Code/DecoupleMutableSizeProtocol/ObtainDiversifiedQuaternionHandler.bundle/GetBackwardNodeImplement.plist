@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adjustSimilarVarCollection</key>
+	<string>restartDirectlyValueStack</string>
+	<key>calculateDiscardedDepthContainer</key>
+	<string>getFirstRotationCache</string>
+	<key>continueIntermediateDialogsFilter</key>
+	<string>setExplicitArithmeticCreator</string>
+	<key>getCrucialChapterCache</key>
+	<string>finishDedicatedTextureOwner</string>
+	<key>getEasyPopupType</key>
+	<string>restartDiscardedFormatPool</string>
+	<key>mitigateSemanticTernaryDecorator</key>
+	<string>visitMainParameterTarget</string>
+	<key>scheduleMutableStateContainer</key>
+	<string>getCurrentNodeObserver</string>
+</dict>
+</plist>

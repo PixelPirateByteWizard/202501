@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>divideDelicateColorFactory</key>
+	<string>initializeLiteRightHandler</string>
+	<key>generateSynchronousToleranceAdapter</key>
+	<string>lockDeclarativeModuleObserver</string>
+	<key>getCustomGrayscaleOwner</key>
+	<string>reduceEnabledAnimationCache</string>
+	<key>makeCurrentSkewXContainer</key>
+	<string>getCartesianLoopAdapter</string>
+	<key>quitAdvancedSkewYManager</key>
+	<string>unscheduleHierarchicalSoundHelper</string>
+</dict>
+</plist>

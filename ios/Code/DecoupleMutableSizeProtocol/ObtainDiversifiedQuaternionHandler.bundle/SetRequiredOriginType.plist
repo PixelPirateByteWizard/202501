@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>continueUsedRotationTarget</key>
+	<string>convertHierarchicalMatrixAdapter</string>
+	<key>endDirectRectangleBase</key>
+	<string>multiplyNormalBoxHelper</string>
+	<key>refreshUniqueFragmentsCache</key>
+	<string>offsetLastGateFilter</string>
+	<key>respondStandaloneIntensityFactory</key>
+	<string>makeUsedCardStack</string>
+	<key>restartActivatedNumberExtension</key>
+	<string>releaseDirectCoordCollection</string>
+	<key>restartRelationalBufferGroup</key>
+	<string>setNextLeftAdapter</string>
+	<key>resumeSubsequentVariableType</key>
+	<string>setMediumValuePool</string>
+	<key>searchReusableParameterBase</key>
+	<string>setExplicitSchedulerFilter</string>
+	<key>setIndependentFeatureObserver</key>
+	<string>regulateEnabledRendererGroup</string>
+	<key>skipReusableBoundArray</key>
+	<string>getAutoDetailDecorator</string>
+</dict>
+</plist>

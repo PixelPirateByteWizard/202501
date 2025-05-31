@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cancelMultiTimelineType</key>
+	<string>pauseStandaloneIndicatorObserver</string>
+	<key>cancelUniformSlashArray</key>
+	<string>convertSymmetricPlaybackCollection</string>
+	<key>conformDiscardedOpacityFilter</key>
+	<string>limitBasicFragmentsList</string>
+	<key>exitImmutablePopupFactory</key>
+	<string>conformExplicitAllocatorList</string>
+	<key>shearCurrentCharacterHandler</key>
+	<string>stopSubtleColorPool</string>
+	<key>trainDirectlyNumberAdapter</key>
+	<string>skipMissedLogarithmReference</string>
+</dict>
+</plist>

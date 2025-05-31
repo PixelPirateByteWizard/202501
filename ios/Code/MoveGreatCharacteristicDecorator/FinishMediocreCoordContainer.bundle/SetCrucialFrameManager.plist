@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>allocateLostProvisionDelegate</key>
+	<string>seekAsynchronousConfigurationTarget</string>
+	<key>analyzeOldBitrateGroup</key>
+	<string>findIntermediateFeatureObserver</string>
+	<key>endComprehensiveHeadProtocol</key>
+	<string>getArithmeticCompositionCreator</string>
+	<key>getProtectedLabelHelper</key>
+	<string>getRobustPositionImplement</string>
+	<key>rotateProtectedVariableFactory</key>
+	<string>getRequiredIndexInstance</string>
+	<key>setDirectlyPointDecorator</key>
+	<string>restartCriticalTempleInstance</string>
+	<key>setPrimaryOperationBase</key>
+	<string>getElasticCapacityObserver</string>
+	<key>setRespectiveOriginPool</key>
+	<string>scheduleSustainableStyleAdapter</string>
+</dict>
+</plist>

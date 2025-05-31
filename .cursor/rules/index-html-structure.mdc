@@ -1,0 +1,33 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# HTML Prototype Structure
+
+This [index.html](mdc:index.html) file contains a static HTML prototype that demonstrates the UI design for the "LinMengDream" (Xiantu Xuanfang) tower defense game. It serves as a visual reference for implementing the Flutter application.
+
+## Key Sections
+The prototype contains four main screens that should be implemented in the Flutter app:
+
+1. **Start Screen** - The game's initial launch screen with "開始試煉" (Start Trial) and "玄境設定" (Settings) buttons
+2. **Game Screen** - The main gameplay interface with the character, enemies, and game stats
+3. **Upgrade Screen** - The "仙緣三擇" (Three Choices) screen that appears when the player levels up
+4. **Game Over Screen** - The "渡劫失敗" (Trial Failed) screen shown when the game ends
+
+## UI Elements to Implement
+The prototype demonstrates several important UI components:
+- Progress bars for "靈力" (Spirit Power) and "悟道進度" (Enlightenment Progress)
+- Game character and enemy sprites
+- Bullet/projectile animations
+- Card-based upgrade selection system
+- Stat displays (修為/Cultivation Level, 劫數/Trial Number)
+
+## Design Language
+The CSS styles in this file showcase the visual aesthetic that should be maintained in the Flutter implementation:
+- Gradient backgrounds (primarily blue-purple to create a mystical atmosphere)
+- Gold-themed buttons with hover effects
+- Card designs with glass-like effects and hover animations
+- Text styling with appropriate shadows and colors
+
+Use this prototype as a reference when implementing the corresponding screens in the Flutter application according to the structure defined in the [README.md](mdc:README.md).

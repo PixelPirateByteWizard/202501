@@ -1,0 +1,41 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Game Screen Requirements
+
+This file documents the requirements for each screen in the "LinMengDream" (Xiantu Xuanfang) tower defense game as described in the [README.md](mdc:README.md).
+
+## 1. Start Screen (StartScreen)
+- Display game title "LinMengDream"
+- Show background image
+- "開始試煉" (Start Trial) button
+- "玄境設定" (Settings) button
+
+## 2. Game Screen (GameScreen)
+- Display player's spirit power (靈力值) progress bar
+- Show cultivation level (修為值)
+- Display current trial/max trial (劫數/總劫數)
+- Character displayed in center
+- Show enemies and animations
+- Display bullet firing animations
+- Show enlightenment progress (悟道進度) bar
+- "頓悟" (Enlightenment) button (available when progress is full)
+
+## 3. Upgrade Screen (UpgradeScreen)
+- Display "仙緣三擇" (Three Choices) title
+- Show three upgrade option cards, each containing:
+  - Icon
+  - Name
+  - Description
+  - "擇此仙緣" (Choose This Destiny) button
+
+## 4. Game Over Screen (GameOverScreen)
+- Display "渡劫失敗" (Trial Failed) title
+- Show final cultivation level
+- Display highest trial reached
+- "再入凡塵" (Try Again) button
+- "返回仙山" (Return to Main Menu) button
+
+The visual design for these screens should follow the prototype in [index.html](mdc:index.html) while implementing the screens according to the structure specified in the [app architecture](mdc:.cursor/rules/app-architecture.mdc).

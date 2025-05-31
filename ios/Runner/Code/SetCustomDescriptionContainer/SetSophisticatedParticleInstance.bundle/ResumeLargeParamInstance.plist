@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getMediumMendCollection</key>
+	<string>initializeSingleValueBase</string>
+	<key>makeDeclarativeMeshStack</key>
+	<string>trainLocalSignatureList</string>
+	<key>quantizationMissedFrameHandler</key>
+	<string>restartResilientConfigurationCache</string>
+	<key>restoreRetainedTimeFactory</key>
+	<string>trainUnsortedPlaybackFilter</string>
+	<key>skipSemanticPriorityCreator</key>
+	<string>setSemanticTechniqueBase</string>
+	<key>storeLiteNodeCreator</key>
+	<string>trainResilientDocumentList</string>
+	<key>storeStandaloneMeshDecorator</key>
+	<string>setEphemeralBufferCollection</string>
+	<key>streamlineOtherVarPool</key>
+	<string>cloneCommonVariableTarget</string>
+</dict>
+</plist>

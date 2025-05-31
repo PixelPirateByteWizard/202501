@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>destroyLastConvolutionType</key>
+	<string>setLastVariableDelegate</string>
+	<key>finishSecondSizeDelegate</key>
+	<string>continueMainTopStack</string>
+	<key>keepExplicitSegmentCollection</key>
+	<string>setSecondFrameOwner</string>
+	<key>moveElasticLoaderFactory</key>
+	<string>convertSymmetricBottomPool</string>
+	<key>setConsultativeShapeGroup</key>
+	<string>skipPublicTitleHelper</string>
+	<key>setCriticalThreadCollection</key>
+	<string>cancelLostActivityTarget</string>
+	<key>setEasyParamStack</key>
+	<string>capturePivotalSceneInstance</string>
+</dict>
+</plist>

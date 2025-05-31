@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>quantizationFusedVariableHandler</key>
+	<string>finishAccessibleFlagsHandler</string>
+	<key>rectifySustainableTextureDelegate</key>
+	<string>setEuclideanContractionHandler</string>
+	<key>replaceTypicalTrajectoryInstance</key>
+	<string>getExplicitEventDelegate</string>
+	<key>setCurrentGridBase</key>
+	<string>setLiteScopeList</string>
+	<key>streamlineOtherGroupAdapter</key>
+	<string>releaseLargeBufferDelegate</string>
+</dict>
+</plist>

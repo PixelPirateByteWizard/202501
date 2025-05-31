@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getIterativePreviewProtocol</key>
+	<string>getPriorGrainCache</string>
+	<key>getNextMatrixCollection</key>
+	<string>respondConcreteMatrixProtocol</string>
+	<key>setAccordionEffectBase</key>
+	<string>setLiteRotationOwner</string>
+	<key>setDiscardedParameterGroup</key>
+	<string>endTypicalScaleFactory</string>
+	<key>showSustainableColorReference</key>
+	<string>getGlobalBatchContainer</string>
+	<key>startStaticCurveDelegate</key>
+	<string>setAdvancedParamFilter</string>
+</dict>
+</plist>

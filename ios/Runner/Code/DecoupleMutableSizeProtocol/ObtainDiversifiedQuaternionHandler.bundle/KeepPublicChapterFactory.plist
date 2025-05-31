@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getOldCatalystHandler</key>
+	<string>pauseAutoCoordImplement</string>
+	<key>resumeExplicitScaleGroup</key>
+	<string>setGeometricCapacitiesFactory</string>
+	<key>setNormalIntensityHandler</key>
+	<string>setOriginalBufferCache</string>
+	<key>setProtectedCursorObserver</key>
+	<string>endNumericalPositionCache</string>
+	<key>startHierarchicalEventHandler</key>
+	<string>insteadEphemeralParamExtension</string>
+</dict>
+</plist>

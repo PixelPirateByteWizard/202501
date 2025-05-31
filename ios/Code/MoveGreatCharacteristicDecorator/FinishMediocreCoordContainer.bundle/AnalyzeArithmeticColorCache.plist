@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>generateSmartTailCache</key>
+	<string>setSemanticFlagsCache</string>
+	<key>getAsynchronousGraphStack</key>
+	<string>skipSmallReplicaPool</string>
+	<key>reduceStandaloneEfficiencyDecorator</key>
+	<string>lockFusedLeftType</string>
+	<key>respondDisplayableVarOwner</key>
+	<string>removeSynchronousGroupObserver</string>
+	<key>setDelicateOriginList</key>
+	<string>setSecondAssetHelper</string>
+	<key>setUsedRangeReference</key>
+	<string>wrapDenseTagHelper</string>
+</dict>
+</plist>

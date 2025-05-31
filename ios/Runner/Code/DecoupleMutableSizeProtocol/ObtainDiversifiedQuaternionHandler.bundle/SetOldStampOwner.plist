@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cancelRapidLeftManager</key>
+	<string>endSingleProgressBarPool</string>
+	<key>executeDiscardedSpriteType</key>
+	<string>getIntuitiveCenterDelegate</string>
+	<key>getSustainableParamCollection</key>
+	<string>setRapidMediaManager</string>
+	<key>prepareCommonLoopInstance</key>
+	<string>insteadRelationalQueuePool</string>
+	<key>resetRespectiveOpacityFilter</key>
+	<string>releaseOpaqueParticleArray</string>
+	<key>setExplicitFrameImplement</key>
+	<string>cloneSustainableFlagsBase</string>
+	<key>setLostSkewXDecorator</key>
+	<string>continueLiteThroughputBase</string>
+	<key>setOriginalVarHandler</key>
+	<string>setEphemeralIntegrityManager</string>
+</dict>
+</plist>

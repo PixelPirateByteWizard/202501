@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>decoupleSymmetricMomentumImplement</key>
+	<string>setUnactivatedNumberImplement</string>
+	<key>getExplicitFragmentsContainer</key>
+	<string>restartHierarchicalTopCache</string>
+	<key>getIntermediateCoordProtocol</key>
+	<string>stopPivotalMetricsManager</string>
+	<key>getProtectedSubpixelStack</key>
+	<string>finishEasyNumberPool</string>
+	<key>skipCustomizedCursorCollection</key>
+	<string>startOriginalHeadCache</string>
+	<key>writePriorStyleCollection</key>
+	<string>endPublicLoopProtocol</string>
+</dict>
+</plist>

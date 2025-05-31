@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>convertSharedMaterialArray</key>
+	<string>setCriticalCharacteristicProtocol</string>
+	<key>getCommonOccasionList</key>
+	<string>pauseDiscardedBorderGroup</string>
+	<key>getPrevBrushList</key>
+	<string>setOtherOriginOwner</string>
+	<key>setRapidGramFactory</key>
+	<string>readEnabledEffectReference</string>
+	<key>startStaticQueueTarget</key>
+	<string>readRapidResultTarget</string>
+	<key>trainStandaloneDepthContainer</key>
+	<string>clipDeclarativeParameterOwner</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getCrudeRotationStack</key>
+	<string>syncPriorDepthExtension</string>
+	<key>keepNumericalSkewXContainer</key>
+	<string>getPrismaticSymbolFilter</string>
+	<key>pauseSortedParticleObserver</key>
+	<string>setAsynchronousImageArray</string>
+	<key>resumeActivatedStampHelper</key>
+	<string>finishMultiSampleAdapter</string>
+	<key>setGlobalAmortizationTarget</key>
+	<string>trainDirectSizeOwner</string>
+</dict>
+</plist>

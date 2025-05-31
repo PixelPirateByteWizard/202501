@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>continuePermanentCompositionGroup</key>
+	<string>resumeRelationalMatrixReference</string>
+	<key>finishIgnoredGroupOwner</key>
+	<string>finishMultiPositionManager</string>
+	<key>getReusableReferenceBase</key>
+	<string>restoreGlobalBoundObserver</string>
+	<key>offsetSubtleProgressBarOwner</key>
+	<string>clearDedicatedControllerContainer</string>
+	<key>resumeLiteParamImplement</key>
+	<string>setSemanticVariableBase</string>
+	<key>setAdvancedUsageProtocol</key>
+	<string>appendDisparateOpacityHandler</string>
+	<key>stopOtherVarAdapter</key>
+	<string>restartSustainableTailCreator</string>
+</dict>
+</plist>

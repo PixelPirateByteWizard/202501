@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cancelSubtleParameterInstance</key>
+	<string>setSmallLoopObserver</string>
+	<key>cleanRelationalFragmentsFactory</key>
+	<string>getSmallVarCreator</string>
+	<key>generateDirectlyDepthHelper</key>
+	<string>initializeSpecifyFlagsObserver</string>
+	<key>getPrismaticBottomExtension</key>
+	<string>stopMainTweakContainer</string>
+	<key>setNumericalTempleImplement</key>
+	<string>multiplySharedOccasionFactory</string>
+</dict>
+</plist>

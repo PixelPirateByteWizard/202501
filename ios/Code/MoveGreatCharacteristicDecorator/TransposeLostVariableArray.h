@@ -1,0 +1,18 @@
+#import "RestartPublicDocumentFactory.h"
+#import "TrainRetainedAssetExtension.h"
+
+#import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface TransposeLostVariableArray : NSObject
+
+
+- (void) startOldFeatureManager;
+
+- (void) resetOriginalTangentInstance;
+
+@end
+
+NS_ASSUME_NONNULL_END
+        

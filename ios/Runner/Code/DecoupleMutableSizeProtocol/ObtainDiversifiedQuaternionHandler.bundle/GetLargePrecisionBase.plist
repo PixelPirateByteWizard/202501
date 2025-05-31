@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aggregateSynchronousSceneDelegate</key>
+	<string>retainUsedVarFactory</string>
+	<key>cancelUnsortedRightProtocol</key>
+	<string>continueSortedAllocatorTarget</string>
+	<key>finishDirectlySubpixelBase</key>
+	<string>setOriginalBorderPool</string>
+	<key>getProtectedProgressBarType</key>
+	<string>setGlobalTextBase</string>
+	<key>setGeometricFlagsBase</key>
+	<string>skipDelicateGraphProtocol</string>
+	<key>setOriginalColorBase</key>
+	<string>getIgnoredPreviewHelper</string>
+	<key>streamlineNormalNumberOwner</key>
+	<string>enhanceCurrentBottomArray</string>
+</dict>
+</plist>

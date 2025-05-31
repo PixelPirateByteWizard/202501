@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getOtherVarObserver</key>
+	<string>getUnactivatedLoaderReference</string>
+	<key>readAccessibleQuaternionBase</key>
+	<string>visitGreatSoundManager</string>
+	<key>setNormalPositionCollection</key>
+	<string>prepareUniformFlagsHandler</string>
+	<key>setStaticSpineManager</key>
+	<string>embraceEnabledLayerBase</string>
+</dict>
+</plist>

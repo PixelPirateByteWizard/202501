@@ -1,0 +1,65 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Game Data Models
+
+This file documents the data models required for the "LinMengDream" (Xiantu Xuanfang) tower defense game as specified in the [README.md](mdc:README.md).
+
+## Player Model
+```dart
+class Player {
+  int health;        // 靈力值 (Spirit Power)
+  int cultivationLevel; // 修為 (Cultivation Level)
+  int wave;          // 目前劫數 (Current Trial)
+  int maxWave;       // 最大劫數 (Maximum Trial)
+  double enlightenmentProgress; // 悟道進度 (Enlightenment Progress)
+  List<String> bullets; // 擁有的子彈類型 (Available Bullet Types)
+  
+  // Constructor, getters and setters
+}
+```
+
+## Enemy Model
+```dart
+class Enemy {
+  String type;       // 敵人類型 (Enemy Type)
+  int health;        // 敵人生命值 (Enemy Health)
+  double speed;      // 移動速度 (Movement Speed)
+  String icon;       // 顯示圖標 (Display Icon)
+  Position position; // 位置 (Position)
+  
+  // Constructor, getters and setters
+}
+```
+
+## Upgrade Model
+```dart
+class Upgrade {
+  String id;         // 唯一標識符 (Unique ID)
+  String name;       // 名稱 (Name)
+  String description; // 描述 (Description)
+  String icon;       // 圖標 (Icon)
+  String effect;     // 效果類型 (Effect Type)
+  double value;      // 效果值 (Effect Value)
+  
+  // Constructor, getters and setters
+}
+```
+
+## Game State Model
+```dart
+class GameState {
+  Player player;
+  List<Enemy> enemies;
+  List<String> activeBullets;
+  bool isPaused;
+  bool isGameOver;
+  int score;
+  
+  // Constructor, getters and setters
+}
+```
+
+These models should be implemented in the corresponding files in the `models` directory as specified in the [app architecture](mdc:.cursor/rules/app-architecture.mdc).

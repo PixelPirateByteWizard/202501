@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>finishFirstElementProtocol</key>
+	<string>keepUniqueIntegrationBase</string>
+	<key>initializeUniqueBufferOwner</key>
+	<string>replaceReusableParamImplement</string>
+	<key>prepareHyperbolicAspectCache</key>
+	<string>setReusableParameterPool</string>
+	<key>releaseDirectlyIndicatorGroup</key>
+	<string>getRetainedControllerHelper</string>
+	<key>resumeGranularRightExtension</key>
+	<string>setResilientHeadContainer</string>
+	<key>setAutoHeadBase</key>
+	<string>dismissAutoUtilReference</string>
+	<key>startMediumQueueManager</key>
+	<string>setCommonReductionInstance</string>
+	<key>trainKeyTempleHandler</key>
+	<string>getResilientTempleList</string>
+</dict>
+</plist>

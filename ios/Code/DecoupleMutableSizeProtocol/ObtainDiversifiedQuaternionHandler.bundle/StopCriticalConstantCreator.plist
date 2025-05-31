@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>addCustomParamHelper</key>
+	<string>setDenseVariablePool</string>
+	<key>compareAssociatedCoordPool</key>
+	<string>reconcileDisplayableVisibleBase</string>
+	<key>finishCurrentPositionInstance</key>
+	<string>addCommonTopicFactory</string>
+	<key>pauseLiteBoundHandler</key>
+	<string>pauseSymmetricEntropyFilter</string>
+	<key>respondImmutableMenuList</key>
+	<string>restartOpaqueValueAdapter</string>
+	<key>resumeCurrentAssetHelper</key>
+	<string>setSymmetricBrushHelper</string>
+	<key>setMissedTextPool</key>
+	<string>executeMutableInterfaceStack</string>
+	<key>setStandaloneVarDecorator</key>
+	<string>keepUsedGridHelper</string>
+	<key>setUniformCoordInstance</key>
+	<string>divideCommonProvisionOwner</string>
+</dict>
+</plist>

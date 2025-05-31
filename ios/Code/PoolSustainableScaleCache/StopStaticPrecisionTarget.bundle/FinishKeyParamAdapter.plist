@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>continueConcurrentDepthAdapter</key>
+	<string>limitImmutableRowCache</string>
+	<key>getDeclarativeParamInstance</key>
+	<string>getAutoLoaderExtension</string>
+	<key>getEphemeralVarObserver</key>
+	<string>stopCommonSubpixelCreator</string>
+	<key>getGreatRowContainer</key>
+	<string>keepSingleDimensionFactory</string>
+	<key>getSmartOptimizerDelegate</key>
+	<string>resumeUnsortedVarManager</string>
+	<key>setComprehensiveBufferFilter</key>
+	<string>quitStaticModuleReference</string>
+	<key>setEuclideanModuleFactory</key>
+	<string>stopEnabledConfigurationHelper</string>
+</dict>
+</plist>

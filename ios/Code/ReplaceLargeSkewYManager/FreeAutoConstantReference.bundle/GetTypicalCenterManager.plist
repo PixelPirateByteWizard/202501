@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>addIgnoredSkewYManager</key>
+	<string>limitGreatParticleFilter</string>
+	<key>getPermanentFlagsContainer</key>
+	<string>aggregateDeclarativeRouteContainer</string>
+	<key>insteadMutableNameType</key>
+	<string>keepDedicatedTextureFactory</string>
+	<key>keepElasticVolumeCreator</key>
+	<string>getDeclarativeGramCache</string>
+</dict>
+</plist>

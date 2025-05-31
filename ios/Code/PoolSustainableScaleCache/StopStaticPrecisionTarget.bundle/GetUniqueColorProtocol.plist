@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>getEuclideanScaleFilter</key>
+	<string>dismissArithmeticAxisExtension</string>
+	<key>quantizationRequiredGraphicObserver</key>
+	<string>quitDisparateNumberCollection</string>
+	<key>setMediumMediaObserver</key>
+	<string>setSubtleBaselineExtension</string>
+	<key>startDirectlyNumberHandler</key>
+	<string>analyzeCrudeVariableExtension</string>
+	<key>trainUnactivatedTernaryAdapter</key>
+	<string>getDedicatedParamOwner</string>
+</dict>
+</plist>

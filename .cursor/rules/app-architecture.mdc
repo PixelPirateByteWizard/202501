@@ -1,0 +1,55 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Flutter App Architecture
+
+This project follows a structured organization as defined in the [README.md](mdc:README.md). The application is a Chinese Xianxia-themed tower defense game called "LinMengDream" (Xiantu Xuanfang).
+
+## Project Structure
+```
+lib/
+├── main.dart                  # App entry point
+├── screens/                   # All game screens
+│   ├── start_screen.dart      # Launch screen
+│   ├── game_screen.dart       # Main game screen
+│   ├── upgrade_screen.dart    # Upgrade selection screen
+│   └── game_over_screen.dart  # Game over screen
+├── models/                    # Data models
+│   ├── player.dart            # Player model
+│   ├── enemy.dart             # Enemy model
+│   ├── upgrade.dart           # Upgrade options model
+│   └── game_state.dart        # Game state model
+├── components/                # Reusable UI components
+│   ├── game_character.dart    # Character component
+│   ├── enemy_component.dart   # Enemy component
+│   ├── bullet.dart            # Bullet component
+│   ├── progress_bar.dart      # Progress bar component
+│   └── upgrade_card.dart      # Upgrade card component
+├── services/                  # Service classes
+│   ├── game_service.dart      # Game logic service
+│   └── storage_service.dart   # Storage service (shared_preferences)
+└── utils/                     # Utility classes
+    ├── constants.dart         # Constants
+    └── game_utils.dart        # Game utility functions
+```
+
+## Technical Requirements
+- State management: Use `setState` for state management (no external state management libraries)
+- Data storage: Use `shared_preferences` for local data storage
+- No asset images required
+- No `cached_network_image` package needed
+- No account functionality required
+- Do not use `freezed` package or `part` syntax
+
+## Game Mechanics
+- Character fixed in screen center
+- Bullets automatically firing toward enemies
+- Enemies appear from all directions
+- Defeat enemies to gain cultivation points
+- Level up when enlightenment progress is full
+- Choose from three upgrade options
+- Game ends when spirit power is depleted
+
+Refer to the HTML prototype in [index.html](mdc:index.html) for visual design reference.

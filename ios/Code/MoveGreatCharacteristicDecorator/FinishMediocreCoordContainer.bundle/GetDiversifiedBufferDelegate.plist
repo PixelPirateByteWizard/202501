@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>augmentRobustSceneGroup</key>
+	<string>findSubsequentStrengthManager</string>
+	<key>checkActivatedCycleDecorator</key>
+	<string>initializeSharedStampFactory</string>
+	<key>cloneSmartFragmentStack</key>
+	<string>setMutableEdgeHelper</string>
+	<key>finishUnsortedTailStack</key>
+	<string>endAccordionEvolutionExtension</string>
+	<key>getGreatSceneBase</key>
+	<string>reconcileFirstAssetExtension</string>
+	<key>replacePrimaryPositionExtension</key>
+	<string>setOriginalValueList</string>
+	<key>setDeclarativeDeliveryAdapter</key>
+	<string>transposeNormalSizeCache</string>
+	<key>startBeginnerParamDelegate</key>
+	<string>stopSmallZoneBase</string>
+	<key>startOpaqueVertexType</key>
+	<string>getAgileVarArray</string>
+</dict>
+</plist>
