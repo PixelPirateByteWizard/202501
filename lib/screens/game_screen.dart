@@ -339,7 +339,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     ),
                     const SizedBox(width: 2),
                     const Text(
-                      '靈力:',
+                      'Spirit:',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -372,7 +372,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     const SizedBox(width: 2),
                     Flexible(
                       child: Text(
-                        '修為: ${player.cultivationLevel}',
+                        'Cultivation: ${player.cultivationLevel}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -402,7 +402,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                       color: Colors.amber.withOpacity(0.5), width: 1),
                 ),
                 child: Text(
-                  '第${player.wave}劫',
+                  'Wave ${player.wave}',
                   style: const TextStyle(
                     color: Colors.amber,
                     fontSize: 12,
@@ -426,7 +426,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                       color: Colors.green,
                     ),
                     onPressed: _showUpgradeStatus,
-                    tooltip: '查看升級狀態',
+                    tooltip: 'View Upgrade Status',
                   ),
 
                   // 暫停按鈕
@@ -442,7 +442,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                       color: Colors.white,
                     ),
                     onPressed: _togglePauseMenu,
-                    tooltip: '暫停遊戲',
+                    tooltip: 'Pause Game',
                   ),
                 ],
               ),
@@ -468,7 +468,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ),
               const SizedBox(width: 4),
               const Text(
-                '靈力:',
+                'Spirit:',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -502,7 +502,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ),
               const SizedBox(width: 4),
               Text(
-                '修為: ${player.cultivationLevel}',
+                'Cultivation: ${player.cultivationLevel}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -523,7 +523,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             border: Border.all(color: Colors.amber.withOpacity(0.5), width: 1),
           ),
           child: Text(
-            '第${player.wave}劫 (無限模式)',
+            'Wave ${player.wave} (Endless Mode)',
             style: const TextStyle(
               color: Colors.amber,
               fontSize: 14,
@@ -542,7 +542,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             size: 20,
           ),
           onPressed: _showUpgradeStatus,
-          tooltip: '查看升級狀態',
+          tooltip: 'View Upgrade Status',
         ),
 
         // 暫停按鈕
@@ -553,7 +553,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             size: 20,
           ),
           onPressed: _togglePauseMenu,
-          tooltip: '暫停遊戲',
+          tooltip: 'Pause Game',
         ),
       ],
     );
@@ -569,7 +569,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       child: Column(
         children: [
           const Text(
-            '悟道進度',
+            'Enlightenment Progress',
             style: TextStyle(
               color: Colors.white70,
               fontSize: 14,
@@ -597,7 +597,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('升級狀態檢查'),
+        title: const Text('Upgrade Status Check'),
         content: SingleChildScrollView(
           child: SelectableText(
             statusInfo,
@@ -610,7 +610,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               Navigator.of(context).pop();
               _gameService.resumeGame();
             },
-            child: const Text('關閉'),
+            child: const Text('Close'),
           ),
         ],
         backgroundColor: Colors.black87,
@@ -695,7 +695,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '遊戲暫停',
+              'Game Paused',
               style: AppConstants.headlineMedium.copyWith(
                 fontSize: isSmallScreen ? 20 : 24,
               ),
@@ -703,19 +703,19 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             SizedBox(height: isSmallScreen ? 16 : 24),
             _buildPauseMenuItem(
               icon: Icons.play_arrow,
-              text: '繼續遊戲',
+              text: 'Continue Game',
               onTap: _togglePauseMenu,
             ),
             const SizedBox(height: 12),
             _buildPauseMenuItem(
               icon: Icons.replay,
-              text: '重新開始',
+              text: 'Restart Game',
               onTap: _restartGame,
             ),
             const SizedBox(height: 12),
             _buildPauseMenuItem(
               icon: Icons.home,
-              text: '返回主菜單',
+              text: 'Return to Main Menu',
               onTap: _exitToMainMenu,
             ),
           ],

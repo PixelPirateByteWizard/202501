@@ -18,27 +18,30 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
 
   final List<Map<String, dynamic>> _characters = [
     {
-      'name': '劍修',
-      'description': '精通劍術的修士，有更高的攻擊力及速度。',
+      'name': 'Sword Cultivator',
+      'description':
+          'A cultivator skilled in sword techniques with higher attack power and speed.',
       'asset': 'assets/images/characters/characters_1.png',
-      'specialties': ['高攻擊力', '快速攻擊', '靈氣穿透'],
-      'startingSkills': ['靈力回復'],
+      'specialties': ['High Attack', 'Fast Attacks', 'Spirit Penetration'],
+      'startingSkills': ['Spirit Recovery'],
       'startingBullets': ['bolt', 'spirit'],
     },
     {
-      'name': '煉丹師',
-      'description': '煉丹術高超的修士，有更多的生命值及恢復能力。',
+      'name': 'Alchemist',
+      'description':
+          'A cultivator skilled in alchemy with more health and regeneration.',
       'asset': 'assets/images/characters/characters_2.png',
-      'specialties': ['高生命值', '生命回復', '灼燒傷害'],
-      'startingSkills': ['靈氣護盾'],
+      'specialties': ['High Health', 'Health Regen', 'Burn Damage'],
+      'startingSkills': ['Spirit Shield'],
       'startingBullets': ['bolt', 'flame'],
     },
     {
-      'name': '符修',
-      'description': '擅長符咒的修士，能同時發射多種不同的法術。',
+      'name': 'Talisman Master',
+      'description':
+          'A cultivator skilled in talismans who can cast multiple spells simultaneously.',
       'asset': 'assets/images/characters/characters_3.png',
-      'specialties': ['多重法術', '範圍攻擊', '元素掌控'],
-      'startingSkills': ['靈子感應'],
+      'specialties': ['Multi-Spell', 'Area Attack', 'Elemental Control'],
+      'startingSkills': ['Spirit Sense'],
       'startingBullets': ['bolt', 'frost'],
     },
   ];
@@ -126,30 +129,30 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
                   children: [
                     // 頂部标题区域 (10%)
                     SizedBox(
-                      height: constraints.maxHeight * 0.1,
-                      child: Center(
-                        child: Text(
-                          '選擇你的修士',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                            color: Colors.amber.shade100,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.7),
-                                blurRadius: 5,
-                                offset: const Offset(1, 1),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      height: constraints.maxHeight * 0.05,
+                      // child: Center(
+                      //   child: Text(
+                      //     'Choose Your Cultivator',
+                      //     style: Theme.of(context)
+                      //         .textTheme
+                      //         .headlineSmall
+                      //         ?.copyWith(
+                      //       color: Colors.amber.shade100,
+                      //       shadows: [
+                      //         Shadow(
+                      //           color: Colors.black.withOpacity(0.7),
+                      //           blurRadius: 5,
+                      //           offset: const Offset(1, 1),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ),
 
                     // 角色选择区域 (20%)
                     SizedBox(
-                      height: constraints.maxHeight * 0.2,
+                      height: constraints.maxHeight * 0.25,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
@@ -191,7 +194,7 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
                               const Icon(Icons.play_arrow, size: 20),
                               const SizedBox(width: 4),
                               Text(
-                                '開始修仙之旅',
+                                'Begin Cultivation Journey',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -388,7 +391,7 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '專長',
+                            'Specialties',
                             style: TextStyle(
                               color: Colors.amber.shade200,
                               fontWeight: FontWeight.bold,
@@ -460,7 +463,7 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '技能',
+                            'Skills',
                             style: TextStyle(
                               color: Colors.amber.shade200,
                               fontWeight: FontWeight.bold,
@@ -530,7 +533,7 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '法術',
+                            'Spells',
                             style: TextStyle(
                               color: Colors.amber.shade200,
                               fontWeight: FontWeight.bold,
@@ -625,23 +628,26 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
     switch (_selectedCharacterIndex) {
       case 0:
         traitIcon = Icons.sports_martial_arts;
-        traitTitle = '劍氣縱橫';
-        traitDescription = '劍修出手迅捷，攻擊力提升20%，攻速提升15%';
+        traitTitle = 'Sword Qi Mastery';
+        traitDescription =
+            'Sword Cultivators attack 20% faster with 15% increased damage';
         break;
       case 1:
         traitIcon = Icons.healing;
-        traitTitle = '丹藥精通';
-        traitDescription = '煉丹師生命值提升20%，每3秒恢復1點生命';
+        traitTitle = 'Pill Mastery';
+        traitDescription =
+            'Alchemists have 20% more health and regenerate 1 HP every 3 seconds';
         break;
       case 2:
         traitIcon = Icons.auto_awesome;
-        traitTitle = '符道通玄';
-        traitDescription = '符修可同時釋放多種法術，範圍效果提升30%';
+        traitTitle = 'Talisman Expertise';
+        traitDescription =
+            'Talisman Masters can cast multiple spells with 30% larger area effects';
         break;
       default:
         traitIcon = Icons.stars;
-        traitTitle = '修仙者';
-        traitDescription = '擁有特殊能力的修仙者';
+        traitTitle = 'Cultivator';
+        traitDescription = 'A cultivator with special abilities';
         break;
     }
 
@@ -679,15 +685,15 @@ class _CharacterSelectScreenState extends State<CharacterSelectScreen>
   String _getBulletName(String bulletType) {
     switch (bulletType) {
       case 'bolt':
-        return '雷電';
+        return 'Lightning';
       case 'flame':
-        return '火焰';
+        return 'Flame';
       case 'frost':
-        return '冰霜';
+        return 'Frost';
       case 'spirit':
-        return '靈氣';
+        return 'Spirit';
       case 'tornado':
-        return '風暴';
+        return 'Tornado';
       default:
         return bulletType;
     }
