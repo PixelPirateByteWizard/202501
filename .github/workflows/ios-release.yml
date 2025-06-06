@@ -50,7 +50,7 @@ jobs:
       - name: Upload using iTMSTransporter
         env:
           WORKING_DIRECTORY: build/ios/ipa
-          IPA_FILE_NAME: LinMengDream.ipa
+          IPA_FILE_NAME: DestinyOath.ipa
           APPLE_USERNAME: yuanhongliang@sammonhk.asia	
           APPLE_PASSWORD: wnsu-gygj-axcu-yjsz
           APPLE_ASC_PROVIDER: 3BGM886R2F

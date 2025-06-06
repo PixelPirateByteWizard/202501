@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Game Data Models
 
-This file documents the data models required for the "LinMengDream" (Xiantu Xuanfang) tower defense game as specified in the [README.md](mdc:README.md).
+This file documents the data models required for the "DestinyOath" (Xiantu Xuanfang) tower defense game as specified in the [README.md](mdc:README.md).
 
 ## Player Model
 ```dart

@@ -5,10 +5,10 @@ alwaysApply: false
 ---
 # Game Screen Requirements
 
-This file documents the requirements for each screen in the "LinMengDream" (Xiantu Xuanfang) tower defense game as described in the [README.md](mdc:README.md).
+This file documents the requirements for each screen in the "DestinyOath" (Xiantu Xuanfang) tower defense game as described in the [README.md](mdc:README.md).
 
 ## 1. Start Screen (StartScreen)
-- Display game title "LinMengDream"
+- Display game title "DestinyOath"
 - Show background image
 - "開始試煉" (Start Trial) button
 - "玄境設定" (Settings) button
