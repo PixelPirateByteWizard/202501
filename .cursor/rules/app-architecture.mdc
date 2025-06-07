@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Flutter App Architecture
 
-This project follows a structured organization as defined in the [README.md](mdc:README.md). The application is a Chinese Xianxia-themed tower defense game called "DestinyOath" (Xiantu Xuanfang).
+This project follows a structured organization as defined in the [README.md](mdc:README.md). The application is a Chinese Xianxia-themed tower defense game called "LinMengDream" (Xiantu Xuanfang).
 
 ## Project Structure
 ```

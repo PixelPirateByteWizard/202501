@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # HTML Prototype Structure
 
-This [index.html](mdc:index.html) file contains a static HTML prototype that demonstrates the UI design for the "DestinyOath" (Xiantu Xuanfang) tower defense game. It serves as a visual reference for implementing the Flutter application.
+This [index.html](mdc:index.html) file contains a static HTML prototype that demonstrates the UI design for the "LinMengDream" (Xiantu Xuanfang) tower defense game. It serves as a visual reference for implementing the Flutter application.
 
 ## Key Sections
 The prototype contains four main screens that should be implemented in the Flutter app:
