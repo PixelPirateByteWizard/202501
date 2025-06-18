@@ -1,0 +1,3360 @@
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/main.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'screens/start_screen.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const BladeClashApp());
+}
+
+class BladeClashApp extends StatelessWidget {
+  const BladeClashApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '神将GO (Blade Clash)',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      home: const StartScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/models/character.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'enemy_type.dart';
+
+class Character {
+  String id;
+  Offset pos;
+  int bladeCount;
+  bool isActive = true;
+  EnemyType? type; // null indicates player
+  String name;
+
+  // AI-related state
+  bool isCharging = false;
+  DateTime chargeEndTime = DateTime.now();
+  DateTime lastClashTime = DateTime.now();
+  Offset moveVector = Offset.zero;
+
+  // Player dash functionality
+  bool isDashing = false;
+  DateTime dashEndTime = DateTime.now();
+  DateTime lastDashTime = DateTime.now();
+  static const Duration dashDuration = Duration(milliseconds: 300);
+  static const Duration dashCooldown = Duration(seconds: 2);
+
+  Character({
+    required this.id,
+    required this.pos,
+    required this.bladeCount,
+    this.type,
+    String? customName,
+  }) : name = customName ?? (type?.name ?? 'You');
+
+  // Dynamic calculated properties
+  double get speed => type?.baseSpeed ?? 3.0;
+
+  double get bladesRadius => (30 + bladeCount * 1.2).clamp(30.0, 250.0);
+
+  double get fullRadius => bladesRadius + 20.0; // Used for collision detection
+
+  Color get color => type?.color ?? Colors.yellow;
+
+  IconData get icon => type?.icon ?? Icons.person;
+
+  String get behavior => type?.behavior ?? 'player';
+
+  // Blade visual styling based on count
+  BladeStyle get bladeStyle {
+    if (bladeCount >= 100) {
+      return const BladeStyle(
+        color: Color(0xFFef4444), // red-500
+        size: 32.0,
+        labelColor: Color(0xFFdc2626), // red-600
+      );
+    }
+    if (bladeCount >= 10) {
+      return const BladeStyle(
+        color: Color(0xFF4ade80), // green-400
+        size: 24.0,
+        labelColor: Color(0xFF16a34a), // green-600
+      );
+    }
+    return const BladeStyle(
+      color: Colors.white,
+      size: 16.0,
+      labelColor: Color(0xFF6b7280), // gray-500
+    );
+  }
+
+  void takeClashDamage() {
+    if (bladeCount > 0) {
+      bladeCount--;
+    }
+    if (bladeCount <= 0) {
+      isActive = false;
+    }
+    lastClashTime = DateTime.now();
+  }
+
+  void addBlade() {
+    bladeCount++;
+  }
+
+  bool canClash() {
+    final now = DateTime.now();
+    return now.difference(lastClashTime).inMilliseconds > 200; // 200ms cooldown
+  }
+
+  void startCharging() {
+    isCharging = true;
+    chargeEndTime = DateTime.now().add(const Duration(milliseconds: 500));
+  }
+
+  void updateCharging() {
+    if (isCharging && DateTime.now().isAfter(chargeEndTime)) {
+      isCharging = false;
+    }
+    if (isDashing && DateTime.now().isAfter(dashEndTime)) {
+      isDashing = false;
+    }
+  }
+
+  double get currentSpeed {
+    if (isDashing) {
+      return speed * 5.0; // Dash speed multiplier (higher than charge)
+    }
+    if (isCharging) {
+      return speed * 3.0; // Charge speed multiplier
+    }
+    return speed;
+  }
+
+  // Player dash methods
+  bool canDash() {
+    final now = DateTime.now();
+    return now.difference(lastDashTime) >= dashCooldown;
+  }
+
+  void startDash() {
+    if (canDash()) {
+      isDashing = true;
+      dashEndTime = DateTime.now().add(dashDuration);
+      lastDashTime = DateTime.now();
+    }
+  }
+
+  double get dashCooldownProgress {
+    final now = DateTime.now();
+    final elapsed = now.difference(lastDashTime);
+    if (elapsed >= dashCooldown) return 1.0;
+    return elapsed.inMilliseconds / dashCooldown.inMilliseconds;
+  }
+}
+
+class BladeStyle {
+  final Color color;
+  final double size;
+  final Color labelColor;
+
+  const BladeStyle({
+    required this.color,
+    required this.size,
+    required this.labelColor,
+  });
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/models/collectable.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class Collectable {
+  Offset pos;
+  final double radius = 15.0;
+
+  Collectable({required this.pos});
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/models/enemy_type.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class EnemyType {
+  final String name;
+  final double baseSpeed;
+  final Color color;
+  final IconData icon;
+  final String behavior; // 'scavenger', 'charger', 'standard'
+  final int baseBlades;
+
+  const EnemyType({
+    required this.name,
+    required this.baseSpeed,
+    required this.color,
+    required this.icon,
+    required this.behavior,
+    required this.baseBlades,
+  });
+
+  static const EnemyType scout = EnemyType(
+    name: 'Scout',
+    baseSpeed: 2.8,
+    color: Color(0xFF22d3ee), // cyan-400
+    icon: Icons.directions_run,
+    behavior: 'scavenger',
+    baseBlades: 3,
+  );
+
+  static const EnemyType brute = EnemyType(
+    name: 'Brute',
+    baseSpeed: 1.2,
+    color: Color(0xFFa855f7), // purple-500
+    icon: Icons.shield,
+    behavior: 'standard',
+    baseBlades: 18,
+  );
+
+  static const EnemyType hunter = EnemyType(
+    name: 'Hunter',
+    baseSpeed: 2.2,
+    color: Color(0xFFf97316), // orange-500
+    icon: Icons.flash_on,
+    behavior: 'charger',
+    baseBlades: 8,
+  );
+
+  static const EnemyType assassin = EnemyType(
+    name: 'Assassin',
+    baseSpeed: 3.2,
+    color: Color(0xFFdc2626), // red-600
+    icon: Icons.flash_auto,
+    behavior: 'charger',
+    baseBlades: 12,
+  );
+
+  static const EnemyType titan = EnemyType(
+    name: 'Titan',
+    baseSpeed: 0.8,
+    color: Color(0xFF7c3aed), // violet-600
+    icon: Icons.auto_awesome,
+    behavior: 'standard',
+    baseBlades: 25,
+  );
+
+  static List<EnemyType> get allTypes =>
+      [scout, brute, hunter, assassin, titan];
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/models/particle.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class Particle {
+  Offset pos;
+  Offset velocity;
+  Color color;
+  double lifespan; // 1.0 (100%) decreases to 0.0
+  final double size;
+
+  Particle({
+    required this.pos,
+    required this.velocity,
+    required this.color,
+    this.lifespan = 1.0,
+    this.size = 3.0,
+  });
+
+  void update() {
+    // Basic position and velocity updates
+    pos += velocity;
+    velocity += const Offset(0, 0.1); // Simple gravity
+    lifespan -= 0.03; // Fade over time
+
+    // Simple bounds check - reset to zero if invalid
+    if (!pos.dx.isFinite || !pos.dy.isFinite) {
+      pos = Offset.zero;
+    }
+    if (!velocity.dx.isFinite || !velocity.dy.isFinite) {
+      velocity = Offset.zero;
+    }
+  }
+
+  bool get isDead => lifespan <= 0;
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/about_us_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class AboutUsScreen extends StatelessWidget {
+  const AboutUsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('关于我们'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.info_outline, size: 80, color: Colors.white54),
+              SizedBox(height: 20),
+              Text(
+                '神将GO - 一个基于Flutter的移动游戏示例。',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white70, fontSize: 18),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '版本: 1.0.0',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white54, fontSize: 16),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '开发者: Gemini Code Assistant',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white54, fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Divider(color: Colors.white12),
+              SizedBox(height: 20),
+              Text(
+                '感谢您的支持与游玩！',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/backpack_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+// 为皮肤和圣物创建简单的数据模型
+class Skin {
+  final String name;
+  final IconData icon;
+  final bool isEquipped;
+  const Skin({required this.name, required this.icon, this.isEquipped = false});
+}
+
+class Relic {
+  final String name;
+  final IconData icon;
+  final String description;
+  const Relic(
+      {required this.name, required this.icon, required this.description});
+}
+
+class BackpackScreen extends StatelessWidget {
+  const BackpackScreen({super.key});
+
+  // 模拟的皮肤和圣物数据
+  static const List<Skin> _skins = [
+    Skin(name: '默认外观', icon: Icons.person, isEquipped: true),
+    Skin(name: '武士之魂', icon: Icons.sports_kabaddi),
+    Skin(name: '圣殿骑士', icon: Icons.shield),
+    Skin(name: '暗影刺客', icon: Icons.visibility_off),
+  ];
+
+  static const List<Relic> _relics = [
+    Relic(
+        name: '磁力护符',
+        icon: Icons.compare_arrows,
+        description: '自动吸取刀锋的范围扩大50%。'),
+    Relic(name: '急速之刃', icon: Icons.flash_on, description: '冲刺冷却时间减少0.5秒。'),
+    Relic(
+        name: '守护核心', icon: Icons.health_and_safety, description: '初始刀锋数量增加5。'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF000010),
+        appBar: AppBar(
+          title: const Text('背包'),
+          backgroundColor: const Color(0xFF000010),
+          elevation: 0,
+          bottom: const TabBar(
+            indicatorColor: Colors.blue,
+            indicatorWeight: 3.0,
+            tabs: [
+              Tab(icon: Icon(Icons.style), text: '皮肤'),
+              Tab(icon: Icon(Icons.auto_awesome), text: '圣物'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            _buildGridView(_buildSkinCard),
+            _buildGridView(_buildRelicCard),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridView(Function(BuildContext, int) cardBuilder) {
+    final itemCount =
+        cardBuilder == _buildSkinCard ? _skins.length : _relics.length;
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.8,
+      ),
+      itemCount: itemCount,
+      itemBuilder: (context, index) => cardBuilder(context, index),
+    );
+  }
+
+  Widget _buildSkinCard(BuildContext context, int index) {
+    final skin = _skins[index];
+    return Card(
+      color: skin.isEquipped
+          ? Colors.blue.withOpacity(0.2)
+          : Colors.black.withOpacity(0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: skin.isEquipped ? Colors.blue : Colors.grey.withOpacity(0.3),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(skin.icon, size: 64, color: Colors.white),
+          const SizedBox(height: 16),
+          Text(skin.name,
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          const SizedBox(height: 8),
+          if (skin.isEquipped)
+            const Text('已装备',
+                style:
+                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRelicCard(BuildContext context, int index) {
+    final relic = _relics[index];
+    return Card(
+      color: Colors.purple.withOpacity(0.15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.purple.withOpacity(0.5), width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(relic.icon, size: 56, color: Colors.purple.shade200),
+            Text(relic.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            Text(
+              relic.description,
+              textAlign: TextAlign.center,
+              style:
+                  TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/feedback_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class FeedbackScreen extends StatefulWidget {
+  const FeedbackScreen({super.key});
+
+  @override
+  State<FeedbackScreen> createState() => _FeedbackScreenState();
+}
+
+class _FeedbackScreenState extends State<FeedbackScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _feedbackController = TextEditingController();
+  bool _isSending = false;
+
+  void _sendFeedback() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isSending = true;
+      });
+
+      // 模拟网络请求或数据提交
+      await Future.delayed(const Duration(seconds: 2));
+
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('感谢您的宝贵反馈！')),
+        );
+        _feedbackController.clear();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('反馈与建议'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                '我们非常重视您的反馈和建议，这将帮助我们不断改进游戏。',
+                style:
+                    TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              TextFormField(
+                controller: _feedbackController,
+                maxLines: 8,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: '请在此处输入您的反馈或建议...',
+                  hintStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.black.withOpacity(0.4),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.blue.withOpacity(0.5)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.blue.withOpacity(0.5)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.blue, width: 2),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '反馈内容不能为空';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _isSending ? null : _sendFeedback,
+                icon: _isSending
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Icon(Icons.send),
+                label: Text(_isSending ? '发送中...' : '发送反馈'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor:
+                      _isSending ? Colors.grey : Colors.blue.shade700,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/game_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import 'dart:async';
+import '../models/character.dart';
+import '../models/enemy_type.dart';
+import '../models/collectable.dart';
+import '../models/particle.dart';
+import '../widgets/game_canvas.dart';
+import '../widgets/joystick.dart';
+import '../widgets/leaderboard.dart';
+import '../widgets/game_over_overlay.dart';
+import '../services/storage_service.dart';
+
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
+  // Game state
+  late AnimationController _controller;
+  Character? player;
+  List<Character> enemies = [];
+  List<Collectable> collectables = [];
+  List<Particle> particles = [];
+  Offset cameraPos = Offset.zero;
+  bool isGameOver = false;
+
+  // Stats tracking
+  int _highScore = 0;
+  int _enemiesDefeatedThisGame = 0;
+  DateTime _gameSessionStartTime = DateTime.now();
+
+  // Game timing
+  Timer? _enemySpawnTimer;
+  Timer? _collectableSpawnTimer;
+  Timer? _timersUpdateTimer; // 用于定期更新定时器
+  DateTime lastEnemySpawn = DateTime.now();
+  int _lastDifficultyLevel = 0; // 上次的难度等级
+
+  // Configuration
+  static const double playerSpeed = 4.0;
+  static const int maxCollectables = 120;
+  static const int maxEnemies = 20;
+  static const double magneticPickupRadius = 180.0;
+  static const double magneticForce = 5.0;
+  static const double cameraLerpFactor = 0.08;
+  static const double chargeDistance = 300.0;
+
+  // Player movement
+  Offset moveVector = Offset.zero;
+
+  // Player dash functionality
+  void _triggerPlayerDash() {
+    if (player != null && player!.canDash()) {
+      player!.startDash();
+      _createDashParticles(player!.pos, Colors.cyan);
+      if (mounted) {
+        setState(() {}); // Update UI to reflect dash state
+      }
+    }
+  }
+
+  void _createDashParticles(Offset pos, Color color) {
+    List<Particle> newParticles = [];
+    for (int i = 0; i < 8; i++) {
+      final angle = (i / 8) * 2 * math.pi;
+      final speed = math.Random().nextDouble() * 6 + 4;
+
+      newParticles.add(Particle(
+        pos: pos,
+        velocity: Offset(
+          math.cos(angle) * speed,
+          math.sin(angle) * speed,
+        ),
+        color: color,
+        size: math.Random().nextDouble() * 3 + 2,
+        lifespan: 0.8,
+      ));
+    }
+    if (mounted) {
+      setState(() {
+        particles.addAll(newParticles);
+      });
+    }
+  }
+
+  // 获取当前游戏难度级别（基于游戏时长，每分钟+1级）
+  int get currentDifficultyLevel {
+    if (isGameOver) return 0;
+    final elapsed = DateTime.now().difference(_gameSessionStartTime);
+    return (elapsed.inMinutes).clamp(0, 10); // 最高10级难度
+  }
+
+  // 获取当前难度倍数
+  double get difficultyMultiplier {
+    return 1.0 + (currentDifficultyLevel * 0.25); // 每分钟增加25%难度
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(days: 365), // Infinite duration
+    )..addListener(_updateGame);
+
+    // 同步初始化游戏，避免异步导致的黑屏问题
+    _initGame();
+    _loadHighScore();
+    _controller.forward();
+  }
+
+  Future<void> _loadHighScore() async {
+    try {
+      final stats = await StorageService.getGameStats();
+      if (mounted) {
+        setState(() {
+          _highScore = stats.highScore;
+        });
+      }
+    } catch (e) {
+      // 如果加载失败，使用默认值
+      if (mounted) {
+        setState(() {
+          _highScore = 0;
+        });
+      }
+    }
+  }
+
+  void _initGame() {
+    _enemySpawnTimer?.cancel();
+    _collectableSpawnTimer?.cancel();
+
+    // 重置游戏开始时间
+    _gameSessionStartTime = DateTime.now();
+    _enemiesDefeatedThisGame = 0;
+
+    final newPlayer = Character(
+      id: 'player',
+      pos: Offset.zero,
+      bladeCount: 10,
+      customName: 'You',
+    );
+    final newEnemies = [
+      _createEnemy(EnemyType.brute, const Offset(400, 300)),
+      _createEnemy(EnemyType.hunter, const Offset(-300, -200)),
+      _createEnemy(EnemyType.scout, const Offset(-300, 400)),
+    ];
+    final newCollectables = <Collectable>[];
+    final pRef = newPlayer;
+    for (int i = 0; i < 80; i++) {
+      final angle = math.Random().nextDouble() * 2 * math.pi;
+      final distance = math.Random().nextDouble() * 1000;
+      final spawnPos = Offset(
+        pRef.pos.dx + math.cos(angle) * distance,
+        pRef.pos.dy + math.sin(angle) * distance,
+      );
+      newCollectables.add(Collectable(pos: spawnPos));
+    }
+
+    if (mounted) {
+      setState(() {
+        isGameOver = false;
+        player = newPlayer;
+        enemies = newEnemies;
+        collectables = newCollectables;
+        particles.clear();
+        cameraPos = Offset.zero;
+        moveVector = Offset.zero;
+      });
+      print(
+          '🎮 Game initialized - Player: ${player?.bladeCount}, Enemies: ${enemies.length}, Collectables: ${collectables.length}');
+    }
+
+    _startTimers();
+  }
+
+  void _startTimers() {
+    _enemySpawnTimer?.cancel();
+    _collectableSpawnTimer?.cancel();
+    _timersUpdateTimer?.cancel();
+
+    // 动态调整生成间隔 - 随着时间推移，生成间隔会减少
+    final baseEnemyInterval = 4.0; // 基础4秒间隔
+    final minEnemyInterval = 1.5; // 最小1.5秒间隔
+    final currentEnemyInterval = (baseEnemyInterval / difficultyMultiplier)
+        .clamp(minEnemyInterval, baseEnemyInterval);
+
+    final baseCollectableInterval = 1200; // 基础1200ms间隔
+    final minCollectableInterval = 600; // 最小600ms间隔
+    final currentCollectableInterval =
+        (baseCollectableInterval / difficultyMultiplier)
+            .clamp(minCollectableInterval.toDouble(),
+                baseCollectableInterval.toDouble())
+            .round();
+
+    _enemySpawnTimer = Timer.periodic(
+      Duration(milliseconds: (currentEnemyInterval * 1000).round()),
+      (_) => _spawnEnemy(),
+    );
+
+    _collectableSpawnTimer = Timer.periodic(
+      Duration(milliseconds: currentCollectableInterval),
+      (_) => _spawnCollectable(),
+    );
+
+    // 每30秒检查一次是否需要更新定时器
+    _timersUpdateTimer = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => _updateTimersIfNeeded(),
+    );
+
+    _lastDifficultyLevel = currentDifficultyLevel;
+  }
+
+  void _updateTimersIfNeeded() {
+    if (currentDifficultyLevel != _lastDifficultyLevel) {
+      print(
+          '🎯 Difficulty updated: Level ${currentDifficultyLevel + 1} (${(difficultyMultiplier * 100).round()}%)');
+      _startTimers(); // 重新启动定时器
+    }
+  }
+
+  Character _createEnemy(EnemyType type, Offset pos) {
+    // 基于时间的难度递增系统 - 后期敌人数据要大幅增长
+    final timeDifficultyMultiplier = difficultyMultiplier;
+
+    // 基于玩家当前等级的难度（减弱影响）
+    final playerLevel = (player?.bladeCount ?? 10) ~/ 20;
+    final playerDifficultyMultiplier = 1.0 + (playerLevel * 0.1);
+
+    // 后期敌人数据大幅增长 - 游戏时间越长，敌人越强
+    final gameMinutes =
+        DateTime.now().difference(_gameSessionStartTime).inMinutes;
+    final lateGameMultiplier = 1.0 + (gameMinutes * 0.4); // 每分钟增长40%
+
+    // 综合难度倍数
+    final finalMultiplier = timeDifficultyMultiplier *
+        playerDifficultyMultiplier *
+        lateGameMultiplier;
+
+    // 后期敌人的基础数据更大
+    final baseBlades = (type.baseBlades * finalMultiplier).round();
+    final randomRange = (8 * timeDifficultyMultiplier * lateGameMultiplier)
+        .round()
+        .clamp(5, 30);
+    final bladeCount = baseBlades + math.Random().nextInt(randomRange);
+
+    return Character(
+      id: '${type.name}_${DateTime.now().millisecondsSinceEpoch}',
+      pos: pos,
+      bladeCount: bladeCount,
+      type: type,
+    );
+  }
+
+  void _spawnEnemy() {
+    if (enemies.where((e) => e.isActive).length >= maxEnemies ||
+        player == null) {
+      return;
+    }
+
+    // Safety check for player position before spawning
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
+
+    final angle = math.Random().nextDouble() * 2 * math.pi;
+    final distance = 800.0 + math.Random().nextDouble() * 200;
+    final spawnPos = Offset(
+      player!.pos.dx + math.cos(angle) * distance,
+      player!.pos.dy + math.sin(angle) * distance,
+    );
+
+    // Safety check for spawn position
+    if (!spawnPos.dx.isFinite || !spawnPos.dy.isFinite) {
+      return; // Skip spawning if position is invalid
+    }
+
+    final enemyTypes = EnemyType.allTypes;
+    final randomType = enemyTypes[math.Random().nextInt(enemyTypes.length)];
+
+    if (mounted) {
+      setState(() {
+        enemies.add(_createEnemy(randomType, spawnPos));
+      });
+    }
+  }
+
+  void _spawnCollectable() {
+    if (collectables.length >= maxCollectables || player == null) {
+      return;
+    }
+
+    // Safety check for player position before spawning
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
+
+    final angle = math.Random().nextDouble() * 2 * math.pi;
+    final distance = math.Random().nextDouble() * 1000;
+    final spawnPos = Offset(
+      player!.pos.dx + math.cos(angle) * distance,
+      player!.pos.dy + math.sin(angle) * distance,
+    );
+
+    // Safety check for spawn position
+    if (!spawnPos.dx.isFinite || !spawnPos.dy.isFinite) {
+      return; // Skip spawning if position is invalid
+    }
+    if (mounted) {
+      setState(() {
+        collectables.add(Collectable(pos: spawnPos));
+      });
+    }
+  }
+
+  void _updateGame() {
+    if (isGameOver || player == null || !mounted) return;
+
+    // Basic safety check and player movement
+    if (!moveVector.dx.isFinite || !moveVector.dy.isFinite) {
+      moveVector = Offset.zero;
+    }
+
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
+
+    // Calculate player speed based on dash state
+    final currentPlayerSpeed =
+        player!.isDashing ? playerSpeed * 5.0 : playerSpeed;
+
+    player!.pos += Offset(
+      moveVector.dx * currentPlayerSpeed,
+      moveVector.dy * currentPlayerSpeed,
+    );
+
+    _updateAI();
+
+    // Update all characters
+    final allCharacters = [player!, ...enemies];
+    for (final character in allCharacters) {
+      if (character.isActive) {
+        character.updateCharging();
+        if (character.id != 'player') {
+          if (!character.moveVector.dx.isFinite ||
+              !character.moveVector.dy.isFinite) {
+            character.moveVector = Offset.zero;
+          }
+          if (!character.pos.dx.isFinite || !character.pos.dy.isFinite) {
+            character.pos = Offset.zero;
+          }
+          character.pos += character.moveVector;
+        }
+      }
+    }
+
+    _updateMagneticPickup();
+    _checkCollisions();
+    _updateParticles();
+    _updateCamera();
+    _cleanupObjects();
+
+    // Update UI
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _updateAI() {
+    if (player == null) return;
+
+    // Basic safety check for player position
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
+
+    final activeEnemies = enemies.where((e) => e.isActive).toList();
+
+    for (final enemy in activeEnemies) {
+      // Basic safety check for enemy position
+      if (!enemy.pos.dx.isFinite || !enemy.pos.dy.isFinite) {
+        enemy.pos = Offset.zero;
+      }
+
+      final dx = player!.pos.dx - enemy.pos.dx;
+      final dy = player!.pos.dy - enemy.pos.dy;
+      final distToPlayer = math.sqrt(dx * dx + dy * dy);
+
+      // 关键修复：防止除零错误
+      if (distToPlayer < 0.1) {
+        enemy.moveVector = Offset.zero;
+        continue;
+      }
+
+      final isStronger = enemy.bladeCount > player!.bladeCount;
+
+      // 计算附近盟友数量以实现群体行为
+      final nearbyAllies = activeEnemies.where((other) {
+        if (other.id == enemy.id) return false;
+        final allyDist = (other.pos - enemy.pos).distance;
+        return allyDist < 200.0;
+      }).length;
+
+      // 群体攻击bonus
+      final groupConfidence = nearbyAllies * 0.15;
+      final effectiveStrength = enemy.bladeCount * (1.0 + groupConfidence);
+
+      // Activate charging behavior if conditions are met.
+      // 强敌更积极地冲刺 - 数据大于玩家时立即冲刺
+      final isSignificantlyStronger =
+          enemy.bladeCount > (player!.bladeCount * 1.2);
+      final chargeDistanceForStrongEnemy =
+          isSignificantlyStronger ? 500.0 : chargeDistance;
+
+      if ((effectiveStrength > player!.bladeCount ||
+              isStronger ||
+              isSignificantlyStronger) &&
+          !enemy.isCharging &&
+          distToPlayer < chargeDistanceForStrongEnemy) {
+        enemy.startCharging();
+      }
+
+      // Determine behavior based on strength and enemy type.
+      if (effectiveStrength > player!.bladeCount || enemy.isCharging) {
+        // BEHAVIOR: ATTACK / CHARGE towards the player.
+        final currentSpeed = enemy.currentSpeed;
+
+        // 强敌更加直接和快速地追击玩家
+        if (isSignificantlyStronger) {
+          // 强敌直接追击，不添加随机性
+          enemy.moveVector = Offset(
+            (dx / distToPlayer) * currentSpeed,
+            (dy / distToPlayer) * currentSpeed,
+          );
+        } else {
+          // 普通强敌添加一些随机性避免所有敌人都走相同路径
+          final randomOffset = Offset(
+            (math.Random().nextDouble() - 0.5) * 0.3,
+            (math.Random().nextDouble() - 0.5) * 0.3,
+          );
+
+          final baseDirection = Offset(dx / distToPlayer, dy / distToPlayer);
+          final finalDirection = baseDirection + randomOffset;
+          final finalDistance = finalDirection.distance;
+
+          if (finalDistance > 0.1) {
+            enemy.moveVector = Offset(
+              (finalDirection.dx / finalDistance) * currentSpeed,
+              (finalDirection.dy / finalDistance) * currentSpeed,
+            );
+          } else {
+            enemy.moveVector = Offset(
+              (dx / distToPlayer) * currentSpeed,
+              (dy / distToPlayer) * currentSpeed,
+            );
+          }
+        }
+      } else {
+        // BEHAVIOR: WEAKER (FLEE or SCAVENGE).
+        if (enemy.behavior == 'scavenger' && distToPlayer > 300) {
+          // SUB-BEHAVIOR: SCAVENGE for collectables when far from the player.
+          Collectable? closest;
+          double minDistance = double.infinity;
+
+          // Find the closest collectable.
+          for (final collectable in collectables) {
+            final cdx = collectable.pos.dx - enemy.pos.dx;
+            final cdy = collectable.pos.dy - enemy.pos.dy;
+            final distance = math.sqrt(cdx * cdx + cdy * cdy);
+
+            if (distance < minDistance) {
+              minDistance = distance;
+              closest = collectable;
+            }
+          }
+
+          if (closest != null && minDistance > 0.1) {
+            final cdx = closest.pos.dx - enemy.pos.dx;
+            final cdy = closest.pos.dy - enemy.pos.dy;
+            enemy.moveVector = Offset(
+              (cdx / minDistance) * enemy.speed,
+              (cdy / minDistance) * enemy.speed,
+            );
+          } else {
+            enemy.moveVector = Offset.zero;
+          }
+        } else {
+          // SUB-BEHAVIOR: FLEE from the player if not scavenging.
+          // 聪明的逃跑：不只是直线逃跑，而是向安全区域逃跑
+          final fleeSpeed = enemy.speed * 1.5; // 逃跑时移动更快
+
+          // 寻找逃跑方向：远离玩家并且避开其他敌人
+          var fleeDirection = Offset(-dx / distToPlayer, -dy / distToPlayer);
+
+          // 避免与其他敌人碰撞
+          for (final other in activeEnemies) {
+            if (other.id == enemy.id) continue;
+            final otherDist = (other.pos - enemy.pos).distance;
+            if (otherDist < 100.0 && otherDist > 0.1) {
+              final avoidX = (enemy.pos.dx - other.pos.dx) / otherDist;
+              final avoidY = (enemy.pos.dy - other.pos.dy) / otherDist;
+              fleeDirection += Offset(avoidX * 0.5, avoidY * 0.5);
+            }
+          }
+
+          final fleeDistance = fleeDirection.distance;
+          if (fleeDistance > 0.1) {
+            enemy.moveVector = Offset(
+              (fleeDirection.dx / fleeDistance) * fleeSpeed,
+              (fleeDirection.dy / fleeDistance) * fleeSpeed,
+            );
+          } else {
+            enemy.moveVector = Offset(
+              -(dx / distToPlayer) * fleeSpeed,
+              -(dy / distToPlayer) * fleeSpeed,
+            );
+          }
+        }
+      }
+
+      // Final safety check for the calculated moveVector
+      if (!enemy.moveVector.dx.isFinite || !enemy.moveVector.dy.isFinite) {
+        enemy.moveVector = Offset.zero;
+      }
+    }
+  }
+
+  void _updateMagneticPickup() {
+    if (player == null) return;
+    final List<Character> allPickers = [player!, ...enemies];
+
+    for (final picker in allPickers) {
+      if (!picker.isActive) continue;
+
+      double pickupRadius = (picker.id == 'player')
+          ? magneticPickupRadius
+          : magneticPickupRadius / 2;
+
+      for (final collectable in collectables) {
+        final dx = picker.pos.dx - collectable.pos.dx;
+        final dy = picker.pos.dy - collectable.pos.dy;
+        final distance = math.sqrt(dx * dx + dy * dy);
+
+        if (distance < pickupRadius && distance > 0.01) {
+          final force = 1 - (distance / pickupRadius);
+          final moveX = (dx / distance) * magneticForce * force;
+          final moveY = (dy / distance) * magneticForce * force;
+
+          collectable.pos += Offset(moveX, moveY);
+        }
+      }
+    }
+  }
+
+  void _checkCollisions() {
+    if (player == null) return;
+
+    final allCharacters = [player!, ...enemies.where((e) => e.isActive)];
+    List<Collectable> collectedThisFrame = [];
+
+    for (final character in allCharacters) {
+      for (final collectable in collectables) {
+        final distance = (character.pos - collectable.pos).distance;
+        if (distance < 20 + collectable.radius) {
+          // Core radius
+          character.addBlade();
+          collectedThisFrame.add(collectable);
+        }
+      }
+    }
+    if (collectedThisFrame.isNotEmpty && mounted) {
+      setState(() {
+        collectables.removeWhere((c) => collectedThisFrame.contains(c));
+      });
+    }
+
+    for (int i = 0; i < allCharacters.length; i++) {
+      for (int j = i + 1; j < allCharacters.length; j++) {
+        final charA = allCharacters[i];
+        final charB = allCharacters[j];
+
+        final distance = (charA.pos - charB.pos).distance;
+
+        if (distance < charA.bladesRadius + charB.bladesRadius) {
+          if (charA.canClash()) {
+            charA.takeClashDamage();
+            _createClashParticles(charA.pos, charA.color);
+          }
+
+          if (charB.canClash()) {
+            charB.takeClashDamage();
+            _createClashParticles(charB.pos, charB.color);
+          }
+        }
+      }
+    }
+
+    if (player != null && !player!.isActive) {
+      _endGame();
+    }
+  }
+
+  void _createClashParticles(Offset pos, Color color) {
+    List<Particle> newParticles = [];
+    for (int i = 0; i < 5; i++) {
+      final angle = math.Random().nextDouble() * 2 * math.pi;
+      final speed = math.Random().nextDouble() * 8 + 2;
+
+      newParticles.add(Particle(
+        pos: pos,
+        velocity: Offset(
+          math.cos(angle) * speed,
+          math.sin(angle) * speed,
+        ),
+        color: color,
+        size: math.Random().nextDouble() * 4 + 2,
+      ));
+    }
+    if (mounted) {
+      setState(() {
+        particles.addAll(newParticles);
+      });
+    }
+  }
+
+  void _updateParticles() {
+    if (particles.isEmpty) return;
+    particles.forEach((p) => p.update());
+    particles.removeWhere((p) => p.isDead);
+  }
+
+  void _updateCamera() {
+    if (player == null) return;
+
+    // Basic safety checks
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
+    if (!cameraPos.dx.isFinite || !cameraPos.dy.isFinite) {
+      cameraPos = Offset.zero;
+    }
+
+    final newCameraPos = Offset.lerp(cameraPos, player!.pos, cameraLerpFactor);
+    cameraPos = newCameraPos ?? player!.pos;
+  }
+
+  void _cleanupObjects() {
+    // 追踪本帧被击败的敌人
+    final defeatedEnemiesThisFrame =
+        enemies.where((enemy) => !enemy.isActive).toList();
+    if (defeatedEnemiesThisFrame.isNotEmpty) {
+      _enemiesDefeatedThisGame += defeatedEnemiesThisFrame.length;
+
+      // 检查是否有泰坦被击败
+      if (defeatedEnemiesThisFrame.any((e) => e.type == EnemyType.titan)) {
+        // (这是将来添加成就解锁逻辑的地方)
+        print("A Titan was defeated!");
+      }
+
+      enemies.removeWhere((enemy) => !enemy.isActive);
+    }
+  }
+
+  void _endGame() async {
+    if (isGameOver) return;
+    if (player == null) return;
+
+    _controller.stop();
+    _enemySpawnTimer?.cancel();
+    _collectableSpawnTimer?.cancel();
+
+    // --- NEW STATS SAVING LOGIC ---
+
+    // 1. 获取当前所有统计数据
+    final currentStats = await StorageService.getGameStats();
+
+    // 2. 计算本局数据
+    final finalScore = player!.bladeCount;
+    final survivalTime =
+        DateTime.now().difference(_gameSessionStartTime).inSeconds;
+
+    // 3. 准备新的数据
+    final newHighScore = math.max(currentStats.highScore, finalScore);
+    final newTotalGames = currentStats.totalGamesPlayed + 1;
+    final newTotalDefeated =
+        currentStats.totalEnemiesDefeated + _enemiesDefeatedThisGame;
+    final newLongestTime =
+        math.max(currentStats.longestTimeInSeconds, survivalTime);
+
+    // 4. 检查并解锁成就
+    final newAchievements =
+        Set<String>.from(currentStats.unlockedAchievementIds);
+    newAchievements.add('first_game'); // 完成第一局
+    if (survivalTime >= 60) newAchievements.add('survive_1_min');
+    if (survivalTime >= 300) newAchievements.add('survive_5_min');
+    if (finalScore >= 100) newAchievements.add('reach_100_blades');
+    // 'defeat_titan' 成就的解锁逻辑应在敌人被击败时处理，这里仅为示例
+    if (_enemiesDefeatedThisGame > 0 &&
+        enemies.any((e) => e.type == EnemyType.titan && !e.isActive)) {
+      newAchievements.add('defeat_titan');
+    }
+
+    // 5. 创建新的统计对象
+    final newStats = GameStats(
+      highScore: newHighScore,
+      totalGamesPlayed: newTotalGames,
+      totalEnemiesDefeated: newTotalDefeated,
+      longestTimeInSeconds: newLongestTime,
+      unlockedAchievementIds: newAchievements,
+    );
+
+    // 6. 保存数据
+    await StorageService.saveGameStats(newStats);
+
+    // --- END OF NEW STATS SAVING LOGIC ---
+
+    if (mounted) {
+      setState(() {
+        isGameOver = true;
+        _highScore = newStats.highScore; // 更新UI上的最高分
+      });
+    }
+  }
+
+  void _restartGame() {
+    _controller.stop();
+    _initGame();
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_updateGame);
+    _controller.dispose();
+    _enemySpawnTimer?.cancel();
+    _collectableSpawnTimer?.cancel();
+    _timersUpdateTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 确保始终显示游戏界面，即使在初始化过程中
+    final currentPlayer = player;
+
+    final joystickPosition = Positioned(
+      bottom: 80,
+      left: 30,
+      child: Joystick(
+        size: 140.0, // 稍微缩小摇杆适配竖屏
+        onMove: (Offset vector) {
+          if (mounted) {
+            setState(() {
+              moveVector = vector;
+            });
+          }
+        },
+      ),
+    );
+
+    // 冲刺按钮
+    final dashButton = Positioned(
+      bottom: 80,
+      right: 30,
+      child: GestureDetector(
+        onTap: _triggerPlayerDash,
+        child: Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: (currentPlayer?.canDash() ?? false)
+                ? Colors.blue.withOpacity(0.8)
+                : Colors.grey.withOpacity(0.5),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: (currentPlayer?.isDashing ?? false)
+                  ? Colors.white
+                  : Colors.grey.withOpacity(0.7),
+              width: 3,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // 冷却进度环
+              if (currentPlayer != null && !currentPlayer.canDash())
+                SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: CircularProgressIndicator(
+                    value: currentPlayer.dashCooldownProgress,
+                    strokeWidth: 3,
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    backgroundColor: Colors.grey.withOpacity(0.3),
+                  ),
+                ),
+              // 冲刺图标
+              Icon(
+                Icons.double_arrow,
+                color: (currentPlayer?.canDash() ?? false)
+                    ? Colors.white
+                    : Colors.grey[600],
+                size: 32,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          GameCanvas(
+            repaint: _controller,
+            player: currentPlayer,
+            enemies: enemies,
+            collectables: collectables,
+            particles: particles,
+            cameraPos: cameraPos,
+          ),
+          Positioned(
+            top: 60,
+            left: 20,
+            child: Leaderboard(
+              characters: [
+                if (currentPlayer != null && currentPlayer.isActive)
+                  currentPlayer,
+                ...enemies.where((e) => e.isActive),
+              ],
+            ),
+          ),
+          // 难度等级显示
+          Positioned(
+            top: 60,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.orange.withOpacity(0.5),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.trending_up,
+                    color: Colors.orange,
+                    size: 16,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '难度 ${currentDifficultyLevel + 1}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${(difficultyMultiplier * 100).round()}%',
+                    style: const TextStyle(
+                      color: Colors.orange,
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (!isGameOver) joystickPosition,
+          if (!isGameOver) dashButton,
+          if (isGameOver)
+            GameOverOverlay(
+              onRestart: _restartGame,
+              finalScore: currentPlayer?.bladeCount ?? 0,
+              highScore: _highScore,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/game_wrapper.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'game_screen.dart';
+
+class GameWrapper extends StatefulWidget {
+  const GameWrapper({super.key});
+
+  @override
+  State<GameWrapper> createState() => _GameWrapperState();
+}
+
+class _GameWrapperState extends State<GameWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    _setGameMode();
+  }
+
+  @override
+  void dispose() {
+    _setDefaultMode();
+    super.dispose();
+  }
+
+  void _setGameMode() {
+    // 设置沉浸式全屏模式
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    // 将方向设置为竖屏
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  void _setDefaultMode() {
+    // 退出游戏时恢复系统UI
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const GameScreen();
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/pokedex_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+import '../models/character.dart';
+import '../models/enemy_type.dart';
+
+class PokedexScreen extends StatelessWidget {
+  const PokedexScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // 创建一个包含玩家和所有敌人类型的列表
+    final List<Map<String, dynamic>> characterList = [
+      {
+        'name': '你 (Player)',
+        'icon': Icons.person,
+        'color': Colors.yellow,
+        'details': '初始刀锋: 10\n速度: 基础',
+        'behavior': '由你操控的英雄，通过冲刺躲避和攻击。',
+      },
+      ...EnemyType.allTypes.map((type) => {
+            'name': type.name,
+            'icon': type.icon,
+            'color': type.color,
+            'details': '初始刀锋: ${type.baseBlades}\n速度: ${type.baseSpeed}',
+            'behavior': '行为模式: ${type.behavior}',
+          })
+    ];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('英雄图鉴'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: characterList.length,
+        itemBuilder: (context, index) {
+          final character = characterList[index];
+          return Card(
+            color: Colors.black.withOpacity(0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: character['color'].withOpacity(0.5)),
+            ),
+            margin: const EdgeInsets.only(bottom: 16.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: character['color'].withOpacity(0.2),
+                    child: Icon(
+                      character['icon'],
+                      size: 30,
+                      color: character['color'],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          character['name'],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: character['color'],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          character['details'],
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          character['behavior'],
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/privacy_policy_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('隐私政策'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '《神将GO》隐私政策',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '1. 我们收集的信息',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '本游戏在您使用过程中可能收集匿名游戏数据，例如游戏时长、分数等，用于优化游戏体验和统计分析。我们不会收集您的个人身份信息。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '2. 信息的使用',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '我们收集的数据仅用于改进游戏性能和提供更好的用户体验。我们不会将您的数据出售给第三方。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '3. 数据安全',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '我们采取合理的物理、电子和管理措施来保护我们收集的信息。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '4. 政策变更',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '我们可能会不时更新本隐私政策。任何更新都将在此页面发布。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 40),
+            Text(
+              '如果您有任何疑问，请通过反馈渠道联系我们。',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/scores_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+import '../services/storage_service.dart';
+
+class ScoresScreen extends StatefulWidget {
+  const ScoresScreen({super.key});
+
+  @override
+  State<ScoresScreen> createState() => _ScoresScreenState();
+}
+
+class _ScoresScreenState extends State<ScoresScreen> {
+  GameStats? _stats;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final stats = await StorageService.getGameStats();
+    if (mounted) {
+      setState(() {
+        _stats = stats;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF000010),
+        appBar: AppBar(
+          title: const Text('成绩'),
+          backgroundColor: const Color(0xFF000010),
+          elevation: 0,
+          bottom: const TabBar(
+            indicatorColor: Colors.yellow,
+            indicatorWeight: 3.0,
+            tabs: [
+              Tab(icon: Icon(Icons.bar_chart), text: '统计数据'),
+              Tab(icon: Icon(Icons.emoji_events), text: '成就'),
+            ],
+          ),
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : TabBarView(
+                children: [
+                  _buildStatsPage(_stats!),
+                  _buildAchievementsPage(_stats!),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildStatsPage(GameStats stats) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          _buildStatCard(
+            '最高纪录',
+            stats.highScore.toString(),
+            Icons.star,
+            Colors.yellow,
+            isLarge: true,
+          ),
+          const SizedBox(height: 16),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            children: [
+              _buildStatCard('最长生存', '${stats.longestTimeInSeconds} 秒',
+                  Icons.timer, Colors.cyan),
+              _buildStatCard('游戏局数', stats.totalGamesPlayed.toString(),
+                  Icons.gamepad, Colors.green),
+              _buildStatCard('击败敌人', stats.totalEnemiesDefeated.toString(),
+                  Icons.group_off, Colors.red),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String label, String value, IconData icon, Color color,
+      {bool isLarge = false}) {
+    return Card(
+      color: color.withOpacity(0.15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: color.withOpacity(0.5)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: isLarge ? 48 : 32, color: color),
+            const SizedBox(height: 12),
+            Text(value,
+                style: TextStyle(
+                    fontSize: isLarge ? 40 : 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            const SizedBox(height: 4),
+            Text(label,
+                style: TextStyle(
+                    fontSize: 14, color: Colors.white.withOpacity(0.7))),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAchievementsPage(GameStats stats) {
+    final allAchievements = StorageService.getAllAchievements();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: allAchievements.length,
+      itemBuilder: (context, index) {
+        final achievement = allAchievements[index];
+        final isUnlocked =
+            stats.unlockedAchievementIds.contains(achievement.id);
+        return Card(
+          color: isUnlocked
+              ? Colors.amber.withOpacity(0.2)
+              : Colors.black.withOpacity(0.3),
+          margin: const EdgeInsets.only(bottom: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+                color:
+                    isUnlocked ? Colors.amber : Colors.grey.withOpacity(0.3)),
+          ),
+          child: ListTile(
+            leading: Icon(
+              achievement.icon,
+              size: 36,
+              color: isUnlocked ? Colors.amber : Colors.grey,
+            ),
+            title: Text(
+              achievement.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isUnlocked ? Colors.white : Colors.white54,
+              ),
+            ),
+            subtitle: Text(
+              achievement.description,
+              style: TextStyle(
+                color:
+                    isUnlocked ? Colors.white.withOpacity(0.7) : Colors.white38,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/settings_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'about_us_screen.dart';
+import 'user_agreement_screen.dart';
+import 'privacy_policy_screen.dart';
+import 'usage_help_screen.dart';
+import 'feedback_screen.dart';
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('设置'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: <Widget>[
+          _buildSettingsTile(
+            context,
+            '关于我们',
+            Icons.info_outline,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AboutUsScreen()),
+            ),
+          ),
+          _buildSettingsTile(
+            context,
+            '用户协议',
+            Icons.gavel,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const UserAgreementScreen()),
+            ),
+          ),
+          _buildSettingsTile(
+            context,
+            '隐私政策',
+            Icons.privacy_tip_outlined,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const PrivacyPolicyScreen()),
+            ),
+          ),
+          _buildSettingsTile(
+            context,
+            '使用帮助',
+            Icons.help_outline,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const UsageHelpScreen()),
+            ),
+          ),
+          _buildSettingsTile(
+            context,
+            '反馈与建议',
+            Icons.feedback_outlined,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FeedbackScreen()),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile(
+      BuildContext context, String title, IconData icon, VoidCallback onTap) {
+    return Card(
+      color: Colors.black.withOpacity(0.3),
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.blue.withOpacity(0.5)),
+      ),
+      child: ListTile(
+        leading: Icon(icon, size: 28, color: Colors.blueAccent),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/start_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'game_wrapper.dart';
+import 'pokedex_screen.dart';
+import 'backpack_screen.dart';
+import 'scores_screen.dart';
+import 'settings_screen.dart';
+
+class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  '神将GO',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 64,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.blueAccent,
+                          offset: Offset(0, 0)),
+                      Shadow(
+                          blurRadius: 20.0,
+                          color: Colors.blue,
+                          offset: Offset(0, 0)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 80),
+                _buildMenuButton(
+                  context,
+                  '开始游戏',
+                  Icons.play_arrow,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GameWrapper()),
+                    );
+                  },
+                  isPrimary: true,
+                ),
+                const SizedBox(height: 20),
+                _buildMenuButton(
+                  context,
+                  '英雄图鉴',
+                  Icons.menu_book,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PokedexScreen()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildMenuButton(
+                  context,
+                  '背包',
+                  Icons.backpack,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const BackpackScreen()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildMenuButton(
+                  context,
+                  '成绩',
+                  Icons.leaderboard,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ScoresScreen()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                _buildMenuButton(
+                  context,
+                  '设置',
+                  Icons.settings,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SettingsScreen()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuButton(
+    BuildContext context,
+    String text,
+    IconData icon,
+    VoidCallback onPressed, {
+    bool isPrimary = false,
+  }) {
+    return ElevatedButton.icon(
+      icon: Icon(icon, size: isPrimary ? 30 : 22),
+      label: Text(text),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: isPrimary
+            ? Colors.blue.shade700
+            : Colors.blue.shade900.withOpacity(0.7),
+        minimumSize: const Size(280, 60),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        textStyle: TextStyle(
+          fontSize: isPrimary ? 26 : 20,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 2,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(
+            color: isPrimary ? Colors.blue.shade300 : Colors.blue.shade700,
+            width: 2,
+          ),
+        ),
+        elevation: 8,
+        shadowColor: isPrimary ? Colors.blue.withOpacity(0.7) : Colors.black,
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/usage_help_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class UsageHelpScreen extends StatelessWidget {
+  const UsageHelpScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('使用帮助'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '欢迎来到《神将GO》帮助中心。',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '1. 游戏目标',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '通过收集刀锋来增强你的角色，击败不断涌来的敌人，尽可能生存更长时间。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '2. 如何移动',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '使用左侧摇杆控制你的角色移动方向。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '3. 冲刺',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '点击右侧冲刺按钮可以进行快速冲刺，用于躲避敌人或快速接近刀锋。冲刺有冷却时间。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '4. 刀锋与敌人',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '收集地图上的刀锋可以增加你的刀锋数量和攻击力。与敌人碰撞会减少刀锋数量，刀锋数量为零时游戏结束。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '5. 难度与分数',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '游戏难度会随着时间增加，敌人会变得更强。你的最终分数取决于你收集的刀锋数量和生存时间。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 40),
+            Text(
+              '祝您游戏愉快！',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/screens/user_agreement_screen.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class UserAgreementScreen extends StatelessWidget {
+  const UserAgreementScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF000010),
+      appBar: AppBar(
+        title: const Text('用户协议'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '欢迎阅读《神将GO》用户协议。',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '1. 服务条款',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '本协议是您与《神将GO》之间就您使用本游戏服务所达成的法律协议。在使用本游戏服务前，请您务必仔细阅读本协议。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '2. 用户权利与义务',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '您有权在遵守本协议及相关法律法规的前提下使用本游戏服务。您应确保您的行为符合所有适用的法律法规。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '3. 隐私保护',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '我们将尽力保护您的个人信息，具体请参阅我们的隐私政策。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '4. 免责声明',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '本游戏在法律允许的最大范围内提供，不作任何明示或暗示的保证。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '5. 协议变更',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '我们保留随时修改本协议的权利，并将在本游戏内发布最新版本。',
+              style:
+                  TextStyle(color: Colors.white70, fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 40),
+            Text(
+              '感谢您对《神将GO》的支持！',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/services/storage_service.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// 定义成就模型
+class Achievement {
+  final String id;
+  final String title;
+  final String description;
+  final IconData icon;
+
+  const Achievement(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.icon});
+}
+
+// 定义游戏统计数据模型
+class GameStats {
+  final int highScore;
+  final int totalGamesPlayed;
+  final int totalEnemiesDefeated;
+  final int longestTimeInSeconds;
+  final Set<String> unlockedAchievementIds;
+
+  GameStats({
+    this.highScore = 0,
+    this.totalGamesPlayed = 0,
+    this.totalEnemiesDefeated = 0,
+    this.longestTimeInSeconds = 0,
+    this.unlockedAchievementIds = const {},
+  });
+}
+
+class StorageService {
+  static const String _highScoreKey = 'highScore';
+  static const String _totalGamesPlayedKey = 'totalGamesPlayed';
+  static const String _totalEnemiesDefeatedKey = 'totalEnemiesDefeated';
+  static const String _longestTimeKey = 'longestTimeInSeconds';
+  static const String _unlockedAchievementsKey = 'unlockedAchievements';
+
+  // 预定义所有成就
+  static final List<Achievement> _allAchievements = [
+    const Achievement(
+        id: 'first_game',
+        title: '初出茅庐',
+        description: '完成你的第一场游戏。',
+        icon: Icons.sports_esports),
+    const Achievement(
+        id: 'survive_1_min',
+        title: '幸存者',
+        description: '在一局游戏中生存超过1分钟。',
+        icon: Icons.timer),
+    const Achievement(
+        id: 'survive_5_min',
+        title: '战场老兵',
+        description: '在一局游戏中生存超过5分钟。',
+        icon: Icons.shield),
+    const Achievement(
+        id: 'reach_100_blades',
+        title: '刀锋领主',
+        description: '刀锋数量达到100。',
+        icon: Icons.flash_on),
+    const Achievement(
+        id: 'defeat_titan',
+        title: '泰坦杀手',
+        description: '成功击败一个泰坦。',
+        icon: Icons.auto_awesome),
+  ];
+
+  static List<Achievement> getAllAchievements() => _allAchievements;
+
+  // 获取完整的游戏统计数据
+  static Future<GameStats> getGameStats() async {
+    final prefs = await SharedPreferences.getInstance();
+    return GameStats(
+      highScore: prefs.getInt(_highScoreKey) ?? 0,
+      totalGamesPlayed: prefs.getInt(_totalGamesPlayedKey) ?? 0,
+      totalEnemiesDefeated: prefs.getInt(_totalEnemiesDefeatedKey) ?? 0,
+      longestTimeInSeconds: prefs.getInt(_longestTimeKey) ?? 0,
+      unlockedAchievementIds:
+          (prefs.getStringList(_unlockedAchievementsKey) ?? []).toSet(),
+    );
+  }
+
+  // 保存完整的游戏统计数据
+  static Future<void> saveGameStats(GameStats stats) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_highScoreKey, stats.highScore);
+    await prefs.setInt(_totalGamesPlayedKey, stats.totalGamesPlayed);
+    await prefs.setInt(_totalEnemiesDefeatedKey, stats.totalEnemiesDefeated);
+    await prefs.setInt(_longestTimeKey, stats.longestTimeInSeconds);
+    await prefs.setStringList(
+        _unlockedAchievementsKey, stats.unlockedAchievementIds.toList());
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/widgets/game_canvas.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import '../models/character.dart';
+import '../models/collectable.dart';
+import '../models/particle.dart';
+
+class GameCanvas extends StatelessWidget {
+  final Listenable repaint;
+  final Character? player;
+  final List<Character> enemies;
+  final List<Collectable> collectables;
+  final List<Particle> particles;
+  final Offset cameraPos;
+
+  const GameCanvas({
+    super.key,
+    required this.repaint,
+    required this.player,
+    required this.enemies,
+    required this.collectables,
+    required this.particles,
+    required this.cameraPos,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: CustomPaint(
+        painter: GamePainter(
+          player: player,
+          enemies: enemies,
+          collectables: collectables,
+          particles: particles,
+          cameraPos: cameraPos,
+          repaint: repaint,
+        ),
+        isComplex: true,
+        willChange: true,
+      ),
+    );
+  }
+}
+
+class GamePainter extends CustomPainter {
+  final Character? player;
+  final List<Character> enemies;
+  final List<Collectable> collectables;
+  final List<Particle> particles;
+  final Offset cameraPos;
+  final Listenable repaint;
+
+  // Reusable Paint objects for performance
+  final Paint _starPaint = Paint()..color = Colors.white.withOpacity(0.6);
+  final Paint _chargePaint = Paint()..style = PaintingStyle.fill;
+  final Paint _corePaint = Paint()..style = PaintingStyle.fill;
+  final Paint _coreStrokePaint = Paint()
+    ..color = Colors.white
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2;
+  final Paint _bladePaint = Paint()..style = PaintingStyle.fill;
+  final Paint _particlePaint = Paint()..style = PaintingStyle.fill;
+  final Paint _labelBgPaint = Paint()..style = PaintingStyle.fill;
+  final TextPainter _labelTextPainter = TextPainter(
+      textAlign: TextAlign.center, textDirection: TextDirection.ltr);
+
+  // Cache for blade Paths and icon TextPainters
+  final Map<double, Path> _bladePathCache = {};
+  final Map<IconData, TextPainter> _iconPainterCache = {};
+  final double _time;
+
+  GamePainter({
+    required this.player,
+    required this.enemies,
+    required this.collectables,
+    required this.particles,
+    required this.cameraPos,
+    required this.repaint,
+  })  : _time = DateTime.now().millisecondsSinceEpoch / 1000.0,
+        super(repaint: repaint);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.width <= 0 || size.height <= 0) return;
+
+    // Debug output to confirm rendering is happening
+    // print('🎨 Painting: ${size.width}x${size.height}, Player: ${player?.bladeCount}, Enemies: ${enemies.length}');
+
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    _drawStars(canvas, size);
+    _drawCollectables(canvas, size);
+
+    final allCharacters = [
+      if (player != null && player!.isActive) player!,
+      ...enemies.where((e) => e.isActive),
+    ];
+    allCharacters.sort((a, b) => a.pos.dy.compareTo(b.pos.dy));
+
+    for (final character in allCharacters) {
+      _drawCharacter(canvas, character, size);
+    }
+
+    _drawParticles(canvas, size);
+  }
+
+  void _drawStars(Canvas canvas, Size size) {
+    final safeCameraPos = Offset(
+      cameraPos.dx.isFinite ? cameraPos.dx : 0.0,
+      cameraPos.dy.isFinite ? cameraPos.dy : 0.0,
+    );
+
+    final random = math.Random(0);
+    final starCount = (size.width * size.height / 5000).clamp(50, 200).toInt();
+
+    for (int i = 0; i < starCount; i++) {
+      final starX = random.nextDouble() * 4000 - 2000;
+      final starY = random.nextDouble() * 4000 - 2000;
+      final parallaxFactor = (random.nextDouble() * 0.5) + 0.1;
+
+      final screenPos = Offset(
+        size.width / 2 + (starX - safeCameraPos.dx * parallaxFactor),
+        size.height / 2 + (starY - safeCameraPos.dy * parallaxFactor),
+      );
+
+      final wrappedX = (screenPos.dx % size.width + size.width) % size.width;
+      final wrappedY = (screenPos.dy % size.height + size.height) % size.height;
+
+      final starSize = random.nextDouble() * 1.5 + 0.5;
+      canvas.drawCircle(Offset(wrappedX, wrappedY), starSize, _starPaint);
+    }
+  }
+
+  void _drawCollectables(Canvas canvas, Size size) {
+    for (final collectable in collectables) {
+      final screenPos = _worldToScreen(collectable.pos, size);
+
+      if (_isOnScreen(screenPos, size, 100)) {
+        _drawBlade(
+            canvas, screenPos, collectable.radius, Colors.white, _time * 2);
+      }
+    }
+  }
+
+  void _drawCharacter(Canvas canvas, Character character, Size size) {
+    final screenPos = _worldToScreen(character.pos, size);
+
+    if (!_isOnScreen(screenPos, size, character.fullRadius * 2)) return;
+
+    // 冲刺效果
+    if (character.isDashing) {
+      _chargePaint.color = Colors.cyan.withOpacity(0.4);
+      canvas.drawCircle(screenPos, character.bladesRadius * 1.8, _chargePaint);
+
+      // 冲刺光环效果
+      final dashGlowPaint = Paint()
+        ..color = Colors.cyan.withOpacity(0.6)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4.0
+        ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 8.0);
+      canvas.drawCircle(screenPos, character.bladesRadius + 10, dashGlowPaint);
+    }
+
+    if (character.isCharging) {
+      _chargePaint.color = Colors.red.withOpacity(0.3);
+      canvas.drawCircle(screenPos, character.bladesRadius * 1.5, _chargePaint);
+    }
+
+    _drawBlades(canvas, character, screenPos);
+
+    _corePaint.color = character.color;
+    canvas.drawCircle(screenPos, 20, _corePaint);
+    canvas.drawCircle(screenPos, 20, _coreStrokePaint);
+
+    _drawIcon(canvas, screenPos, character.icon, Colors.white, 16);
+    _drawCharacterLabel(canvas, character, screenPos);
+  }
+
+  void _drawBlades(Canvas canvas, Character character, Offset center) {
+    if (character.bladeCount <= 0) return;
+
+    final bladeStyle = character.bladeStyle;
+    const layers = 4;
+    final bladesPerLayer = (character.bladeCount / layers).ceil();
+    final maxBladesInRing = 50;
+
+    for (int layer = 0; layer < layers; layer++) {
+      if (character.bladeCount < layer * (bladesPerLayer / 3)) continue;
+
+      final layerBladeCount = math.min(bladesPerLayer, maxBladesInRing);
+      if (layerBladeCount == 0) continue;
+
+      final layerRadius = character.bladesRadius - (layer * 15.0);
+      if (layerRadius < 20) continue;
+
+      // 更复杂的旋转速度模式
+      final baseRotationSpeed = 1.2 - (layer * 0.3);
+      // 冲刺时武器旋转加速
+      final speedMultiplier =
+          character.isDashing ? 3.0 : (character.isCharging ? 2.0 : 1.0);
+      final rotationSpeed = baseRotationSpeed * speedMultiplier;
+      final direction = layer.isEven ? 1 : -1;
+      final phaseOffset = layer * math.pi / 3; // 添加相位偏移
+      final rotation = (_time * rotationSpeed * direction) + phaseOffset;
+
+      final angleStep = (2 * math.pi) / layerBladeCount;
+
+      for (int i = 0; i < layerBladeCount; i++) {
+        final angle = (angleStep * i) + rotation;
+
+        final bladePos = Offset(
+          center.dx + math.cos(angle) * layerRadius,
+          center.dy + math.sin(angle) * layerRadius,
+        );
+
+        final layerSizeMultiplier = 1.0 - (layer * 0.1);
+        final bladeSize = (bladeStyle.size / 2) * layerSizeMultiplier;
+
+        final depthAlpha = (0.6 + 0.4 * math.sin(angle)).clamp(0.3, 1.0);
+        final layerColor = bladeStyle.color.withOpacity(depthAlpha);
+
+        _drawBlade(canvas, bladePos, bladeSize, layerColor, angle);
+      }
+    }
+  }
+
+  void _drawBlade(
+      Canvas canvas, Offset center, double size, Color color, double rotation) {
+    _bladePaint.color = color;
+
+    final path = _bladePathCache.putIfAbsent(size, () {
+      final p = Path();
+      // 创建细长的月牙形状
+      final width = size * 1.5; // 月牙的宽度
+      final height = size * 0.4; // 月牙的厚度
+
+      // 外弧 (月牙的外边缘)
+      p.addArc(
+        Rect.fromCenter(
+            center: Offset.zero, width: width * 2, height: width * 2),
+        -0.3, // 开始角度
+        0.6, // 扫过的角度
+      );
+
+      // 内弧 (月牙的内边缘) - 创建月牙的凹陷
+      final innerRadius = width * 0.7;
+      p.arcTo(
+        Rect.fromCenter(
+            center: Offset(-width * 0.15, 0),
+            width: innerRadius * 2,
+            height: innerRadius * 2),
+        0.3, // 开始角度
+        -0.6, // 扫过的角度 (反方向)
+        false,
+      );
+
+      p.close();
+      return p;
+    });
+
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(rotation);
+
+    // 添加发光效果
+    final glowPaint = Paint()
+      ..color = color.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 3.0);
+
+    canvas.drawPath(path, glowPaint);
+    canvas.drawPath(path, _bladePaint);
+    canvas.restore();
+  }
+
+  void _drawIcon(
+      Canvas canvas, Offset center, IconData icon, Color color, double size) {
+    final textPainter = _iconPainterCache.putIfAbsent(icon, () {
+      final painter = TextPainter(textDirection: TextDirection.ltr);
+      painter.text = TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          color: color,
+          fontSize: size,
+          fontFamily: icon.fontFamily,
+          package: icon.fontPackage,
+        ),
+      );
+      painter.layout();
+      return painter;
+    });
+
+    if ((textPainter.text as TextSpan?)?.style?.color != color) {
+      textPainter.text = TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          color: color,
+          fontSize: size,
+          fontFamily: icon.fontFamily,
+          package: icon.fontPackage,
+        ),
+      );
+      textPainter.layout();
+    }
+
+    textPainter.paint(
+      canvas,
+      center - Offset(textPainter.width / 2, textPainter.height / 2),
+    );
+  }
+
+  void _drawCharacterLabel(
+      Canvas canvas, Character character, Offset screenPos) {
+    final labelY = screenPos.dy - character.bladesRadius - 35;
+
+    _labelTextPainter.text = TextSpan(
+      style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          shadows: [Shadow(blurRadius: 2.0, color: Colors.black)]),
+      children: [
+        TextSpan(
+          text: character.name,
+          style: TextStyle(
+              color: character.type == null ? Colors.yellow : Colors.white),
+        ),
+        TextSpan(
+          text: '  ${character.bladeCount}',
+          style: const TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+
+    _labelTextPainter.layout();
+
+    final bgWidth = _labelTextPainter.width + 16;
+    final bgHeight = 22.0;
+    _labelBgPaint.color = character.bladeStyle.labelColor.withOpacity(0.8);
+    final bgRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(
+          center: Offset(screenPos.dx, labelY),
+          width: bgWidth,
+          height: bgHeight),
+      const Radius.circular(11),
+    );
+
+    canvas.drawRRect(bgRect, _labelBgPaint);
+    _labelTextPainter.paint(
+      canvas,
+      Offset(
+        screenPos.dx - _labelTextPainter.width / 2,
+        labelY - _labelTextPainter.height / 2,
+      ),
+    );
+  }
+
+  void _drawParticles(Canvas canvas, Size size) {
+    for (final particle in particles) {
+      final screenPos = _worldToScreen(particle.pos, size);
+
+      if (_isOnScreen(screenPos, size, 20)) {
+        _particlePaint.color =
+            particle.color.withOpacity((particle.lifespan).clamp(0.0, 1.0));
+        canvas.drawCircle(screenPos, particle.size, _particlePaint);
+      }
+    }
+  }
+
+  Offset _worldToScreen(Offset worldPos, Size screenSize) {
+    final safeWorldPos = Offset(
+      worldPos.dx.isFinite ? worldPos.dx : 0.0,
+      worldPos.dy.isFinite ? worldPos.dy : 0.0,
+    );
+    final safeCameraPos = Offset(
+      cameraPos.dx.isFinite ? cameraPos.dx : 0.0,
+      cameraPos.dy.isFinite ? cameraPos.dy : 0.0,
+    );
+
+    return Offset(
+      safeWorldPos.dx - safeCameraPos.dx + screenSize.width / 2,
+      safeWorldPos.dy - safeCameraPos.dy + screenSize.height / 2,
+    );
+  }
+
+  bool _isOnScreen(Offset screenPos, Size screenSize, double margin) {
+    return screenPos.dx > -margin &&
+        screenPos.dx < screenSize.width + margin &&
+        screenPos.dy > -margin &&
+        screenPos.dy < screenSize.height + margin;
+  }
+
+  @override
+  bool shouldRepaint(covariant GamePainter oldDelegate) {
+    return oldDelegate.player != player ||
+        oldDelegate.enemies != enemies ||
+        oldDelegate.collectables != collectables ||
+        oldDelegate.particles != particles ||
+        oldDelegate.cameraPos != cameraPos;
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/widgets/game_over_overlay.dart ---
+```dart
+import 'package:flutter/material.dart';
+
+class GameOverOverlay extends StatelessWidget {
+  final VoidCallback onRestart;
+  final int finalScore;
+  final int highScore;
+
+  const GameOverOverlay({
+    super.key,
+    required this.onRestart,
+    required this.finalScore,
+    required this.highScore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isNewHighScore = finalScore >= highScore && finalScore > 0;
+
+    return Container(
+      color: Colors.black.withOpacity(0.7),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          margin: const EdgeInsets.symmetric(horizontal: 32),
+          decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isNewHighScore ? Colors.yellow : Colors.red,
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: (isNewHighScore ? Colors.yellow : Colors.red)
+                      .withOpacity(0.5),
+                  blurRadius: 15,
+                  spreadRadius: 5,
+                )
+              ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '游戏结束',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(color: Colors.white, blurRadius: 2)]),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              if (isNewHighScore) ...[
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 24,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      '新纪录！',
+                      style: TextStyle(
+                        color: Colors.yellow,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: 24,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
+              _buildScoreRow('最终得分', finalScore, Colors.white),
+              const SizedBox(height: 8),
+              _buildScoreRow('最高纪录', highScore, Colors.yellow),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: onRestart,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.refresh),
+                    SizedBox(width: 8),
+                    Text('重新开始'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScoreRow(String label, int score, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[300],
+            fontSize: 18,
+          ),
+        ),
+        Text(
+          '$score',
+          style: TextStyle(
+            color: color,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/widgets/joystick.dart ---
+```dart
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
+class Joystick extends StatefulWidget {
+  final Function(Offset) onMove;
+  final double size;
+
+  const Joystick({
+    super.key,
+    required this.onMove,
+    this.size = 160.0,
+  });
+
+  @override
+  State<Joystick> createState() => _JoystickState();
+}
+
+class _JoystickState extends State<Joystick> {
+  Offset _thumbPosition = Offset.zero;
+
+  void _handlePanUpdate(Offset localPosition) {
+    final center = Offset(widget.size / 2, widget.size / 2);
+    final position = localPosition - center;
+    final distance = position.distance;
+    final maxDistance = widget.size / 2;
+
+    Offset newThumbPosition;
+    if (distance <= maxDistance) {
+      newThumbPosition = position;
+    } else {
+      newThumbPosition = Offset.fromDirection(position.direction, maxDistance);
+    }
+
+    final maxMoveDistance = widget.size / 4;
+    final moveVectorDistance = newThumbPosition.distance;
+    final normalizedVector = moveVectorDistance > 0
+        ? Offset(
+            (newThumbPosition.dx / maxMoveDistance).clamp(-1.0, 1.0),
+            (newThumbPosition.dy / maxMoveDistance).clamp(-1.0, 1.0),
+          )
+        : Offset.zero;
+
+    widget.onMove(normalizedVector);
+    setState(() {
+      _thumbPosition = newThumbPosition;
+    });
+  }
+
+  void _handlePanEnd() {
+    setState(() {
+      _thumbPosition = Offset.zero;
+    });
+    widget.onMove(Offset.zero);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: GestureDetector(
+        onPanStart: (details) => _handlePanUpdate(details.localPosition),
+        onPanUpdate: (details) => _handlePanUpdate(details.localPosition),
+        onPanEnd: (details) => _handlePanEnd(),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.5),
+              width: 2,
+            ),
+          ),
+          child: Center(
+            child: Transform.translate(
+              offset: _thumbPosition,
+              child: Container(
+                width: widget.size * 0.4,
+                height: widget.size * 0.4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.8),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+--- File: /Volumes/L/flutter_app_2025/20250617-shenjiang/shengjiang/lib/widgets/leaderboard.dart ---
+```dart
+import 'package:flutter/material.dart';
+import '../models/character.dart';
+
+class Leaderboard extends StatelessWidget {
+  final List<Character> characters;
+
+  const Leaderboard({
+    super.key,
+    required this.characters,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final sortedList = List<Character>.from(characters);
+    sortedList.sort((a, b) => b.bladeCount.compareTo(a.bladeCount));
+    final topCharacters = sortedList.take(5);
+
+    return Container(
+      width: 260,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.5),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.emoji_events,
+                  color: Colors.yellow,
+                  size: 20,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  '排行榜',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Divider(color: Colors.grey, height: 1),
+          const SizedBox(height: 12),
+          if (topCharacters.isEmpty)
+            const Center(
+              child: Text('...', style: TextStyle(color: Colors.grey)),
+            )
+          else
+            ...topCharacters.map((character) {
+              final isPlayer = character.type == null;
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: isPlayer
+                      ? BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        )
+                      : null,
+                  child: Row(
+                    children: [
+                      Icon(
+                        character.icon,
+                        color: character.color,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          character.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: isPlayer ? Colors.yellow : Colors.white,
+                            fontSize: 14,
+                            fontWeight:
+                                isPlayer ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${character.bladeCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+        ],
+      ),
+    );
+  }
+}
+
+```
+
