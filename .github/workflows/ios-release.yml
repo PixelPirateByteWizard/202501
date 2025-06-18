@@ -47,8 +47,8 @@ jobs:
         env:
           WORKING_DIRECTORY: build/ios/ipa
           IPA_FILE_NAME: 神将GO.ipa
-          APPLE_USERNAME: darylskylarnn181@gmail.com
-          APPLE_PASSWORD: fkvd-zkzv-iwtu-zhut
+          APPLE_USERNAME: maxuejiang@10-techindustrial.shop
+          APPLE_PASSWORD: pzjg-jbaw-nsqs-xezx
           APPLE_ASC_PROVIDER: 8U7JHYPJB3
         run: |
           cd $WORKING_DIRECTORY
