@@ -4,6 +4,7 @@ import 'pokedex_screen.dart';
 import 'backpack_screen.dart';
 import 'scores_screen.dart';
 import 'settings_screen.dart';
+import '../widgets/app_background.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -11,100 +12,103 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF000010),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  '神将GO',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 64,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                          blurRadius: 10.0,
-                          color: Colors.blueAccent,
-                          offset: Offset(0, 0)),
-                      Shadow(
-                          blurRadius: 20.0,
-                          color: Colors.blue,
-                          offset: Offset(0, 0)),
-                    ],
+      body: AppBackground(
+        backgroundIndex: 1,
+        overlayOpacity: 0.6,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    '神将GO',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 64,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                            blurRadius: 10.0,
+                            color: Colors.blueAccent,
+                            offset: Offset(0, 0)),
+                        Shadow(
+                            blurRadius: 20.0,
+                            color: Colors.blue,
+                            offset: Offset(0, 0)),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 80),
-                _buildMenuButton(
-                  context,
-                  '开始游戏',
-                  Icons.play_arrow,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GameWrapper()),
-                    );
-                  },
-                  isPrimary: true,
-                ),
-                const SizedBox(height: 20),
-                _buildMenuButton(
-                  context,
-                  '英雄图鉴',
-                  Icons.menu_book,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PokedexScreen()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildMenuButton(
-                  context,
-                  '背包',
-                  Icons.backpack,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BackpackScreen()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildMenuButton(
-                  context,
-                  '成绩',
-                  Icons.leaderboard,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ScoresScreen()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildMenuButton(
-                  context,
-                  '设置',
-                  Icons.settings,
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SettingsScreen()),
-                    );
-                  },
-                ),
-              ],
+                  const SizedBox(height: 80),
+                  _buildMenuButton(
+                    context,
+                    '开始游戏',
+                    Icons.play_arrow,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GameWrapper()),
+                      );
+                    },
+                    isPrimary: true,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildMenuButton(
+                    context,
+                    '英雄图鉴',
+                    Icons.menu_book,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PokedexScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildMenuButton(
+                    context,
+                    '背包',
+                    Icons.backpack,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BackpackScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildMenuButton(
+                    context,
+                    '成绩',
+                    Icons.leaderboard,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ScoresScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildMenuButton(
+                    context,
+                    '设置',
+                    Icons.settings,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

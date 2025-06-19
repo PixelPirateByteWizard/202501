@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/game_settings_service.dart';
+import '../widgets/app_background.dart';
 import 'about_us_screen.dart';
 import 'user_agreement_screen.dart';
 import 'privacy_policy_screen.dart';
@@ -16,119 +17,122 @@ class SettingsScreen extends StatelessWidget {
     final settings = Provider.of<GameSettingsService>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF000010),
       appBar: AppBar(
         title: const Text('设置'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        children: <Widget>[
-          // 图像设置区域
-          _buildSectionHeader(context, '图像设置', Icons.image_outlined),
-          _buildCard(
-            child: Column(
-              children: [
-                _buildSwitchTile(
-                  context: context,
-                  title: '粒子效果',
-                  icon: Icons.flare_outlined,
-                  value: settings.particlesEnabled,
-                  onChanged: settings.updateParticlesEnabled,
-                ),
-              ],
+      body: AppBackground(
+        backgroundIndex: 2,
+        overlayOpacity: 0.7,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          children: <Widget>[
+            // 图像设置区域
+            _buildSectionHeader(context, '图像设置', Icons.image_outlined),
+            _buildCard(
+              child: Column(
+                children: [
+                  _buildSwitchTile(
+                    context: context,
+                    title: '粒子效果',
+                    icon: Icons.flare_outlined,
+                    value: settings.particlesEnabled,
+                    onChanged: settings.updateParticlesEnabled,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // 数据管理区域
-          _buildSectionHeader(context, '数据管理', Icons.storage_outlined),
-          _buildCard(
-            child: _buildSettingsTile(
-              context,
-              '重置游戏数据',
-              Icons.delete_forever_outlined,
-              () => _showResetDataDialog(context),
-              iconColor: Colors.redAccent,
+            // 数据管理区域
+            _buildSectionHeader(context, '数据管理', Icons.storage_outlined),
+            _buildCard(
+              child: _buildSettingsTile(
+                context,
+                '重置游戏数据',
+                Icons.delete_forever_outlined,
+                () => _showResetDataDialog(context),
+                iconColor: Colors.redAccent,
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // 关于区域
-          _buildSectionHeader(context, '关于', Icons.help_center_outlined),
-          _buildCard(
-            child: Column(
-              children: [
-                _buildSettingsTile(
-                  context,
-                  '使用帮助',
-                  Icons.help_outline,
-                  () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UsageHelpScreen())),
-                ),
-                const Divider(
-                    height: 1,
-                    color: Colors.white12,
-                    indent: 56,
-                    endIndent: 16),
-                _buildSettingsTile(
-                  context,
-                  '反馈与建议',
-                  Icons.feedback_outlined,
-                  () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FeedbackScreen())),
-                ),
-                const Divider(
-                    height: 1,
-                    color: Colors.white12,
-                    indent: 56,
-                    endIndent: 16),
-                _buildSettingsTile(
-                  context,
-                  '关于我们',
-                  Icons.info_outline,
-                  () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AboutUsScreen())),
-                ),
-                const Divider(
-                    height: 1,
-                    color: Colors.white12,
-                    indent: 56,
-                    endIndent: 16),
-                _buildSettingsTile(
-                  context,
-                  '用户协议',
-                  Icons.gavel_outlined,
-                  () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UserAgreementScreen())),
-                ),
-                const Divider(
-                    height: 1,
-                    color: Colors.white12,
-                    indent: 56,
-                    endIndent: 16),
-                _buildSettingsTile(
-                  context,
-                  '隐私政策',
-                  Icons.privacy_tip_outlined,
-                  () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PrivacyPolicyScreen())),
-                ),
-              ],
+            // 关于区域
+            _buildSectionHeader(context, '关于', Icons.help_center_outlined),
+            _buildCard(
+              child: Column(
+                children: [
+                  _buildSettingsTile(
+                    context,
+                    '使用帮助',
+                    Icons.help_outline,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UsageHelpScreen())),
+                  ),
+                  const Divider(
+                      height: 1,
+                      color: Colors.white12,
+                      indent: 56,
+                      endIndent: 16),
+                  _buildSettingsTile(
+                    context,
+                    '反馈与建议',
+                    Icons.feedback_outlined,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FeedbackScreen())),
+                  ),
+                  const Divider(
+                      height: 1,
+                      color: Colors.white12,
+                      indent: 56,
+                      endIndent: 16),
+                  _buildSettingsTile(
+                    context,
+                    '关于我们',
+                    Icons.info_outline,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AboutUsScreen())),
+                  ),
+                  const Divider(
+                      height: 1,
+                      color: Colors.white12,
+                      indent: 56,
+                      endIndent: 16),
+                  _buildSettingsTile(
+                    context,
+                    '用户协议',
+                    Icons.gavel_outlined,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserAgreementScreen())),
+                  ),
+                  const Divider(
+                      height: 1,
+                      color: Colors.white12,
+                      indent: 56,
+                      endIndent: 16),
+                  _buildSettingsTile(
+                    context,
+                    '隐私政策',
+                    Icons.privacy_tip_outlined,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PrivacyPolicyScreen())),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

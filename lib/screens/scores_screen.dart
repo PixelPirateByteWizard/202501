@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/storage_service.dart';
+import '../widgets/app_background.dart';
 
 class ScoresScreen extends StatefulWidget {
   const ScoresScreen({super.key});
@@ -33,10 +34,9 @@ class _ScoresScreenState extends State<ScoresScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: const Color(0xFF000010),
         appBar: AppBar(
           title: const Text('成绩'),
-          backgroundColor: const Color(0xFF000010),
+          backgroundColor: Colors.transparent,
           elevation: 0,
           bottom: const TabBar(
             indicatorColor: Colors.yellow,
@@ -47,14 +47,18 @@ class _ScoresScreenState extends State<ScoresScreen> {
             ],
           ),
         ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : TabBarView(
-                children: [
-                  _buildStatsPage(_stats!),
-                  _buildAchievementsPage(_stats!),
-                ],
-              ),
+        body: AppBackground(
+          backgroundIndex: 5,
+          overlayOpacity: 0.7,
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : TabBarView(
+                  children: [
+                    _buildStatsPage(_stats!),
+                    _buildAchievementsPage(_stats!),
+                  ],
+                ),
+        ),
       ),
     );
   }

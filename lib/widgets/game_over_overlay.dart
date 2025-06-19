@@ -82,30 +82,38 @@ class GameOverOverlay extends StatelessWidget {
               const SizedBox(height: 8),
               _buildScoreRow('最高纪录', highScore, Colors.yellow),
               const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: onRestart,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
+              SafeArea(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 延迟执行返回主界面操作，避免在状态转换过程中触发错误
+                    Future.delayed(const Duration(milliseconds: 50), () {
+                      // 返回主界面
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.home),
+                      SizedBox(width: 8),
+                      Text('返回主界面'),
+                    ],
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.refresh),
-                    SizedBox(width: 8),
-                    Text('重新开始'),
-                  ],
                 ),
               ),
             ],

@@ -75,10 +75,19 @@ class Leaderboard extends StatelessWidget {
                       : null,
                   child: Row(
                     children: [
-                      Icon(
-                        character.icon,
-                        color: character.color,
-                        size: 18,
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: character.color.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            character.imagePath,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
