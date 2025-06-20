@@ -27,26 +27,20 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   List<Particle> particles = [];
   Offset cameraPos = Offset.zero;
   bool isGameOver = false;
-
-  // Background image
-  int _backgroundIndex = 1;
-
-  // Stats tracking
-  int _highScore = 0;
-  int _enemiesDefeatedThisGame = 0;
-  DateTime _gameSessionStartTime = DateTime.now();
+  int highScore = 0;
 
   // Game timing
   Timer? _enemySpawnTimer;
   Timer? _collectableSpawnTimer;
   Timer? _timersUpdateTimer; // 用于定期更新定时器
   DateTime lastEnemySpawn = DateTime.now();
+  DateTime gameStartTime = DateTime.now(); // 游戏开始时间
   int _lastDifficultyLevel = 0; // 上次的难度等级
 
   // Configuration
   static const double playerSpeed = 4.0;
   static const int maxCollectables = 120;
-  static const int maxEnemies = 35; // Increased from 20 to 35
+  static const int maxEnemies = 20;
   static const double magneticPickupRadius = 180.0;
   static const double magneticForce = 5.0;
   static const double cameraLerpFactor = 0.08;
@@ -90,28 +84,16 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     }
   }
 
-  // 获取当前游戏难度级别（基于游戏时长，每45秒+1级）
+  // 获取当前游戏难度级别（基于游戏时长，每分钟+1级）
   int get currentDifficultyLevel {
     if (isGameOver) return 0;
-    final elapsed = DateTime.now().difference(_gameSessionStartTime);
-    return (elapsed.inSeconds / 45).floor().clamp(0, 15); // 最高15级难度，每45秒提升一级
+    final elapsed = DateTime.now().difference(gameStartTime);
+    return (elapsed.inMinutes).clamp(0, 10); // 最高10级难度
   }
 
   // 获取当前难度倍数
   double get difficultyMultiplier {
-    return 1.0 + (currentDifficultyLevel * 0.3); // 每级增加30%难度
-  }
-
-  // 根据难度级别更新背景
-  void _updateBackgroundBasedOnDifficulty() {
-    // 每2级难度更换一次背景
-    final newBackgroundIndex = ((currentDifficultyLevel / 2).floor() % 13) + 1;
-
-    if (_backgroundIndex != newBackgroundIndex) {
-      setState(() {
-        _backgroundIndex = newBackgroundIndex;
-      });
-    }
+    return 1.0 + (currentDifficultyLevel * 0.25); // 每分钟增加25%难度
   }
 
   @override
@@ -122,9 +104,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       duration: const Duration(days: 365), // Infinite duration
     )..addListener(_updateGame);
 
-    // Select a random background at game start
-    _backgroundIndex = math.Random().nextInt(13) + 1;
-
     // 同步初始化游戏，避免异步导致的黑屏问题
     _initGame();
     _loadHighScore();
@@ -133,17 +112,17 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Future<void> _loadHighScore() async {
     try {
-      final stats = await StorageService.getGameStats();
+      final score = await StorageService.getHighScore();
       if (mounted) {
         setState(() {
-          _highScore = stats.highScore;
+          highScore = score;
         });
       }
     } catch (e) {
       // 如果加载失败，使用默认值
       if (mounted) {
         setState(() {
-          _highScore = 0;
+          highScore = 0;
         });
       }
     }
@@ -153,12 +132,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _enemySpawnTimer?.cancel();
     _collectableSpawnTimer?.cancel();
 
-    // Change background when restarting game
-    _backgroundIndex = math.Random().nextInt(13) + 1;
-
     // 重置游戏开始时间
-    _gameSessionStartTime = DateTime.now();
-    _enemiesDefeatedThisGame = 0;
+    gameStartTime = DateTime.now();
 
     final newPlayer = Character(
       id: 'player',
@@ -170,9 +145,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _createEnemy(EnemyType.brute, const Offset(400, 300)),
       _createEnemy(EnemyType.hunter, const Offset(-300, -200)),
       _createEnemy(EnemyType.scout, const Offset(-300, 400)),
-      _createEnemy(EnemyType.brute, const Offset(500, -250)),
-      _createEnemy(EnemyType.hunter, const Offset(-450, 150)),
-      _createEnemy(EnemyType.scout, const Offset(350, -400)),
     ];
     final newCollectables = <Collectable>[];
     final pRef = newPlayer;
@@ -209,8 +181,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _timersUpdateTimer?.cancel();
 
     // 动态调整生成间隔 - 随着时间推移，生成间隔会减少
-    final baseEnemyInterval = 3.0; // 基础3秒间隔（从4秒减少）
-    final minEnemyInterval = 0.8; // 最小0.8秒间隔（从1.5秒减少）
+    final baseEnemyInterval = 4.0; // 基础4秒间隔
+    final minEnemyInterval = 1.5; // 最小1.5秒间隔
     final currentEnemyInterval = (baseEnemyInterval / difficultyMultiplier)
         .clamp(minEnemyInterval, baseEnemyInterval);
 
@@ -232,9 +204,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       (_) => _spawnCollectable(),
     );
 
-    // 每15秒检查一次是否需要更新定时器
+    // 每30秒检查一次是否需要更新定时器
     _timersUpdateTimer = Timer.periodic(
-      const Duration(seconds: 15),
+      const Duration(seconds: 30),
       (_) => _updateTimersIfNeeded(),
     );
 
@@ -258,9 +230,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     final playerDifficultyMultiplier = 1.0 + (playerLevel * 0.1);
 
     // 后期敌人数据大幅增长 - 游戏时间越长，敌人越强
-    final gameSeconds =
-        DateTime.now().difference(_gameSessionStartTime).inSeconds;
-    final lateGameMultiplier = 1.0 + (gameSeconds * 0.01); // 每秒增长1%，更平滑的难度曲线
+    final gameMinutes = DateTime.now().difference(gameStartTime).inMinutes;
+    final lateGameMultiplier = 1.0 + (gameMinutes * 0.4); // 每分钟增长40%
 
     // 综合难度倍数
     final finalMultiplier = timeDifficultyMultiplier *
@@ -283,42 +254,36 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   void _spawnEnemy() {
-    // Allow for multiple spawns at once when difficulty increases
-    final spawnCount = math.min((currentDifficultyLevel / 4).floor() + 1,
-        3); // Spawn up to 3 enemies at once at higher difficulties
-
     if (enemies.where((e) => e.isActive).length >= maxEnemies ||
         player == null) {
       return;
     }
 
-    for (int i = 0; i < spawnCount; i++) {
-      // Safety check for player position before spawning
-      if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
-        player!.pos = Offset.zero;
-      }
+    // Safety check for player position before spawning
+    if (!player!.pos.dx.isFinite || !player!.pos.dy.isFinite) {
+      player!.pos = Offset.zero;
+    }
 
-      final angle = math.Random().nextDouble() * 2 * math.pi;
-      final distance = 800.0 + math.Random().nextDouble() * 200;
-      final spawnPos = Offset(
-        player!.pos.dx + math.cos(angle) * distance,
-        player!.pos.dy + math.sin(angle) * distance,
-      );
+    final angle = math.Random().nextDouble() * 2 * math.pi;
+    final distance = 800.0 + math.Random().nextDouble() * 200;
+    final spawnPos = Offset(
+      player!.pos.dx + math.cos(angle) * distance,
+      player!.pos.dy + math.sin(angle) * distance,
+    );
 
-      // Safety check for spawn position
-      if (!spawnPos.dx.isFinite || !spawnPos.dy.isFinite) {
-        return; // Skip spawning if position is invalid
-      }
+    // Safety check for spawn position
+    if (!spawnPos.dx.isFinite || !spawnPos.dy.isFinite) {
+      return; // Skip spawning if position is invalid
+    }
 
-      final enemyTypes = EnemyType.allTypes;
-      final randomType = enemyTypes[math.Random().nextInt(enemyTypes.length)];
+    final enemyTypes = EnemyType.allTypes;
+    final randomType = enemyTypes[math.Random().nextInt(enemyTypes.length)];
 
-      if (mounted) {
-        setState(() {
-          enemies.add(_createEnemy(randomType, spawnPos));
-        });
-      }
-    } // Close the for loop for multiple enemy spawns
+    if (mounted) {
+      setState(() {
+        enemies.add(_createEnemy(randomType, spawnPos));
+      });
+    }
   }
 
   void _spawnCollectable() {
@@ -351,9 +316,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   void _updateGame() {
     if (isGameOver || player == null || !mounted) return;
-
-    // Update background based on current difficulty level
-    _updateBackgroundBasedOnDifficulty();
 
     // Basic safety check and player movement
     if (!moveVector.dx.isFinite || !moveVector.dy.isFinite) {
@@ -415,37 +377,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
     final activeEnemies = enemies.where((e) => e.isActive).toList();
 
-    // 计算敌人总数，用于调整攻击性
-    final enemyCount = activeEnemies.length;
-    // 敌人数量越多，越倾向于主动攻击
-    final packAggressionBonus = math.min(enemyCount / 10, 0.5); // 最多增加50%攻击性
-
-    // 检查是否已经有敌人在冲刺
-    bool hasChargingEnemy = activeEnemies.any((e) => e.isCharging);
-
-    // 如果没有敌人在冲刺，选择一个最适合冲刺的敌人
-    Character? selectedCharger;
-    if (!hasChargingEnemy && activeEnemies.isNotEmpty) {
-      // 按照与玩家的距离和强度排序，选择最适合冲刺的敌人
-      activeEnemies.sort((a, b) {
-        // 计算每个敌人的"冲刺适合度"得分
-        final aDistToPlayer = (a.pos - player!.pos).distance;
-        final bDistToPlayer = (b.pos - player!.pos).distance;
-
-        final aStrengthRatio = a.bladeCount / player!.bladeCount;
-        final bStrengthRatio = b.bladeCount / player!.bladeCount;
-
-        // 距离越近、越强大的敌人得分越高
-        final aScore = aStrengthRatio - (aDistToPlayer / 1000);
-        final bScore = bStrengthRatio - (bDistToPlayer / 1000);
-
-        return bScore.compareTo(aScore); // 降序排列
-      });
-
-      // 选择得分最高的敌人作为冲刺者
-      selectedCharger = activeEnemies.first;
-    }
-
     for (final enemy in activeEnemies) {
       // Basic safety check for enemy position
       if (!enemy.pos.dx.isFinite || !enemy.pos.dy.isFinite) {
@@ -471,37 +402,27 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         return allyDist < 200.0;
       }).length;
 
-      // 群体攻击bonus - 增加了系数
-      final groupConfidence = nearbyAllies * 0.25; // 从0.15增加到0.25
-      final effectiveStrength =
-          enemy.bladeCount * (1.0 + groupConfidence + packAggressionBonus);
+      // 群体攻击bonus
+      final groupConfidence = nearbyAllies * 0.15;
+      final effectiveStrength = enemy.bladeCount * (1.0 + groupConfidence);
 
-      // 更积极的冲刺行为 - 降低了启动冲刺的门槛
+      // Activate charging behavior if conditions are met.
+      // 强敌更积极地冲刺 - 数据大于玩家时立即冲刺
       final isSignificantlyStronger =
-          enemy.bladeCount > (player!.bladeCount * 1.1); // 从1.2降低到1.1
-
-      // 增加冲刺距离，使敌人从更远处开始冲刺
+          enemy.bladeCount > (player!.bladeCount * 1.2);
       final chargeDistanceForStrongEnemy =
-          isSignificantlyStronger ? 600.0 : 400.0; // 增加了冲刺距离
+          isSignificantlyStronger ? 500.0 : chargeDistance;
 
-      // 只有被选中的敌人才能冲刺
-      final isSelectedForCharging = enemy == selectedCharger;
-
-      // 如果这个敌人被选为冲刺者，且条件满足，则开始冲刺
-      if (isSelectedForCharging &&
-          !enemy.isCharging &&
-          distToPlayer < chargeDistanceForStrongEnemy &&
-          (effectiveStrength > player!.bladeCount * 0.8 ||
+      if ((effectiveStrength > player!.bladeCount ||
               isStronger ||
-              isSignificantlyStronger)) {
+              isSignificantlyStronger) &&
+          !enemy.isCharging &&
+          distToPlayer < chargeDistanceForStrongEnemy) {
         enemy.startCharging();
-        hasChargingEnemy = true;
       }
 
-      // 更主动的行为决策
-      if ((enemy.isCharging) ||
-          (isSelectedForCharging &&
-              effectiveStrength > player!.bladeCount * 0.8)) {
+      // Determine behavior based on strength and enemy type.
+      if (effectiveStrength > player!.bladeCount || enemy.isCharging) {
         // BEHAVIOR: ATTACK / CHARGE towards the player.
         final currentSpeed = enemy.currentSpeed;
 
@@ -725,141 +646,38 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   void _cleanupObjects() {
-    // 追踪本帧被击败的敌人
-    final defeatedEnemiesThisFrame =
-        enemies.where((enemy) => !enemy.isActive).toList();
-    if (defeatedEnemiesThisFrame.isNotEmpty) {
-      _enemiesDefeatedThisGame += defeatedEnemiesThisFrame.length;
-
-      // 检查是否有泰坦被击败
-      if (defeatedEnemiesThisFrame.any((e) => e.type == EnemyType.titan)) {
-        // (这是将来添加成就解锁逻辑的地方)
-        print("A Titan was defeated!");
-      }
-
-      enemies.removeWhere((enemy) => !enemy.isActive);
-    }
+    enemies.removeWhere((enemy) => !enemy.isActive);
   }
 
   void _endGame() async {
     if (isGameOver) return;
-    if (player == null) return;
 
-    // 停止所有定时器和动画
     _controller.stop();
     _enemySpawnTimer?.cancel();
     _collectableSpawnTimer?.cancel();
-    _timersUpdateTimer?.cancel();
 
-    try {
-      // --- NEW STATS SAVING LOGIC ---
-
-      // 1. 获取当前所有统计数据
-      final currentStats = await StorageService.getGameStats();
-
-      // 2. 计算本局数据
-      final finalScore = player!.bladeCount;
-      final survivalTime =
-          DateTime.now().difference(_gameSessionStartTime).inSeconds;
-
-      // 3. 准备新的数据
-      final newHighScore = math.max(currentStats.highScore, finalScore);
-      final newTotalGames = currentStats.totalGamesPlayed + 1;
-      final newTotalDefeated =
-          currentStats.totalEnemiesDefeated + _enemiesDefeatedThisGame;
-      final newLongestTime =
-          math.max(currentStats.longestTimeInSeconds, survivalTime);
-
-      // 4. 检查并解锁成就
-      final newAchievements =
-          Set<String>.from(currentStats.unlockedAchievementIds);
-      newAchievements.add('first_game'); // 完成第一局
-      if (survivalTime >= 60) newAchievements.add('survive_1_min');
-      if (survivalTime >= 300) newAchievements.add('survive_5_min');
-      if (finalScore >= 100) newAchievements.add('reach_100_blades');
-      // 'defeat_titan' 成就的解锁逻辑应在敌人被击败时处理，这里仅为示例
-      if (_enemiesDefeatedThisGame > 0 &&
-          enemies.any((e) => e.type == EnemyType.titan && !e.isActive)) {
-        newAchievements.add('defeat_titan');
-      }
-
-      // 5. 创建新的统计对象
-      final newStats = GameStats(
-        highScore: newHighScore,
-        totalGamesPlayed: newTotalGames,
-        totalEnemiesDefeated: newTotalDefeated,
-        longestTimeInSeconds: newLongestTime,
-        unlockedAchievementIds: newAchievements,
-      );
-
-      // 6. 保存数据
-      await StorageService.saveGameStats(newStats);
-
-      // --- END OF NEW STATS SAVING LOGIC ---
-
+    int finalScore = player?.bladeCount ?? 0;
+    if (player != null) {
+      await StorageService.saveHighScore(finalScore);
+      final newHighScore = await StorageService.getHighScore();
       if (mounted) {
         setState(() {
-          isGameOver = true;
-          _highScore = newStats.highScore; // 更新UI上的最高分
+          highScore = newHighScore;
         });
       }
-    } catch (e) {
-      // 如果保存数据过程中出现错误，至少设置游戏结束状态
-      if (mounted) {
-        setState(() {
-          isGameOver = true;
-        });
-      }
-      print('保存游戏数据时出错: $e');
+    }
+
+    if (mounted) {
+      setState(() {
+        isGameOver = true;
+      });
     }
   }
 
   void _restartGame() {
-    // 完全停止所有活动
     _controller.stop();
-    _enemySpawnTimer?.cancel();
-    _collectableSpawnTimer?.cancel();
-    _timersUpdateTimer?.cancel();
-
-    // 先将游戏标记为非结束状态，但保持其他状态不变
-    setState(() {
-      isGameOver = false;
-    });
-
-    // 使用更长的延迟确保UI完全更新
-    Future.delayed(const Duration(milliseconds: 200), () {
-      if (!mounted) return;
-
-      // 创建全新的控制器，避免使用旧控制器可能导致的状态问题
-      _controller.dispose();
-      _controller = AnimationController(
-        vsync: this,
-        duration: const Duration(days: 365),
-      );
-
-      // 重置所有游戏状态
-      setState(() {
-        player = null;
-        enemies = [];
-        collectables = [];
-        particles = [];
-        cameraPos = Offset.zero;
-        moveVector = Offset.zero;
-        _backgroundIndex = math.Random().nextInt(13) + 1;
-      });
-
-      // 再次延迟初始化游戏，确保状态已完全重置
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (!mounted) return;
-
-        // 重新初始化游戏
-        _initGame();
-
-        // 添加监听器并启动动画
-        _controller.addListener(_updateGame);
-        _controller.forward();
-      });
-    });
+    _initGame();
+    _controller.forward();
   }
 
   @override
@@ -925,16 +743,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             children: [
               // 冷却进度环
               if (currentPlayer != null && !currentPlayer.canDash())
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: CircularProgressIndicator(
-                    value: currentPlayer.dashCooldownProgress,
-                    strokeWidth: 3,
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.blue),
-                    backgroundColor: Colors.grey.withOpacity(0.3),
-                  ),
+                CircularProgressIndicator(
+                  value: currentPlayer.dashCooldownProgress,
+                  strokeWidth: 3,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  backgroundColor: Colors.grey.withOpacity(0.3),
                 ),
               // 冲刺图标
               Icon(
@@ -962,7 +775,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             collectables: collectables,
             particles: particles,
             cameraPos: cameraPos,
-            backgroundIndex: _backgroundIndex,
           ),
           Positioned(
             top: 60,
@@ -1017,13 +829,13 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          if (!isGameOver) joystickPosition,
-          if (!isGameOver) dashButton,
+          joystickPosition,
+          dashButton,
           if (isGameOver)
             GameOverOverlay(
               onRestart: _restartGame,
               finalScore: currentPlayer?.bladeCount ?? 0,
-              highScore: _highScore,
+              highScore: highScore,
             ),
         ],
       ),

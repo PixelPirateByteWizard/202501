@@ -43,28 +43,6 @@ class Character {
 
   String get behavior => type?.behavior ?? 'player';
 
-  // Get image path based on character type
-  String get imagePath {
-    if (type == null) {
-      return 'assets/role/Hero_6.png'; // Player
-    } else if (type == EnemyType.scout) {
-      return 'assets/role/Hero_1.png';
-    } else if (type == EnemyType.brute) {
-      return 'assets/role/Hero_2.png';
-    } else if (type == EnemyType.hunter) {
-      return 'assets/role/Hero_3.png';
-    } else if (type == EnemyType.assassin) {
-      return 'assets/role/Hero_4.png';
-    } else if (type == EnemyType.titan) {
-      return 'assets/role/Hero_5.png';
-    } else {
-      // Fallback for any other types
-      final typeIndex = EnemyType.allTypes.indexOf(type!);
-      final imageIndex = (typeIndex % 19) + 1;
-      return 'assets/role/Hero_$imageIndex.png';
-    }
-  }
-
   // Blade visual styling based on count
   BladeStyle get bladeStyle {
     if (bladeCount >= 100) {

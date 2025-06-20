@@ -61,10 +61,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets:
-    - assets/bg/
-    - assets/item/
-    - assets/role/
+  # assets:
+  #   - assets/bg/
+  #   - assets/item/
+  #   - assets/role/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
