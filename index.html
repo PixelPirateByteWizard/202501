@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrelexis App Prototype</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS for the celestial theme and advanced UI elements */
+        :root {
+            --primary-bg: #2E1A47;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow-color: rgba(209, 152, 255, 0.7);
+            --text-primary: #EAE6F0;
+            --text-secondary: #A99FBC;
+            --accent-teal: #64FFDA;
+            --accent-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a0e2a;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            min-height: 100vh;
+        }
+
+        .iphone-frame {
+            width: 430px; /* iPhone 15 Pro Max width */
+            height: 932px; /* iPhone 15 Pro Max height */
+            background-color: var(--primary-bg);
+            border-radius: 60px;
+            border: 12px solid #111;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-screen {
+            flex-grow: 1;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+        }
+        .app-screen::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+
+        .status-bar {
+            height: 44px;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+        
+        .nav-bar {
+            height: 84px;
+            width: 100%;
+            background: rgba(46, 26, 71, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-bottom-left-radius: 48px;
+            border-bottom-right-radius: 48px;
+            z-index: 20;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 10px;
+            gap: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: var(--accent-teal);
+        }
+        .nav-item i {
+            font-size: 22px;
+        }
+
+        /* Journal Page Specifics */
+        details summary { list-style: none; cursor: pointer; }
+        details summary::-webkit-details-marker { display: none; }
+        details[open] summary .arrow { transform: rotate(90deg); }
+        .arrow { transition: transform 0.2s ease-in-out; }
+
+        /* Astra AI Assistant Specifics */
+        .astra-orb {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(209, 152, 255, 0.8) 0%, rgba(126, 87, 194, 0.5) 50%, rgba(46, 26, 71, 0.3) 100%);
+            box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color), 0 0 80px #583385;
+            animation: pulse 4s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1); }
+            100% { transform: scale(0.95); }
+        }
+        
+        /* General Page Container */
+        .page-container {
+            padding: 1rem 1.5rem 8rem; /* Padding at bottom for nav bar */
+            min-height: 100%;
+        }
+        
+        .page-title {
+            font-size: 2.25rem; /* 36px */
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* FAB and Event Horizon Menu */
+        .fab {
+            position: absolute;
+            bottom: 100px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(45deg, #8A2BE2, #4A00E0);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 10px 20px rgba(74, 0, 224, 0.4);
+            cursor: pointer;
+            z-index: 30;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(138, 43, 226, 0.6);
+        }
+        .event-horizon-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 5, 20, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .event-horizon-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .radial-menu-item {
+            position: absolute;
+            bottom: 110px;
+            right: 34px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-primary);
+            font-size: 12px;
+            transform: scale(0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .visible .radial-menu-item:nth-child(1) { transform: translate(-120px, 0px) scale(1); transition-delay: 0.1s; }
+        .visible .radial-menu-item:nth-child(2) { transform: translate(-85px, -85px) scale(1); transition-delay: 0.2s; }
+        .visible .radial-menu-item:nth-child(3) { transform: translate(0px, -120px) scale(1); transition-delay: 0.3s; }
+        .radial-menu-item .icon-bg {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        /* Statistics Page */
+        .chart-bar {
+            background: linear-gradient(to top, var(--accent-teal), var(--glow-color));
+            border-radius: 4px;
+            transition: height 0.5s ease-out;
+        }
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr); /* Display 20 weeks for prototype */
+            grid-auto-flow: column;
+            grid-template-rows: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .heatmap-day {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+
+        /* Sub-page Overlay */
+        .sub-page-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-bg);
+            z-index: 50;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .sub-page-overlay.visible {
+            transform: translateY(0);
+        }
+        .sub-page-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .sub-page-content {
+            padding: 0 1.5rem 1.5rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--glow-color);
+        }
+        .form-textarea {
+            min-height: 200px;
+            resize: none;
+        }
+        .primary-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--accent-teal), #64a1ff);
+            color: #111;
+            font-weight: bold;
+            padding: 0.8rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- iPhone 15 Pro Frame -->
+    <div class="iphone-frame">
+        
+        <!-- iOS Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div>
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- App Screen Content (Scrollable) -->
+        <div id="app-screen" class="app-screen">
+
+            <!-- =================================== -->
+            <!-- ======== SCREEN 1: JOURNAL ======== -->
+            <!-- =================================== -->
+            <div id="journal" class="page-container">
+                <h1 class="page-title">Journal</h1>
+                
+                <div class="relative mb-6">
+                    <input type="text" placeholder="Search entries, tasks, memories..." class="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white placeholder-gray-400 rounded-full py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-[var(--glow-color)]">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+
+                <details open class="mb-6">
+                    <summary class="flex justify-between items-center py-2">
+                        <h2 class="text-lg font-bold text-white tracking-widest">TODAY, JULY 08</h2>
+                        <i class="fas fa-chevron-right arrow text-gray-400"></i>
+                    </summary>
+                    <div class="space-y-4 mt-2">
+                        <div class="glass-card p-4"><p class="text-gray-200">The meeting about Project Nova went better than expected. Felt a real sense of accomplishment.</p><span class="text-xs text-gray-400 mt-2 block">10:15 AM</span></div>
+                        <div class="glass-card p-4"><p class="text-gray-200 mb-3">A moment of peace during my afternoon walk. The sky was incredible.</p><img src="https://images.unsplash.com/photo-1534790566855-4cb788d389ec?q=80&w=2070&auto=format&fit=crop" alt="Image of beautiful clouds" class="rounded-lg w-full h-48 object-cover"><span class="text-xs text-gray-400 mt-2 block">3:30 PM</span></div>
+                        <div class="mt-4"><h3 class="text-sm font-semibold text-gray-300 mb-2">Completed Today</h3><div class="glass-card p-3 flex justify-between items-center"><span class="text-gray-300 line-through">Finalize Q3 presentation</span><button class="text-xs bg-teal-500/20 text-teal-300 font-semibold py-1 px-3 rounded-full hover:bg-teal-500/40">Reflect</button></div></div>
+                    </div>
+                </details>
+
+                <details class="mb-6">
+                    <summary class="flex justify-between items-center py-2">
+                        <h2 class="text-lg font-bold text-white tracking-widest">YESTERDAY, JULY 07</h2>
+                        <i class="fas fa-chevron-right arrow text-gray-400"></i>
+                    </summary>
+                    <div class="space-y-4 mt-2"><div class="glass-card p-4"><p class="text-gray-200">Started reading "Dune Messiah". The world-building is just as immersive as the first book.</p><span class="text-xs text-gray-400 mt-2 block">9:45 PM</span></div></div>
+                </details>
+            </div>
+
+            <!-- =================================== -->
+            <!-- ====== SCREEN 2: STATISTICS ======= -->
+            <!-- =================================== -->
+            <div id="statistics" class="page-container">
+                <h1 class="page-title">Statistics</h1>
+                <div class="glass-card p-5 mb-6">
+                    <h3 class="font-bold text-white text-lg mb-4">Mood Heatmap</h3>
+                    <div class="overflow-x-auto pb-2">
+                        <div class="flex text-xs text-gray-400 mb-2" style="margin-left: 2rem;"><div class="w-1/4">Mar</div><div class="w-1/4">Apr</div><div class="w-1/4">May</div><div class="w-1/4">Jun</div></div>
+                        <div class="flex gap-3">
+                            <div class="flex flex-col text-xs text-gray-400 justify-around shrink-0"><span>Mon</span><span>Wed</span><span>Fri</span></div>
+                            <div class="heatmap-grid">
+                                <script>
+                                    // Dynamically generate heatmap squares for a more realistic look
+                                    for (let i = 0; i < 140; i++) {
+                                        const intensity = Math.random();
+                                        let colorClass = '';
+                                        if (intensity > 0.8) colorClass = 'bg-teal-500/80';
+                                        else if (intensity > 0.6) colorClass = 'bg-teal-500/60';
+                                        else if (intensity > 0.4) colorClass = 'bg-teal-500/40';
+                                        else if (intensity > 0.1) colorClass = 'bg-teal-500/20';
+                                        document.write(`<div class="heatmap-day ${colorClass}"></div>`);
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end items-center gap-2 text-xs text-gray-400 mt-3">Less<div class="w-3 h-3 rounded-sm bg-teal-500/20"></div><div class="w-3 h-3 rounded-sm bg-teal-500/40"></div><div class="w-3 h-3 rounded-sm bg-teal-500/60"></div><div class="w-3 h-3 rounded-sm bg-teal-500/80"></div>More</div>
+                </div>
+                <div class="glass-card p-5 mb-6">
+                    <h3 class="font-bold text-white text-lg mb-4">Activity Log</h3>
+                    <div class="flex justify-around items-end h-40 border-b border-l border-gray-700 p-2"><div class="w-8 chart-bar" style="height: 60%;"></div><div class="w-8 chart-bar" style="height: 80%;"></div><div class="w-8 chart-bar" style="height: 40%;"></div><div class="w-8 chart-bar" style="height: 90%;"></div></div>
+                    <div class="flex justify-around text-xs text-gray-400 mt-2"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div>
+                </div>
+                <div class="glass-card p-5">
+                    <h3 class="font-bold text-white text-lg mb-4">Goal Progress</h3>
+                    <div class="space-y-4">
+                        <div><p class="text-gray-200 mb-1">Learn to Paint</p><div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-gradient-to-r from-teal-400 to-blue-500 h-2.5 rounded-full" style="width: 45%"></div></div></div>
+                        <div><p class="text-gray-200 mb-1">Read 12 Books</p><div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2.5 rounded-full" style="width: 75%"></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =================================== -->
+            <!-- ===== SCREEN 3: AI ASSISTANT ====== -->
+            <!-- =================================== -->
+            <div id="astra" class="page-container flex flex-col items-center h-full">
+                <h1 class="page-title">Astra</h1>
+                <div class="astra-orb my-8"></div>
+                <div class="w-full space-y-4 text-center">
+                    <div class="glass-card p-4 text-left self-start max-w-xs mx-auto"><p class="text-gray-200">I noticed you completed "Finalize Q3 presentation." How do you feel about the outcome?</p></div>
+                    <div class="glass-card p-4 text-left self-start max-w-xs mx-auto bg-teal-500/10"><p class="text-gray-200">Show me my most productive day last month.</p></div>
+                </div>
+                <div class="mt-auto w-full relative">
+                     <input type="text" placeholder="Ask Astra anything..." class="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-white placeholder-gray-400 rounded-full py-4 pl-6 pr-14 focus:outline-none focus:ring-2 focus:ring-[var(--glow-color)]">
+                     <i class="fas fa-microphone absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 text-xl cursor-pointer"></i>
+                </div>
+            </div>
+
+            <!-- =================================== -->
+            <!-- ======== SCREEN 4: SETTINGS ======= -->
+            <!-- =================================== -->
+            <div id="settings" class="page-container">
+                <h1 class="page-title">Settings</h1>
+                <div class="space-y-6">
+                    <div class="glass-card p-5">
+                        <div class="flex justify-between items-center cursor-pointer">
+                            <p class="text-white font-medium">About Us</p>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <hr class="border-gray-700 my-4">
+                        <div class="flex justify-between items-center cursor-pointer">
+                            <p class="text-white font-medium">User Agreement</p>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <hr class="border-gray-700 my-4">
+                        <div class="flex justify-between items-center cursor-pointer">
+                            <p class="text-white font-medium">Privacy Policy</p>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5">
+                        <div class="flex justify-between items-center cursor-pointer">
+                            <p class="text-white font-medium">Help & Support</p>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <hr class="border-gray-700 my-4">
+                        <div class="flex justify-between items-center cursor-pointer">
+                            <p class="text-white font-medium">Feedback & Suggestions</p>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End App Screen -->
+
+        <!-- =================================== -->
+        <!-- ======== ADD SUB-PAGES ======== -->
+        <!-- =================================== -->
+
+        <!-- Add Journal Page -->
+        <div id="add-journal-page" class="sub-page-overlay">
+            <div class="sub-page-header">
+                <h2 class="text-xl font-bold text-white">New Entry</h2>
+                <button class="close-sub-page text-2xl text-gray-400">&times;</button>
+            </div>
+            <div class="sub-page-content">
+                <input type="text" placeholder="Give it a title..." class="form-input">
+                <textarea placeholder="Write down your thoughts..." class="form-textarea"></textarea>
+                <div class="flex gap-4">
+                    <button class="glass-card flex-1 py-3 text-gray-300"><i class="fas fa-image mr-2"></i>Add Photo</button>
+                    <button class="glass-card flex-1 py-3 text-gray-300"><i class="fas fa-tag mr-2"></i>Add Tag</button>
+                </div>
+                <button class="primary-btn">Save Entry</button>
+            </div>
+        </div>
+
+        <!-- Add To-Do Page -->
+        <div id="add-todo-page" class="sub-page-overlay">
+            <div class="sub-page-header">
+                <h2 class="text-xl font-bold text-white">New To-Do</h2>
+                <button class="close-sub-page text-2xl text-gray-400">&times;</button>
+            </div>
+            <div class="sub-page-content">
+                <input type="text" placeholder="What's the task?" class="form-input">
+                <input type="date" class="form-input" value="2025-07-09">
+                <textarea placeholder="Add some notes..." class="form-textarea" style="min-height: 100px;"></textarea>
+                <button class="primary-btn">Add Task</button>
+            </div>
+        </div>
+
+        <!-- Add Memory Page -->
+        <div id="add-memory-page" class="sub-page-overlay">
+            <div class="sub-page-header">
+                <h2 class="text-xl font-bold text-white">New Memory</h2>
+                <button class="close-sub-page text-2xl text-gray-400">&times;</button>
+            </div>
+            <div class="sub-page-content flex flex-col">
+                <textarea placeholder="What happened in this moment?" class="form-textarea" style="min-height: 80px;"></textarea>
+                <div class="flex-grow glass-card border-dashed border-2 border-gray-500 flex flex-col justify-center items-center text-gray-400 mb-4 cursor-pointer">
+                    <i class="fas fa-cloud-upload-alt text-5xl mb-2"></i>
+                    <p>Tap to upload image</p>
+                </div>
+                <button class="primary-btn">Save Memory</button>
+            </div>
+        </div>
+
+
+        <!-- Floating Action Button -->
+        <div id="fab" class="fab">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <!-- Event Horizon Radial Menu -->
+        <div id="event-horizon-menu" class="event-horizon-overlay">
+            <div class="radial-menu-item" data-target="add-journal-page">
+                <div class="icon-bg glass-card bg-blue-500/50"><i class="fas fa-book-open"></i></div>
+                <span>Entry</span>
+            </div>
+            <div class="radial-menu-item" data-target="add-todo-page">
+                <div class="icon-bg glass-card bg-teal-500/50"><i class="fas fa-check-square"></i></div>
+                <span>To-Do</span>
+            </div>
+             <div class="radial-menu-item" data-target="add-memory-page">
+                <div class="icon-bg glass-card bg-purple-500/50"><i class="fas fa-image"></i></div>
+                <span>Memory</span>
+            </div>
+        </div>
+
+
+        <!-- Bottom Navigation Bar -->
+        <div id="nav-bar" class="nav-bar">
+            <a href="#journal" class="nav-item active"><i class="fas fa-book-open"></i><span>Journal</span></a>
+            <a href="#statistics" class="nav-item"><i class="fas fa-chart-pie"></i><span>Stats</span></a>
+            <a href="#astra" class="nav-item"><i class="fas fa-star"></i><span>Astra</span></a>
+            <a href="#settings" class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></a>
+        </div>
+
+    </div> <!-- End iPhone Frame -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fab = document.getElementById('fab');
+            const menu = document.getElementById('event-horizon-menu');
+            const navItems = document.querySelectorAll('.nav-item');
+            const appScreen = document.getElementById('app-screen');
+            const pages = document.querySelectorAll('.page-container');
+            const radialItems = document.querySelectorAll('.radial-menu-item');
+            const subPageOverlays = document.querySelectorAll('.sub-page-overlay');
+            const closeSubPageButtons = document.querySelectorAll('.close-sub-page');
+
+            // Toggle Event Horizon Menu
+            fab.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.classList.toggle('visible');
+            });
+
+            document.addEventListener('click', () => {
+                if (menu.classList.contains('visible')) {
+                    menu.classList.remove('visible');
+                }
+            });
+            
+            menu.addEventListener('click', (e) => e.stopPropagation());
+
+            // Open Sub-Pages from Radial Menu
+            radialItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetId = item.dataset.target;
+                    const targetPage = document.getElementById(targetId);
+                    if (targetPage) {
+                        targetPage.classList.add('visible');
+                        menu.classList.remove('visible');
+                    }
+                });
+            });
+
+            // Close Sub-Pages
+            closeSubPageButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.closest('.sub-page-overlay').classList.remove('visible');
+                });
+            });
+
+            // Navigation Logic
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const targetId = item.getAttribute('href');
+                    const targetPage = document.querySelector(targetId);
+                    if (targetPage) {
+                        appScreen.scrollTo({ top: targetPage.offsetTop - 44, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Update active nav item on scroll
+            appScreen.addEventListener('scroll', () => {
+                let currentPageId = '';
+                pages.forEach(page => {
+                    if (appScreen.scrollTop >= page.offsetTop - 100) {
+                        currentPageId = '#' + page.id;
+                    }
+                });
+                navItems.forEach(item => {
+                    item.classList.toggle('active', item.getAttribute('href') === currentPageId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
