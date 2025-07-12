@@ -10,8 +10,8 @@
 	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.549C6BCEA42F</key>
-		<string>UWN76ZQ5K5.com.549C6BCEA42F</string>
+		<key>com.motina.mlexis</key>
+		<string>N4F283NV6R.com.motina.mlexis</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
@@ -20,7 +20,7 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>UWN76ZQ5K5</string>
+	<string>N4F283NV6R</string>
 	<key>uploadSymbols</key>
 	<false/>
 </dict>
