@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>排序物語 - 修復與優化版</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- p5.js for game logic and canvas rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Custom styles to match the game's aesthetic */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            touch-action: manipulation; /* Improve touch responsiveness on mobile */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        }
+        .game-container {
+            max-width: 420px; /* Typical mobile screen width */
+            width: 100%;
+            height: 100vh;
+            max-height: 900px;
+            display: flex;
+            flex-direction: column;
+            background-color: #f0e8f8; /* Light purple background */
+        }
+        .btn-bottom-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1.5rem; /* Large rounded corners */
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #4a5568;
+            box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 0.15), 0 3px 6px -3px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+            gap: 0.25rem;
+        }
+        .btn-bottom-nav:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+        }
+        .btn-bottom-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(50%);
+        }
+        .btn-bottom-nav i {
+            font-size: 1.75rem; /* Larger icons */
+        }
+        #game-canvas-container {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .star {
+            color: #d1d5db; /* Gray color for empty stars */
+            font-size: 3rem;
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .star.filled {
+            color: #f59e0b; /* Yellow color for filled stars */
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+    <div class="game-container w-full shadow-2xl rounded-lg overflow-hidden relative">
+
+        <!-- Top Bar: Status Info -->
+        <header class="p-4 text-gray-700 z-10">
+            <div class="flex justify-between items-center mb-2">
+                <i class="fas fa-cog text-3xl text-gray-500 cursor-pointer hover:text-gray-700 transition"></i>
+                <div class="text-center">
+                    <h1 class="text-2xl font-bold">第 <span id="level-number">1</span> 關</h1>
+                    <p class="text-sm text-gray-500">目標步數: <span id="target-moves">0</span> | 移動: <span id="move-count">0</span></p>
+                </div>
+                <i class="fas fa-redo-alt text-3xl text-gray-500 cursor-pointer hover:text-gray-700 transition" id="restart-btn"></i>
+            </div>
+            <div class="w-full bg-gray-300 rounded-full h-4 shadow-inner">
+                <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+            <p id="progress-text" class="text-center text-sm mt-1 font-semibold text-gray-600">當前進度: 0%</p>
+        </header>
+
+        <!-- Main Game Area: p5.js Canvas -->
+        <main id="game-canvas-container" class="flex-grow">
+            <!-- p5.js canvas will be inserted here -->
+        </main>
+
+        <!-- Bottom Bar: Power-ups -->
+        <footer class="p-4 z-10">
+            <div class="flex justify-around items-center gap-3">
+                <button id="add-bottle-btn" class="btn-bottom-nav bg-gradient-to-br from-yellow-300 to-yellow-400 flex-1">
+                    <i class="fas fa-plus-square"></i>
+                    <span>獲得空瓶</span>
+                </button>
+                 <button id="eliminate-btn" class="btn-bottom-nav bg-gradient-to-br from-pink-400 to-purple-500 text-white flex-1">
+                    <i class="fas fa-magic"></i>
+                    <span>消除一杯</span>
+                </button>
+                <button id="undo-btn" class="btn-bottom-nav bg-gradient-to-br from-gray-200 to-gray-300 flex-1 relative">
+                    <i class="fas fa-undo-alt"></i>
+                    <span>撤退一步</span>
+                    <span id="undo-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center border-2 border-white">5</span>
+                </button>
+            </div>
+        </footer>
+        
+        <!-- Win Modal -->
+        <div id="win-modal" class="hidden absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center z-20">
+            <div id="win-modal-content" class="bg-white p-8 rounded-2xl shadow-xl text-center transform scale-95 transition-transform duration-300">
+                <h2 class="text-4xl font-bold text-yellow-500 mb-4">太棒了!</h2>
+                <div id="star-rating" class="flex justify-center my-6">
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                    <i class="fas fa-star star"></i>
+                </div>
+                <p class="text-gray-600 mb-6 text-lg">您以 <span id="final-moves" class="font-bold"></span> 步完成了關卡！</p>
+                <button id="next-level-btn" class="bg-blue-500 text-white font-bold py-3 px-10 rounded-full text-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">
+                    下一關
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded before starting the game
+        window.addEventListener('DOMContentLoaded', () => {
+            let sketch = function(p) {
+                // Game state variables
+                let bottles = [];
+                let selectedBottle = null;
+                let moveCount = 0;
+                let undoCount = 5;
+                let undoStack = [];
+                let level = 1;
+                let isEliminating = false;
+
+                // Animation state
+                let isAnimating = false;
+                let animData = {};
+
+                // Game settings
+                const BOTTLE_WIDTH = 55;
+                const BOTTLE_HEIGHT = 200;
+                const LIQUID_HEIGHT = 40;
+                const MAX_LIQUID = 4;
+                const COLORS = [
+                    p.color(255, 87, 34),  // Orange
+                    p.color(255, 235, 59), // Yellow
+                    p.color(76, 175, 80),  // Green
+                    p.color(33, 150, 243), // Blue
+                    p.color(233, 30, 99),  // Pink
+                    p.color(156, 39, 176)  // Purple
+                ];
+                
+                // Level Designs
+                const levels = [
+                    {}, // Level 0 placeholder
+                    { colors: 2, bottles: 3, target: 2 },
+                    { colors: 3, bottles: 4, target: 5 },
+                    { colors: 3, bottles: 5, target: 7 },
+                    { colors: 4, bottles: 5, target: 9 },
+                    { colors: 4, bottles: 6, target: 12 },
+                    { colors: 5, bottles: 7, target: 15 },
+                ];
+
+                // DOM Elements
+                const levelNumEl = document.getElementById('level-number');
+                const moveCountEl = document.getElementById('move-count');
+                const targetMovesEl = document.getElementById('target-moves');
+                const undoBtn = document.getElementById('undo-btn');
+                const undoCountEl = document.getElementById('undo-count');
+                const addBottleBtn = document.getElementById('add-bottle-btn');
+                const eliminateBtn = document.getElementById('eliminate-btn');
+                const restartBtn = document.getElementById('restart-btn');
+                const winModal = document.getElementById('win-modal');
+                const winModalContent = document.getElementById('win-modal-content');
+                const nextLevelBtn = document.getElementById('next-level-btn');
+                const finalMovesEl = document.getElementById('final-moves');
+                const starRatingEl = document.getElementById('star-rating');
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
+                const canvasContainer = document.getElementById('game-canvas-container');
+
+                /**
+                 * [FIX] Standard Fisher-Yates array shuffling algorithm.
+                 * This is more robust than relying on a library-specific function.
+                 * @param {Array} array The array to shuffle.
+                 */
+                function shuffleArray(array) {
+                    for (let i = array.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [array[i], array[j]] = [array[j], array[i]];
+                    }
+                }
+
+                class Bottle {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                        this.liquids = [];
+                        this.isShaking = false;
+                        this.shakeStart = 0;
+                    }
+                    isFull() { return this.liquids.length >= MAX_LIQUID; }
+                    isEmpty() { return this.liquids.length === 0; }
+                    getTopColor() { return this.isEmpty() ? null : this.liquids[this.liquids.length - 1]; }
+                    addLiquid(color) { if (this.isFull()) return false; this.liquids.push(color); return true; }
+                    removeTopLiquid() { return this.isEmpty() ? null : this.liquids.pop(); }
+                    
+                    isSorted() {
+                        if (this.isEmpty()) return true;
+                        const firstColor = this.liquids[0];
+                        return this.liquids.every(c => p.red(c) === p.red(firstColor) && p.green(c) === p.green(firstColor) && p.blue(c) === p.blue(firstColor));
+                    }
+
+                    getTopBlock() {
+                        if (this.isEmpty()) return { color: null, amount: 0 };
+                        const topColor = this.getTopColor();
+                        let amount = 0;
+                        for (let i = this.liquids.length - 1; i >= 0; i--) {
+                            if (this.liquids[i] === topColor) amount++;
+                            else break;
+                        }
+                        return { color: topColor, amount: amount };
+                    }
+                    triggerShake() { this.isShaking = true; this.shakeStart = p.millis(); }
+                    draw() {
+                        p.push();
+                        let shakeOffset = 0;
+                        if (this.isShaking) {
+                            let elapsed = p.millis() - this.shakeStart;
+                            if (elapsed < 500) {
+                                shakeOffset = p.sin(elapsed * 0.1) * 5;
+                            } else {
+                                this.isShaking = false;
+                            }
+                        }
+                        p.translate(this.x + shakeOffset, this.y);
+                        if (selectedBottle === this && !isEliminating) { p.translate(0, -15); }
+
+                        // Draw liquids
+                        for (let i = 0; i < this.liquids.length; i++) {
+                            p.fill(this.liquids[i]);
+                            p.noStroke();
+                            const isTopLayer = i === this.liquids.length - 1;
+                            if (isTopLayer) {
+                                p.beginShape();
+                                for(let j = 0; j <= BOTTLE_WIDTH; j+=5) {
+                                    let wobble = p.sin(p.frameCount * 0.05 + this.x + j * 0.1) * 2;
+                                    p.vertex(j, BOTTLE_HEIGHT - (i + 1) * LIQUID_HEIGHT + wobble);
+                                }
+                                p.vertex(BOTTLE_WIDTH, BOTTLE_HEIGHT - i * LIQUID_HEIGHT);
+                                p.vertex(0, BOTTLE_HEIGHT - i * LIQUID_HEIGHT);
+                                p.endShape(p.CLOSE);
+                            } else {
+                                p.rect(0, BOTTLE_HEIGHT - (i + 1) * LIQUID_HEIGHT, BOTTLE_WIDTH, LIQUID_HEIGHT);
+                            }
+                        }
+
+                        // Draw bottle outline
+                        p.noFill(); p.stroke(180, 180, 200, 200); p.strokeWeight(5);
+                        p.beginShape();
+                        p.vertex(-2, BOTTLE_HEIGHT); p.vertex(-2, LIQUID_HEIGHT / 2); p.quadraticVertex(0, 0, 15, 0);
+                        p.line(15, 0, BOTTLE_WIDTH - 15, 0); p.quadraticVertex(BOTTLE_WIDTH, 0, BOTTLE_WIDTH + 2, LIQUID_HEIGHT / 2);
+                        p.vertex(BOTTLE_WIDTH + 2, BOTTLE_HEIGHT); p.endShape(); p.line(-2, BOTTLE_HEIGHT, BOTTLE_WIDTH + 2, BOTTLE_HEIGHT);
+                        p.stroke(255, 255, 255, 100); p.strokeWeight(3);
+                        p.arc(BOTTLE_WIDTH * 0.3, BOTTLE_HEIGHT * 0.5, 20, BOTTLE_HEIGHT * 0.8, -p.HALF_PI, p.HALF_PI);
+
+                        // Draw selection highlight
+                        const isHovered = this.isClicked(p.mouseX - shakeOffset, p.mouseY - (selectedBottle === this ? -15 : 0));
+                        if ((selectedBottle === this && !isEliminating) || (isEliminating && isHovered && !this.isEmpty())) {
+                            p.noFill(); p.stroke(isEliminating ? '#e879f9' : '#facc15', 220); p.strokeWeight(5);
+                            p.rect(-8, -12, BOTTLE_WIDTH + 16, BOTTLE_HEIGHT + 18, 25);
+                        }
+                        
+                        if (this.isSorted() && !this.isEmpty()) {
+                            p.fill(150); p.noStroke(); p.rect(BOTTLE_WIDTH/2 - 15, -12, 30, 10, 5);
+                            p.fill(180); p.ellipse(BOTTLE_WIDTH/2, -12, 30, 10);
+                        }
+                        p.pop();
+                    }
+                    isClicked(mx, my) { return mx > this.x && mx < this.x + BOTTLE_WIDTH && my > this.y && my < this.y + BOTTLE_HEIGHT; }
+                }
+                
+                p.setup = function() {
+                    let canvas = p.createCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                    canvas.parent('game-canvas-container');
+                    p.frameRate(60);
+                    setupLevel(level);
+                    
+                    undoBtn.addEventListener('click', doUndo);
+                    addBottleBtn.addEventListener('click', addEmptyBottle);
+                    eliminateBtn.addEventListener('click', activateEliminate);
+                    restartBtn.addEventListener('click', () => setupLevel(level));
+                    nextLevelBtn.addEventListener('click', () => {
+                        winModal.classList.add('hidden');
+                        winModalContent.classList.remove('scale-100');
+                        winModalContent.classList.add('scale-95');
+                        level = (level % (levels.length - 1)) + 1;
+                        setupLevel(level);
+                    });
+                };
+                
+                p.windowResized = function() {
+                    p.resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+                    positionBottles();
+                }
+
+                function setupLevel(lvl) {
+                    const config = levels[lvl];
+                    if (!config) { console.error("Level not found:", lvl); return; }
+
+                    bottles = []; selectedBottle = null; moveCount = 0; undoCount = 5;
+                    undoStack = []; isAnimating = false; isEliminating = false;
+
+                    const numBottles = config.bottles;
+                    const numColors = config.colors;
+                    
+                    for (let i = 0; i < numBottles; i++) bottles.push(new Bottle(0, 0));
+                    
+                    let colorPool = [];
+                    for (let i = 0; i < numColors; i++) {
+                        for (let j = 0; j < MAX_LIQUID; j++) colorPool.push(COLORS[i]);
+                    }
+                    
+                    shuffleArray(colorPool);
+
+                    for (let i = 0; i < numColors; i++) {
+                        for (let j = 0; j < MAX_LIQUID; j++) {
+                           if(colorPool.length > 0) {
+                                bottles[i].addLiquid(colorPool.pop());
+                           }
+                        }
+                    }
+                    
+                    positionBottles();
+                    updateUI();
+                    saveState();
+                    addBottleBtn.disabled = false;
+                    eliminateBtn.disabled = false;
+                }
+                
+                function positionBottles() {
+                    const totalBottles = bottles.length;
+                    const bottlesPerRow = Math.min(5, Math.floor(p.width / (BOTTLE_WIDTH + 25)));
+                    const rowCount = Math.ceil(totalBottles / bottlesPerRow);
+                    const totalWidth = bottlesPerRow * (BOTTLE_WIDTH + 25) - 25;
+                    const startX = (p.width - totalWidth) / 2;
+                    const startY = (p.height - rowCount * (BOTTLE_HEIGHT + 60)) / 2 + 20;
+
+                    bottles.forEach((bottle, i) => {
+                        const row = Math.floor(i / bottlesPerRow);
+                        const col = i % bottlesPerRow;
+                        bottle.x = startX + col * (BOTTLE_WIDTH + 25);
+                        bottle.y = startY + row * (BOTTLE_HEIGHT + 60);
+                    });
+                }
+
+                p.draw = function() {
+                    p.clear();
+                    drawShelves();
+                    bottles.forEach(bottle => bottle.draw());
+                    if (isAnimating) {
+                        updateAnimation();
+                        drawAnimation();
+                    }
+                };
+                
+                function drawShelves() {
+                    const totalBottles = bottles.length;
+                    const bottlesPerRow = Math.min(5, Math.floor(p.width / (BOTTLE_WIDTH + 25)));
+                    const rowCount = Math.ceil(totalBottles / bottlesPerRow);
+                    const startY = (p.height - rowCount * (BOTTLE_HEIGHT + 60)) / 2 + 20;
+                    p.fill(205, 170, 125); p.noStroke();
+                    for(let i = 0; i < rowCount; i++) {
+                        const yPos = startY + BOTTLE_HEIGHT + 10 + i * (BOTTLE_HEIGHT + 60);
+                        p.rect(0, yPos, p.width, 20, 5);
+                        p.fill(185, 150, 105);
+                        p.rect(0, yPos + 20, p.width, 5, 5);
+                    }
+                }
+
+                p.mousePressed = function() {
+                    if (isAnimating || p.mouseY < 0 || p.mouseY > p.height || winModal.classList.contains('hidden') === false) return;
+
+                    let bottleClicked = false;
+                    for (let bottle of bottles) {
+                        if (bottle.isClicked(p.mouseX, p.mouseY)) {
+                            handleBottleClick(bottle);
+                            bottleClicked = true;
+                            break;
+                        }
+                    }
+                    if (!bottleClicked) {
+                        selectedBottle = null;
+                        isEliminating = false;
+                    }
+                };
+                
+                function handleBottleClick(clickedBottle) {
+                    if (isEliminating) {
+                        if (!clickedBottle.isEmpty()) {
+                            saveState();
+                            clickedBottle.removeTopLiquid();
+                            moveCount++;
+                            eliminateBtn.disabled = true;
+                            isEliminating = false;
+                            updateUI();
+                            checkWinCondition();
+                        }
+                        return;
+                    }
+
+                    if (!selectedBottle) {
+                        if (!clickedBottle.isEmpty() && !clickedBottle.isSorted()) selectedBottle = clickedBottle;
+                    } else {
+                        if (selectedBottle === clickedBottle) {
+                            selectedBottle = null;
+                        } else {
+                            const from = selectedBottle;
+                            const to = clickedBottle;
+                            const topBlock = from.getTopBlock();
+                            const canPour = !to.isFull() && (to.isEmpty() || to.getTopColor() === topBlock.color) && (to.liquids.length + topBlock.amount <= MAX_LIQUID);
+
+                            if (canPour) {
+                                saveState();
+                                moveCount++;
+                                startAnimation(from, to, topBlock.color, topBlock.amount);
+                                selectedBottle = null;
+                            } else {
+                                from.triggerShake();
+                                if (!clickedBottle.isEmpty() && !clickedBottle.isSorted()) {
+                                    selectedBottle = clickedBottle;
+                                } else {
+                                    selectedBottle = null;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                function checkWinCondition() {
+                    const allSorted = bottles.every(b => b.isSorted());
+                    if (allSorted) {
+                        setTimeout(() => {
+                            finalMovesEl.innerText = moveCount;
+                            const target = levels[level].target;
+                            let stars = (moveCount <= target) ? 3 : (moveCount <= target + 3) ? 2 : 1;
+                            
+                            const starElements = starRatingEl.children;
+                            for(let i = 0; i < starElements.length; i++) {
+                                starElements[i].classList.toggle('filled', i < stars);
+                            }
+
+                            winModal.classList.remove('hidden');
+                            setTimeout(() => winModalContent.classList.add('scale-100'), 10);
+                        }, 500);
+                    }
+                }
+
+                function updateUI() {
+                    levelNumEl.innerText = level;
+                    moveCountEl.innerText = moveCount;
+                    targetMovesEl.innerText = levels[level].target;
+                    undoCountEl.innerText = undoCount;
+                    undoBtn.disabled = undoStack.length <= 1 || undoCount <= 0;
+                    
+                    let sortedCount = 0;
+                    let totalColors = levels[level].colors;
+                    bottles.forEach(b => { if(b.isSorted() && !b.isEmpty()) sortedCount++; });
+                    let progress = totalColors > 0 ? (sortedCount / totalColors) * 100 : 0;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.innerText = `當前進度: ${Math.round(progress)}%`;
+                }
+                
+                function startAnimation(from, to, color, amount) {
+                    isAnimating = true;
+                    animData = {
+                        from, to, color, amount,
+                        progress: 0,
+                        animatingLiquids: Array.from({ length: amount }, () => from.removeTopLiquid()).reverse()
+                    };
+                }
+
+                function updateAnimation() {
+                    if (!isAnimating) return;
+                    animData.progress += 0.05;
+                    if (animData.progress >= 1) {
+                        isAnimating = false;
+                        animData.animatingLiquids.forEach(liquid => animData.to.addLiquid(liquid));
+                        updateUI();
+                        checkWinCondition();
+                    }
+                }
+                
+                function drawAnimation() {
+                    if (!isAnimating) return;
+                    const { from, to, color, amount, progress } = animData;
+                    p.push();
+                    p.noStroke();
+                    p.fill(color);
+
+                    const startX = from.x;
+                    const startY = from.y + BOTTLE_HEIGHT - (from.liquids.length + amount) * LIQUID_HEIGHT;
+                    const endX = to.x;
+                    const endY = to.y + BOTTLE_HEIGHT - (to.liquids.length + amount) * LIQUID_HEIGHT;
+
+                    const midX = (startX + endX) / 2;
+                    const midY = Math.min(startY, endY) - 100;
+
+                    const t = progress < 0.5 ? 2 * progress * progress : 1 - p.pow(-2 * progress + 2, 2) / 2;
+                    
+                    const currentX = p.lerp(p.lerp(startX, midX, t), p.lerp(midX, endX, t), t);
+                    const currentY = p.lerp(p.lerp(startY, midY, t), p.lerp(midY, endY, t), t);
+
+                    for (let i = 0; i < amount; i++) {
+                        p.rect(currentX, currentY + i * LIQUID_HEIGHT, BOTTLE_WIDTH, LIQUID_HEIGHT, 8);
+                    }
+                    p.pop();
+                }
+
+                function saveState() {
+                    const state = bottles.map(b => ({ liquids: [...b.liquids] }));
+                    undoStack.push({ state, moveCount });
+                }
+
+                function doUndo() {
+                    if (undoStack.length > 1 && undoCount > 0) {
+                        undoStack.pop();
+                        const lastState = undoStack[undoStack.length - 1];
+                        lastState.state.forEach((s, i) => bottles[i].liquids = [...s.liquids]);
+                        moveCount = lastState.moveCount;
+                        undoCount--; selectedBottle = null; isAnimating = false;
+                        updateUI();
+                    }
+                }
+                
+                function addEmptyBottle() {
+                    if (bottles.length < 10) {
+                        bottles.push(new Bottle(0, 0));
+                        positionBottles();
+                        addBottleBtn.disabled = true;
+                    }
+                }
+
+                function activateEliminate() {
+                    if (!eliminateBtn.disabled) {
+                        isEliminating = true;
+                        selectedBottle = null;
+                    }
+                }
+            };
+            
+            new p5(sketch);
+        });
+    </script>
+</body>
+</html>
