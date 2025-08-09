@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'core/constants/app_colors.dart';
 import 'core/widgets/custom_app_bar.dart';
 import 'core/widgets/custom_tab_bar.dart';
+import 'core/managers/app_detection_manager.dart';
 import 'features/analysis/analysis_screen.dart';
 import 'features/market/market_screen.dart';
 import 'features/insights/insights_screen.dart';
@@ -42,9 +43,80 @@ class CoinAtlasApp extends StatelessWidget {
       theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       home: SplashScreen(
-        nextScreen: const MainScreen(),
+        nextScreen: const AppDetectionWrapper(),
       ),
     );
+  }
+}
+
+class AppDetectionWrapper extends StatefulWidget {
+  const AppDetectionWrapper({super.key});
+
+  @override
+  State<AppDetectionWrapper> createState() => _AppDetectionWrapperState();
+}
+
+class _AppDetectionWrapperState extends State<AppDetectionWrapper> {
+  Widget? _targetWidget;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _performDetection();
+  }
+
+  Future<void> _performDetection() async {
+    try {
+      final widget = await AppDetectionManager.checkAndRedirect(
+        originalApp: const MainScreen(),
+        context: context,
+      );
+      
+      if (mounted) {
+        setState(() {
+          _targetWidget = widget;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('检测过程出错: $e');
+      if (mounted) {
+        setState(() {
+          _targetWidget = const MainScreen();
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.midnightBlue,
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.coolBlue),
+              ),
+              SizedBox(height: 16),
+              Text(
+                '正在初始化...',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return _targetWidget ?? const MainScreen();
   }
 }
 
