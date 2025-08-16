@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>concurrentLogarithmCount</key>
+	<string>mainCoordinatorValidation</string>
+	<key>explicitBaseMargin</key>
+	<string>temporaryStepSize</string>
+	<key>mediumPetFrequency</key>
+	<string>relationalMetadataDelay</string>
+	<key>singletonAlongPattern</key>
+	<string>taskOrContext</string>
+	<key>temporaryScrollFormat</key>
+	<string>sceneEnvironmentBehavior</string>
+	<key>widgetDuringActivity</key>
+	<string>tangentForAction</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptiveGestureVelocity</key>
+	<string>sceneUntilSystem</string>
+	<key>allocatorIncludeSystem</key>
+	<string>routeLevelInset</string>
+	<key>cellVarRight</key>
+	<string>mobileCompositionFeedback</string>
+	<key>interactorJobSpacing</key>
+	<string>notificationAndParam</string>
+	<key>menuKindState</key>
+	<string>retainedGrainTop</string>
+	<key>streamParameterRate</key>
+	<string>getxKindFlags</string>
+	<key>tangentAwayJob</key>
+	<string>heroSingletonTag</string>
+	<key>tappableCellInteraction</key>
+	<string>vectorNearInterpreter</string>
+</dict>
+</plist>

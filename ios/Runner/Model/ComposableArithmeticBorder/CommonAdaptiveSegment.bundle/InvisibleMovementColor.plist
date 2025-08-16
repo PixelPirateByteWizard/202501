@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>clipperParameterStatus</key>
+	<string>navigationFlyweightInteraction</string>
+	<key>functionalGridSpacing</key>
+	<string>uniformIconSpeed</string>
+	<key>sliderKindPosition</key>
+	<string>animationParameterTop</string>
+	<key>symmetricFrameMode</key>
+	<string>positionedVersusLayer</string>
+	<key>topicMementoDepth</key>
+	<string>sampleDuringScope</string>
+</dict>
+</plist>

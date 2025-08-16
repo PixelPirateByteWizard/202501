@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dedicatedBrushShape</key>
+	<string>offsetFacadeIndex</string>
+	<key>gridWorkRight</key>
+	<string>modelAtWork</string>
+	<key>listenerBufferOpacity</key>
+	<string>disabledEquipmentVisible</string>
+	<key>resilientRadiusTheme</key>
+	<string>responsiveLocalizationShade</string>
+	<key>synchronousGrainColor</key>
+	<string>queryPerChain</string>
+</dict>
+</plist>

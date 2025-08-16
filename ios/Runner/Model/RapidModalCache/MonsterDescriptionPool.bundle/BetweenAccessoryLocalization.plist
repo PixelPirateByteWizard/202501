@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animationVisitorOpacity</key>
+	<string>alignmentStateResponse</string>
+	<key>batchChainScale</key>
+	<string>independentSliderScale</string>
+	<key>gridviewDuringPhase</key>
+	<string>statelessBoxshadowDepth</string>
+	<key>radiusNearFacade</key>
+	<string>labelTierDuration</string>
+	<key>skinBufferBound</key>
+	<string>declarativeSizeSize</string>
+	<key>sortedMobxDistance</key>
+	<string>observerModeRotation</string>
+	<key>timerShapeColor</key>
+	<string>gemAlongFlyweight</string>
+</dict>
+</plist>

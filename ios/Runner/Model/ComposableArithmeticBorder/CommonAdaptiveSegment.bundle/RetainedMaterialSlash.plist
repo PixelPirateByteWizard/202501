@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>consultativeResourceInteraction</key>
+	<string>drawerAgainstJob</string>
+	<key>graphPerLayer</key>
+	<string>normalMetadataScale</string>
+	<key>keyProgressbarStyle</key>
+	<string>buttonBesideParam</string>
+	<key>rowPlatformStatus</key>
+	<string>configurationCycleBehavior</string>
+	<key>spotJobTint</key>
+	<string>layoutUntilScope</string>
+	<key>tableOutsideValue</key>
+	<string>referenceViaTask</string>
+	<key>textureExceptSingleton</key>
+	<string>discardedGraphicInterval</string>
+</dict>
+</plist>

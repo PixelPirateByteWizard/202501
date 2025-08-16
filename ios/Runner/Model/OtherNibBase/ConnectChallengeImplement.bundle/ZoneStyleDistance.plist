@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>constraintObserverDensity</key>
+	<string>granularRiverpodBehavior</string>
+	<key>coordinatorWithoutStage</key>
+	<string>dependencyChainRight</string>
+	<key>fixedFactoryTop</key>
+	<string>crudeStateTransparency</string>
+	<key>inactivePainterAlignment</key>
+	<string>routerForStrategy</string>
+	<key>indicatorByStructure</key>
+	<string>gemActivityTransparency</string>
+	<key>sizeAsParameter</key>
+	<string>zoneInContext</string>
+	<key>tensorObserverInterval</key>
+	<string>sequentialSceneContrast</string>
+	<key>tweenPatternMargin</key>
+	<string>callbackMethodSpacing</string>
+	<key>usageThanState</key>
+	<string>featureOperationKind</string>
+</dict>
+</plist>

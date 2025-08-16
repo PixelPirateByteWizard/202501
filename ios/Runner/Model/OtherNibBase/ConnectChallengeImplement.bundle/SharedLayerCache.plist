@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>lazyTitleRotation</key>
+	<string>arithmeticContextEdge</string>
+	<key>mediaMediatorBorder</key>
+	<string>cardAtParam</string>
+	<key>numericalCardMode</key>
+	<string>customizedCardSize</string>
+	<key>requiredStreamKind</key>
+	<string>reusableBitrateDepth</string>
+</dict>
+</plist>

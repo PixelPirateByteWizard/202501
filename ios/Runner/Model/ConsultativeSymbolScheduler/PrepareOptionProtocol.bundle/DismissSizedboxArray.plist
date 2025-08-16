@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessoryTypeHue</key>
+	<string>sinkDecoratorContrast</string>
+	<key>callbackForMemento</key>
+	<string>globalLayoutSkewy</string>
+	<key>denseBlocRotation</key>
+	<string>mainPainterScale</string>
+	<key>exceptionActionContrast</key>
+	<string>instructionViaShape</string>
+	<key>gridviewForFramework</key>
+	<string>integerSingletonHue</string>
+	<key>subsequentTweenFrequency</key>
+	<string>exceptionOrSystem</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cacheAgainstType</key>
+	<string>signBufferBehavior</string>
+	<key>dependencyLayerVisibility</key>
+	<string>lossAdapterVisibility</string>
+	<key>easyResponseSaturation</key>
+	<string>transitionLikeJob</string>
+	<key>gramAmongState</key>
+	<string>brushOperationOpacity</string>
+	<key>intensityActionFormat</key>
+	<string>gateAdapterAppearance</string>
+	<key>oldNodeDistance</key>
+	<string>dependencyKindEdge</string>
+	<key>pinchableHashFlags</key>
+	<string>animationDecoratorDuration</string>
+	<key>precisionFrameworkValidation</key>
+	<string>controllerFromJob</string>
+</dict>
+</plist>

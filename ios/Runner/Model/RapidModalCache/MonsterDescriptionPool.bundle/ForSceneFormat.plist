@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>advancedEquipmentEdge</key>
+	<string>modalAndFlyweight</string>
+	<key>behaviorDespiteOperation</key>
+	<string>allocatorMediatorTransparency</string>
+	<key>delicateBatchPadding</key>
+	<string>queryLevelFeedback</string>
+	<key>normSingletonForce</key>
+	<string>dependencyParameterInteraction</string>
+	<key>textProcessStyle</key>
+	<string>heroInPlatform</string>
+</dict>
+</plist>

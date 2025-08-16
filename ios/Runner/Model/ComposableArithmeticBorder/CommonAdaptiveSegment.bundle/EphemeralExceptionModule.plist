@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dimensionDespitePattern</key>
+	<string>stepBeyondShape</string>
+	<key>firstOperationOrientation</key>
+	<string>symbolAgainstMode</string>
+	<key>listenerForFlyweight</key>
+	<string>interactorContextColor</string>
+	<key>previewChainFeedback</key>
+	<string>basicFutureVelocity</string>
+	<key>reducerOperationHue</key>
+	<string>autoInjectionType</string>
+	<key>sliderContainEnvironment</key>
+	<string>decorationVariableDepth</string>
+	<key>symmetricChecklistFlags</key>
+	<string>temporaryExtensionFormat</string>
+	<key>widgetActionOrientation</key>
+	<string>entityAboutTask</string>
+</dict>
+</plist>

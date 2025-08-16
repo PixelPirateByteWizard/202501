@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>declarativeProviderFrequency</key>
+	<string>independentBaselineOrientation</string>
+	<key>desktopAppbarBottom</key>
+	<string>unsortedSubscriptionScale</string>
+	<key>injectionLayerShade</key>
+	<string>aspectratioScopeFlags</string>
+	<key>rectContainComposite</key>
+	<string>normalEqualizationLeft</string>
+	<key>sinkAmongActivity</key>
+	<string>resilientPopupBorder</string>
+	<key>timerMediatorCount</key>
+	<string>singleEffectName</string>
+</dict>
+</plist>

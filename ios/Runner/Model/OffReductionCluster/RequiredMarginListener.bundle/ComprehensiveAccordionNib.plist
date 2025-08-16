@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>activityOperationValidation</key>
+	<string>responseUntilMethod</string>
+	<key>effectPerVariable</key>
+	<string>operationStructureIndex</string>
+	<key>invisibleProjectionSize</key>
+	<string>timerCompositeBottom</string>
+	<key>loopParameterInset</key>
+	<string>positionLevelSize</string>
+	<key>queryActionFlags</key>
+	<string>reusableProviderForce</string>
+	<key>radiusAmongMethod</key>
+	<string>zoneViaParam</string>
+	<key>singletonThroughSystem</key>
+	<string>positionParameterFrequency</string>
+	<key>widgetPlatformInset</key>
+	<string>sequentialResourceType</string>
+</dict>
+</plist>

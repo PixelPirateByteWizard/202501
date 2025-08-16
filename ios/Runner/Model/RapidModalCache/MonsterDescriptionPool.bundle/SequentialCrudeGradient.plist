@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commonPageviewFeedback</key>
+	<string>displayableGestureIndex</string>
+	<key>desktopCycleBehavior</key>
+	<string>sineAroundActivity</string>
+	<key>localizationLevelPadding</key>
+	<string>comprehensiveMarginSpeed</string>
+	<key>mutablePetPosition</key>
+	<string>desktopGestureTint</string>
+	<key>newestListenerAppearance</key>
+	<string>scrollEnvironmentShape</string>
+	<key>presenterNumberLocation</key>
+	<string>hardListenerPressure</string>
+	<key>uniformLayoutSpeed</key>
+	<string>statelessBeyondValue</string>
+</dict>
+</plist>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>controllerSystemForce</key>
+	<string>textureDuringEnvironment</string>
+	<key>disparateMarginStyle</key>
+	<string>injectionTierTransparency</string>
+	<key>navigatorModeTag</key>
+	<string>awaitByObserver</string>
+	<key>semanticSingletonKind</key>
+	<string>singleActionPosition</string>
+	<key>tickerActivitySaturation</key>
+	<string>inheritedNotifierRight</string>
+	<key>widgetFlyweightColor</key>
+	<string>dependencyFlyweightKind</string>
+</dict>
+</plist>

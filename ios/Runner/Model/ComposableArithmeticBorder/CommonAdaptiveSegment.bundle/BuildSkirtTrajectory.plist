@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animatedcontainerViaCycle</key>
+	<string>workflowBesideStage</string>
+	<key>displayableMobxLocation</key>
+	<string>taskAmongValue</string>
+	<key>groupAndAction</key>
+	<string>stackLevelDuration</string>
+	<key>methodWorkHead</key>
+	<string>alignmentNumberScale</string>
+	<key>monsterWorkInset</key>
+	<string>shaderMethodSkewx</string>
+	<key>profileFlyweightDensity</key>
+	<string>tweenShapeOffset</string>
+	<key>resourceAlongStyle</key>
+	<string>checkboxExceptMode</string>
+</dict>
+</plist>

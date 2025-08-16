@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>chartValueVelocity</key>
+	<string>indicatorScopeOrientation</string>
+	<key>euclideanMenuKind</key>
+	<string>adaptiveAnimationSize</string>
+	<key>greatClipperBorder</key>
+	<string>animationAgainstStyle</string>
+	<key>hyperbolicDocumentOffset</key>
+	<string>eagerContainerBound</string>
+	<key>invisibleZoneState</key>
+	<string>granularFeatureOrigin</string>
+	<key>isolateWithoutJob</key>
+	<string>numericalHistogramSpeed</string>
+	<key>progressbarTemplePadding</key>
+	<string>projectProcessFrequency</string>
+	<key>requestAdapterPadding</key>
+	<string>subpixelBeyondNumber</string>
+	<key>statelessRichtextStyle</key>
+	<string>similarMusicHead</string>
+	<key>webSliderState</key>
+	<string>typicalNavigatorInterval</string>
+</dict>
+</plist>

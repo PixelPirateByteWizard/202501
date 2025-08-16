@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>alignmentPerPhase</key>
+	<string>directlyEffectLocation</string>
+	<key>awaitBridgeOffset</key>
+	<string>advancedLocalizationDensity</string>
+	<key>draggableResultState</key>
+	<string>rapidLabelTint</string>
+	<key>ephemeralSizeAcceleration</key>
+	<string>blocForInterpreter</string>
+	<key>movementModeBrightness</key>
+	<string>ternaryAgainstActivity</string>
+	<key>pinchableBehaviorMode</key>
+	<string>enabledControllerTheme</string>
+	<key>remainderDuringParam</key>
+	<string>canvasAlongMethod</string>
+	<key>spineFormScale</key>
+	<string>interactiveAsyncDensity</string>
+	<key>tensorCallbackPadding</key>
+	<string>largeToolCount</string>
+</dict>
+</plist>

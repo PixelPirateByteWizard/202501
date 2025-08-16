@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>assetInterpreterTransparency</key>
+	<string>loopEnvironmentStyle</string>
+	<key>configurationKindLeft</key>
+	<string>storeInsideProcess</string>
+	<key>directGrayscaleRate</key>
+	<string>multiGridTail</string>
+	<key>rowTypeOrientation</key>
+	<string>coordinatorVersusBridge</string>
+	<key>webFrameStyle</key>
+	<string>responseProxySkewx</string>
+</dict>
+</plist>

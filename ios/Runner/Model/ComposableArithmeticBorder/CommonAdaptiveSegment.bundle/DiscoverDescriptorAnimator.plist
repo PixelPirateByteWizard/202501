@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>anchorExceptMode</key>
+	<string>typicalAssetPadding</string>
+	<key>bufferFunctionTransparency</key>
+	<string>relationalTernaryAcceleration</string>
+	<key>canvasProxyDelay</key>
+	<string>pageviewFunctionRate</string>
+	<key>dedicatedVectorBottom</key>
+	<string>positionedByVisitor</string>
+	<key>largeRepositoryDuration</key>
+	<string>entityScopeAppearance</string>
+	<key>mediaqueryObserverForce</key>
+	<string>gateInsideVisitor</string>
+	<key>otherSingletonFormat</key>
+	<string>gateBesideVisitor</string>
+	<key>sizeVarTail</key>
+	<string>gridviewFrameworkFeedback</string>
+</dict>
+</plist>

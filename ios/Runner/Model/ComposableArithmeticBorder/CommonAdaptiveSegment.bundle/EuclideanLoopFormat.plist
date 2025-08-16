@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>allocatorPhaseTransparency</key>
+	<string>brushPrototypeSize</string>
+	<key>aspectNearMode</key>
+	<string>advancedThemeFormat</string>
+	<key>comprehensiveStatefulBorder</key>
+	<string>customLayerDistance</string>
+	<key>hashVersusForm</key>
+	<string>materialDecoratorOrientation</string>
+	<key>isolateVisitorKind</key>
+	<string>storyboardBridgeInteraction</string>
+</dict>
+</plist>
