@@ -1,0 +1,26 @@
+---
+description: Guidelines for implementing feature modules
+---
+# Feature Module Structure
+
+Each feature module (group_generator, match_scorer, led_scroller, settings) should follow this structure:
+
+1. **Screen File** (`*_screen.dart`):
+   - Contains the UI components
+   - Handles user interactions
+   - Uses the controller for business logic
+
+2. **Controller File** (`*_controller.dart`):
+   - Contains business logic
+   - Manages state for the feature
+   - Interacts with models and services
+
+3. **Model File** (`*_model.dart`):
+   - Defines data structures
+   - Contains immutable classes with final fields
+   - No business logic in models
+
+Example for Group Generator:
+- `group_generator_screen.dart` - UI for creating and viewing groups
+- `group_generator_controller.dart` - Logic for generating balanced groups
+- `group_model.dart` - Group and Player model definitions

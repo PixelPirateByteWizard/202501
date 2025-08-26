@@ -1,0 +1,31 @@
+---
+description: UI design guidelines for Verzephronix
+---
+# UI Design Guidelines
+
+1. **Color Scheme**:
+   - Primary: Deep Space Indigo (`#0a0e2a`, `#12173a`, `#1a237e`)
+   - Accent: Cosmic Blue (`#00e5ff`)
+   - Highlights: Stardust Gold (`#ffd700`), Nebula Purple (`#7c4dff`)
+
+2. **UI Components**:
+   - Cards with rounded corners (20px radius)
+   - Subtle gradients for depth
+   - Glowing effects for interactive elements
+   - Space-themed visual elements
+
+3. **Layout**:
+   - Bottom navigation with 5 tabs (Home, Groups, Scorer, LED, Settings)
+   - Card-based content organization
+   - Consistent padding (16px standard)
+   - Responsive to different screen sizes
+
+4. **Animations**:
+   - Subtle transitions between screens
+   - Interactive feedback on buttons
+   - Smooth scrolling effects for LED display
+
+5. **Typography**:
+   - Use system fonts with clear hierarchy
+   - Headings: Bold, larger size
+   - Body text: Regular weight, good contrast with background

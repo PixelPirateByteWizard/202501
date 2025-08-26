@@ -1,0 +1,16 @@
+---
+globs: *.dart
+---
+# Dart File Guidelines
+
+1. Keep files focused on a single responsibility
+2. Use clear, descriptive names for classes and methods
+3. Organize imports with Flutter imports first, then package imports, then project imports
+4. Include documentation comments for public APIs
+5. Model classes should be immutable with final fields
+6. Follow Flutter style guide for widget structure:
+   - Constructor parameters at the top
+   - Private variables next
+   - Widget build method last
+7. Remember to use `setState` for state updates in StatefulWidgets
+8. Use named parameters for all widget constructors

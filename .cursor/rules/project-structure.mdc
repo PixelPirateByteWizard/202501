@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+---
+# Verzephronix Project Structure
+
+This Flutter app follows a modular architecture with clear separation of concerns:
+
+- `lib/main.dart` is the entry point
+- `lib/app.dart` defines the main app structure and navigation
+- Core features are organized in separate directories:
+  - `lib/group_generator/` - Group generation feature
+  - `lib/match_scorer/` - Match scoring feature
+  - `lib/led_scroller/` - LED scrolling display feature
+  - `lib/settings/` - App settings and preferences
+- Shared utilities are in `lib/utils/`
+- Reusable widgets are in `lib/widgets/`
+
+Each feature module follows a consistent pattern with screen, controller, and model files.

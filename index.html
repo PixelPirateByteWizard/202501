@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verzephronix - Sports Companion App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'space-indigo': {
+                            900: '#0a0e2a',
+                            800: '#12173a',
+                            700: '#1a237e',
+                            600: '#283593',
+                            500: '#3949ab',
+                        },
+                        'cosmic-blue': '#00e5ff',
+                        'stardust-gold': '#ffd700',
+                        'nebula-purple': '#7c4dff',
+                    },
+                    fontFamily: {
+                        'rajdhani': ['Rajdhani', 'sans-serif'],
+                        'exo': ['Exo 2', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'holographic': '0 0 15px rgba(0, 229, 255, 0.7), 0 0 30px rgba(124, 77, 255, 0.3)',
+                        'glow': '0 0 10px rgba(0, 229, 255, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(ellipse at center, #1a237e 0%, #0a0e2a 100%);
+            font-family: 'Exo 2', sans-serif;
+            color: #e0e0ff;
+            overflow-x: hidden;
+        }
+        
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            border-radius: 40px;
+            background: linear-gradient(145deg, #1a237e, #0a0e2a);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        
+        .screen {
+            position: absolute;
+            top: 40px;
+            left: 15px;
+            width: 360px;
+            height: 764px;
+            background: linear-gradient(160deg, #12173a, #0a0e2a);
+            border-radius: 32px;
+            overflow: hidden;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #a0a0ff;
+            background: rgba(18, 23, 58, 0.8);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .tab-bar {
+            height: 84px;
+            background: rgba(18, 23, 58, 0.95);
+            border-top: 1px solid rgba(0, 229, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #8a8ac9;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-item.active {
+            color: #00e5ff;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .card {
+            background: rgba(26, 35, 126, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+        
+        .h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3949ab, #283593);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 24px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00e5ff, #3949ab);
+        }
+        
+        .input-field {
+            background: rgba(26, 35, 126, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 14px;
+            padding: 14px 18px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #00e5ff;
+            box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.3);
+        }
+        
+        .group-orb {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #283593, #1a237e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 10px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+            border: 2px solid rgba(0, 229, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .group-orb::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(0, 229, 255, 0.6), transparent 30%);
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .group-orb-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(10, 14, 42, 0.7);
+            border-radius: 50%;
+            width: 94%;
+            height: 94%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .player-tag {
+            background: rgba(57, 73, 171, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+        
+        .player-tag:hover {
+            background: rgba(57, 73, 171, 0.6);
+            transform: translateY(-3px);
+        }
+        
+        .led-display {
+            background: #000;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.1);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .color-option.active {
+            border-color: white;
+            transform: scale(1.1);
+        }
+        
+        .sport-card {
+            background: rgba(26, 35, 126, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .sport-card.active {
+            background: rgba(57, 73, 171, 0.5);
+            border-color: #00e5ff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+        
+        .score-display {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 64px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+        
+        .settings-item {
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .preview-container {
+            perspective: 1000px;
+        }
+        
+        .preview-phone {
+            transform: rotateY(-20deg);
+            margin-right: -100px;
+            transition: all 0.5s ease;
+        }
+        
+        .preview-phone:hover {
+            transform: rotateY(0deg) translateY(-10px);
+            margin-right: 0;
+        }
+        
+        .stardust-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+            background-size: 50px 50px, 80px 80px;
+            background-position: 0 0, 25px 25px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 229, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+        }
+        
+        .scroll-text {
+            animation: scrollText 15s linear infinite;
+            white-space: nowrap;
+            display: inline-block;
+            padding-left: 100%;
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-8">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold mb-4 text-white font-rajdhani">Verzephronix App</h1>
+        <p class="text-xl text-cosmic-blue max-w-2xl mx-auto">A cosmic sports companion with group generator, match scorer, LED display and more - designed with Deep Space Indigo theme</p>
+    </div>
+    
+    <div class="flex flex-wrap justify-center gap-8">
+        <!-- Home Screen Preview -->
+        <div class="preview-container">
+            <div class="preview-phone">
+                <div class="iphone-frame">
+                    <div class="screen">
+                        <div class="stardust-bg"></div>
+                        <div class="status-bar">
+                            <div>9:41</div>
+                            <div>
+                                <i class="fas fa-signal mr-2"></i>
+                                <i class="fas fa-wifi mr-2"></i>
+                                <i class="fas fa-battery-full"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="app-content">
+                            <div class="flex justify-center mb-6">
+                                <div class="text-center">
+                                    <div class="text-cosmic-blue mb-2">
+                                        <i class="fas fa-user-astronaut text-4xl"></i>
+                                    </div>
+                                    <h1 class="h1">Verzephronix</h1>
+                                    <p class="text-nebula-purple mb-8">Sports Event Companion</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-8">
+                                <div class="card flex flex-col items-center justify-center p-6 text-center">
+                                    <div class="w-16 h-16 rounded-full bg-space-indigo-800 flex items-center justify-center mb-4 border border-cosmic-blue/30">
+                                        <i class="fas fa-users text-2xl text-cosmic-blue"></i>
+                                    </div>
+                                    <h3 class="h2 font-rajdhani">Group Generator</h3>
+                                    <p class="text-sm opacity-80">Create balanced teams</p>
+                                </div>
+                                
+                                <div class="card flex flex-col items-center justify-center p-6 text-center">
+                                    <div class="w-16 h-16 rounded-full bg-space-indigo-800 flex items-center justify-center mb-4 border border-cosmic-blue/30">
+                                        <i class="fas fa-stopwatch text-2xl text-cosmic-blue"></i>
+                                    </div>
+                                    <h3 class="h2 font-rajdhani">Match Scorer</h3>
+                                    <p class="text-sm opacity-80">Track scores & time</p>
+                                </div>
+                                
+                                <div class="card flex flex-col items-center justify-center p-6 text-center">
+                                    <div class="w-16 h-16 rounded-full bg-space-indigo-800 flex items-center justify-center mb-4 border border-cosmic-blue/30">
+                                        <i class="fas fa-scroll text-2xl text-cosmic-blue"></i>
+                                    </div>
+                                    <h3 class="h2 font-rajdhani">LED Scroller</h3>
+                                    <p class="text-sm opacity-80">Display messages</p>
+                                </div>
+                                
+                                <div class="card flex flex-col items-center justify-center p-6 text-center">
+                                    <div class="w-16 h-16 rounded-full bg-space-indigo-800 flex items-center justify-center mb-4 border border-cosmic-blue/30">
+                                        <i class="fas fa-cog text-2xl text-cosmic-blue"></i>
+                                    </div>
+                                    <h3 class="h2 font-rajdhani">Settings</h3>
+                                    <p class="text-sm opacity-80">App preferences</p>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center text-sm text-space-indigo-300">
+                                <p>Current Event: Badminton Tournament</p>
+                                <p>Participants: 24 | Groups: 4</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-bar">
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div>Home</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>Groups</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div>Scorer</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>LED</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-lg font-rajdhani text-white">Home Screen</div>
+        </div>
+        
+        <!-- Group Generator Screen -->
+        <div class="preview-container">
+            <div class="preview-phone">
+                <div class="iphone-frame">
+                    <div class="screen">
+                        <div class="stardust-bg"></div>
+                        <div class="status-bar">
+                            <div>9:41</div>
+                            <div>
+                                <i class="fas fa-signal mr-2"></i>
+                                <i class="fas fa-wifi mr-2"></i>
+                                <i class="fas fa-battery-full"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="app-content">
+                            <div class="flex items-center mb-6">
+                                <h1 class="h1 flex-grow">Group Generator</h1>
+                                <div class="w-10 h-10 rounded-full bg-space-indigo-700 flex items-center justify-center">
+                                    <i class="fas fa-random text-cosmic-blue"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-6">
+                                <h2 class="h2 mb-4">Enter Participants</h2>
+                                <textarea class="input-field" rows="4" placeholder="Enter names, separated by commas">John, Sarah, Mike, Lisa, David, Emma, Robert, Olivia, James, Sophia, William, Ava, Benjamin, Mia, Daniel, Charlotte, Matthew, Amelia, Christopher, Harper, Andrew, Evelyn</textarea>
+                                
+                                <div class="flex items-center mb-4">
+                                    <div class="mr-4">Number of Groups:</div>
+                                    <div class="text-xl font-bold text-cosmic-blue">4</div>
+                                    <div class="ml-auto">
+                                        <button class="bg-space-indigo-700 rounded-full w-8 h-8 flex items-center justify-center">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="mx-2 w-32 bg-space-indigo-800 h-2 rounded-full">
+                                        <div class="bg-cosmic-blue h-2 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                    <div>
+                                        <button class="bg-space-indigo-700 rounded-full w-8 h-8 flex items-center justify-center">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary w-full pulse">
+                                    <i class="fas fa-cogs mr-2"></i> Generate Groups
+                                </button>
+                            </div>
+                            
+                            <h2 class="h2 mb-4">Generated Groups</h2>
+                            <div class="flex flex-wrap justify-center">
+                                <div class="group-orb">
+                                    <div class="group-orb-content">
+                                        <div class="text-stardust-gold font-bold text-lg">Group 1</div>
+                                        <div class="text-xs">6 players</div>
+                                    </div>
+                                </div>
+                                <div class="group-orb">
+                                    <div class="group-orb-content">
+                                        <div class="text-stardust-gold font-bold text-lg">Group 2</div>
+                                        <div class="text-xs">6 players</div>
+                                    </div>
+                                </div>
+                                <div class="group-orb">
+                                    <div class="group-orb-content">
+                                        <div class="text-stardust-gold font-bold text-lg">Group 3</div>
+                                        <div class="text-xs">6 players</div>
+                                    </div>
+                                </div>
+                                <div class="group-orb">
+                                    <div class="group-orb-content">
+                                        <div class="text-stardust-gold font-bold text-lg">Group 4</div>
+                                        <div class="text-xs">6 players</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="player-tag">John</div>
+                                    <div class="player-tag">Sarah</div>
+                                    <div class="player-tag">Mike</div>
+                                    <div class="player-tag">Lisa</div>
+                                    <div class="player-tag">David</div>
+                                    <div class="player-tag">Emma</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-bar">
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div>Home</div>
+                            </div>
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>Groups</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div>Scorer</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>LED</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-lg font-rajdhani text-white">Group Generator</div>
+        </div>
+        
+        <!-- Match Scorer Screen -->
+        <div class="preview-container">
+            <div class="preview-phone">
+                <div class="iphone-frame">
+                    <div class="screen">
+                        <div class="stardust-bg"></div>
+                        <div class="status-bar">
+                            <div>9:41</div>
+                            <div>
+                                <i class="fas fa-signal mr-2"></i>
+                                <i class="fas fa-wifi mr-2"></i>
+                                <i class="fas fa-battery-full"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="app-content">
+                            <div class="flex items-center mb-6">
+                                <h1 class="h1 flex-grow">Match Scorer</h1>
+                                <div class="w-10 h-10 rounded-full bg-space-indigo-700 flex items-center justify-center">
+                                    <i class="fas fa-stopwatch text-cosmic-blue"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="flex overflow-x-auto pb-4 mb-6">
+                                <div class="sport-card active mr-4" style="min-width: 100px;">
+                                    <div class="text-3xl mb-2">🎾</div>
+                                    <div>Tennis</div>
+                                </div>
+                                <div class="sport-card mr-4" style="min-width: 100px;">
+                                    <div class="text-3xl mb-2">🏸</div>
+                                    <div>Badminton</div>
+                                </div>
+                                <div class="sport-card mr-4" style="min-width: 100px;">
+                                    <div class="text-3xl mb-2">🏓</div>
+                                    <div>Table Tennis</div>
+                                </div>
+                                <div class="sport-card" style="min-width: 100px;">
+                                    <div class="text-3xl mb-2">🏀</div>
+                                    <div>Basketball</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-6">
+                                <div class="flex justify-between items-center mb-8">
+                                    <div class="text-center">
+                                        <div class="text-lg font-rajdhani mb-2">Player 1</div>
+                                        <input type="text" class="input-field text-center" value="John Doe">
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <div class="text-lg text-space-indigo-300 mb-2">Set 1</div>
+                                        <div class="flex items-center">
+                                            <button class="w-12 h-12 rounded-full bg-space-indigo-700 flex items-center justify-center mr-4">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <div class="score-display">6</div>
+                                            <div class="mx-2 text-2xl">-</div>
+                                            <div class="score-display">4</div>
+                                            <button class="w-12 h-12 rounded-full bg-space-indigo-700 flex items-center justify-center ml-4">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <div class="text-lg font-rajdhani mb-2">Player 2</div>
+                                        <input type="text" class="input-field text-center" value="Jane Smith">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-2 mb-4">
+                                    <div class="text-center">
+                                        <div class="text-sm mb-1">Current Game</div>
+                                        <div class="text-2xl font-bold">40</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm mb-1">Duration</div>
+                                        <div class="text-2xl font-bold">22:18</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm mb-1">Serves</div>
+                                        <div class="text-2xl font-bold">P2</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-center space-x-4">
+                                    <button class="btn">
+                                        <i class="fas fa-undo mr-2"></i> Undo
+                                    </button>
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-flag mr-2"></i> End Match
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <h2 class="h2 mb-4">Match History</h2>
+                            <div class="card">
+                                <div class="settings-item">
+                                    <div>
+                                        <div class="font-rajdhani">Set 1</div>
+                                        <div class="text-sm text-space-indigo-300">John Doe won 6-4</div>
+                                    </div>
+                                    <div class="text-stardust-gold">Completed</div>
+                                </div>
+                                <div class="settings-item">
+                                    <div>
+                                        <div class="font-rajdhani">Set 2</div>
+                                        <div class="text-sm text-space-indigo-300">In progress</div>
+                                    </div>
+                                    <div class="text-cosmic-blue">Active</div>
+                                </div>
+                                <div class="settings-item">
+                                    <div>
+                                        <div class="font-rajdhani">Set 3</div>
+                                        <div class="text-sm text-space-indigo-300">Not started</div>
+                                    </div>
+                                    <div class="text-space-indigo-300">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-bar">
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div>Home</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>Groups</div>
+                            </div>
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div>Scorer</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>LED</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-lg font-rajdhani text-white">Match Scorer</div>
+        </div>
+        
+        <!-- LED Scroller Screen -->
+        <div class="preview-container">
+            <div class="preview-phone">
+                <div class="iphone-frame">
+                    <div class="screen">
+                        <div class="stardust-bg"></div>
+                        <div class="status-bar">
+                            <div>9:41</div>
+                            <div>
+                                <i class="fas fa-signal mr-2"></i>
+                                <i class="fas fa-wifi mr-2"></i>
+                                <i class="fas fa-battery-full"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="app-content">
+                            <div class="flex items-center mb-6">
+                                <h1 class="h1 flex-grow">LED Scroller</h1>
+                                <div class="w-10 h-10 rounded-full bg-space-indigo-700 flex items-center justify-center">
+                                    <i class="fas fa-scroll text-cosmic-blue"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="led-display">
+                                <div class="scroll-text">GO TEAM! 🔥 DEFENSE! 💪 WIN THIS! 🏆</div>
+                            </div>
+                            
+                            <div class="card mb-6">
+                                <h2 class="h2 mb-4">Custom Message</h2>
+                                <input type="text" class="input-field mb-4" placeholder="Enter your message" value="GO TEAM! 🔥 DEFENSE! 💪 WIN THIS! 🏆">
+                                
+                                <div class="mb-4">
+                                    <h3 class="font-rajdhani mb-2">Text Color</h3>
+                                    <div class="color-picker">
+                                        <div class="color-option active" style="background-color: #ffd700;"></div>
+                                        <div class="color-option" style="background-color: #00e5ff;"></div>
+                                        <div class="color-option" style="background-color: #7c4dff;"></div>
+                                        <div class="color-option" style="background-color: #ff5252;"></div>
+                                        <div class="color-option" style="background-color: #69f0ae;"></div>
+                                        <div class="color-option" style="background-color: #ffffff;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h3 class="font-rajdhani mb-2">Background</h3>
+                                    <div class="color-picker">
+                                        <div class="color-option active" style="background-color: #000000;"></div>
+                                        <div class="color-option" style="background-color: #1a237e;"></div>
+                                        <div class="color-option" style="background-color: #0a0e2a;"></div>
+                                        <div class="color-option" style="background: linear-gradient(90deg, #1a237e, #000);"></div>
+                                        <div class="color-option" style="background: linear-gradient(90deg, #7c4dff, #0a0e2a);"></div>
+                                        <div class="color-option" style="background: linear-gradient(90deg, #00e5ff, #1a237e);"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h3 class="font-rajdhani mb-2">Speed</h3>
+                                    <input type="range" min="1" max="10" value="5" class="w-full">
+                                </div>
+                                
+                                <button class="btn btn-primary w-full mb-4">
+                                    <i class="fas fa-play mr-2"></i> Start Scrolling
+                                </button>
+                                
+                                <button class="btn w-full">
+                                    <i class="fas fa-expand mr-2"></i> Full Screen Mode
+                                </button>
+                            </div>
+                            
+                            <h2 class="h2 mb-4">Templates</h2>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="card p-4">
+                                    <div class="font-rajdhani">GO TEAM GO!</div>
+                                    <div class="text-sm text-space-indigo-300 mt-2">Simple encouragement</div>
+                                </div>
+                                <div class="card p-4">
+                                    <div class="font-rajdhani">DEFENSE!</div>
+                                    <div class="text-sm text-space-indigo-300 mt-2">Defensive chant</div>
+                                </div>
+                                <div class="card p-4">
+                                    <div class="font-rajdhani">VICTORY IS OURS!</div>
+                                    <div class="text-sm text-space-indigo-300 mt-2">Confidence boost</div>
+                                </div>
+                                <div class="card p-4">
+                                    <div class="font-rajdhani">🔥 UNSTOPPABLE! 🔥</div>
+                                    <div class="text-sm text-space-indigo-300 mt-2">Energy booster</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-bar">
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div>Home</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>Groups</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div>Scorer</div>
+                            </div>
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>LED</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-lg font-rajdhani text-white">LED Scroller</div>
+        </div>
+        
+        <!-- Settings Screen -->
+        <div class="preview-container">
+            <div class="preview-phone">
+                <div class="iphone-frame">
+                    <div class="screen">
+                        <div class="stardust-bg"></div>
+                        <div class="status-bar">
+                            <div>9:41</div>
+                            <div>
+                                <i class="fas fa-signal mr-2"></i>
+                                <i class="fas fa-wifi mr-2"></i>
+                                <i class="fas fa-battery-full"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="app-content">
+                            <div class="flex items-center mb-6">
+                                <h1 class="h1 flex-grow">Settings</h1>
+                                <div class="w-10 h-10 rounded-full bg-space-indigo-700 flex items-center justify-center">
+                                    <i class="fas fa-cog text-cosmic-blue"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-info-circle"></i>
+                                        </div>
+                                        <div>App Details</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-space-indigo-300"></i>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-list"></i>
+                                        </div>
+                                        <div>Features Walkthrough</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-space-indigo-300"></i>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-file-contract"></i>
+                                        </div>
+                                        <div>License Agreement</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-space-indigo-300"></i>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div>Privacy Policy</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-space-indigo-300"></i>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-comment-dots"></i>
+                                        </div>
+                                        <div>Submit Feedback</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-space-indigo-300"></i>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-space-indigo-700 flex items-center justify-center mr-3">
+                                            <i class="fas fa-code-branch"></i>
+                                        </div>
+                                        <div>Version Information</div>
+                                    </div>
+                                    <div class="text-space-indigo-300">v1.2.0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-6">
+                                <h2 class="h2 mb-4">App Preferences</h2>
+                                
+                                <div class="settings-item">
+                                    <div>Dark Mode</div>
+                                    <div class="relative inline-block w-12 h-6">
+                                        <input type="checkbox" class="opacity-0 w-0 h-0" checked>
+                                        <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-space-indigo-700 rounded-full transition"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div>Haptic Feedback</div>
+                                    <div class="relative inline-block w-12 h-6">
+                                        <input type="checkbox" class="opacity-0 w-0 h-0" checked>
+                                        <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-space-indigo-700 rounded-full transition"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div>Sound Effects</div>
+                                    <div class="relative inline-block w-12 h-6">
+                                        <input type="checkbox" class="opacity-0 w-0 h-0">
+                                        <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-space-indigo-700 rounded-full transition"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-item">
+                                    <div>Auto-save Matches</div>
+                                    <div class="relative inline-block w-12 h-6">
+                                        <input type="checkbox" class="opacity-0 w-0 h-0" checked>
+                                        <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-space-indigo-700 rounded-full transition"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center text-sm mt-8 text-space-indigo-300">
+                                <p>Verzephronix © 2023</p>
+                                <p>All rights reserved</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-bar">
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div>Home</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>Groups</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div>Scorer</div>
+                            </div>
+                            <div class="tab-item">
+                                <div class="tab-icon">
+                                    <i class="fas fa-scroll"></i>
+                                </div>
+                                <div>LED</div>
+                            </div>
+                            <div class="tab-item active">
+                                <div class="tab-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div>Settings</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4 text-lg font-rajdhani text-white">Settings</div>
+        </div>
+    </div>
+    
+    <div class="max-w-4xl mt-16 p-8 rounded-2xl bg-space-indigo-800 border border-space-indigo-600">
+        <h2 class="text-2xl font-bold mb-6 text-center text-white font-rajdhani">Implementation Notes</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card">
+                <h3 class="h2 mb-4">Technical Specifications</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Fully responsive design using Tailwind CSS</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-cosmic-blue mt-1 mr-3"></i>
+                        <span>FontAwesome icons for intuitive UI elements</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Custom color palette with Deep Space Indigo theme</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Rajdhani and Exo 2 fonts for sports-tech aesthetic</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-cosmic-blue mt-1 mr-3"></i>
+                        <span>CSS animations for interactive elements</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3 class="h2 mb-4">Development Ready</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <i class="fas fa-mobile-alt text-cosmic-blue mt-1 mr-3"></i>
+                        <span>iPhone 15 Pro frame simulation (390x844px)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-code text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Clean, component-based HTML structure</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-paint-brush text-cosmic-blue mt-1 mr-3"></i>
+                        <span>CSS with variables for easy theming</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-lightbulb text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Interactive elements ready for JavaScript integration</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-layer-group text-cosmic-blue mt-1 mr-3"></i>
+                        <span>Glass-morphism and neumorphic design elements</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-12 text-center text-space-indigo-300 max-w-2xl mx-auto">
+        <p>This high-fidelity prototype demonstrates all core functionality of Verzephronix - a sports companion app designed with a cosmic aesthetic. The implementation follows iOS design guidelines while maintaining a unique identity with its Deep Space Indigo theme.</p>
+    </div>
+</body>
+</html>

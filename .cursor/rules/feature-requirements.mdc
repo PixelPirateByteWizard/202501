@@ -1,0 +1,35 @@
+---
+description: Detailed feature requirements for Verzephronix
+---
+# Feature Requirements
+
+## Group Generator
+- Input field for participant names (comma-separated)
+- Slider/control to adjust number of groups
+- Algorithm to create balanced groups
+- Visual display of generated groups
+- Ability to manually adjust group assignments
+
+## Match Scorer
+- Templates for different sports (Tennis, Badminton, Table Tennis, Basketball)
+- Score tracking with increment/decrement controls
+- Timer functionality for timed sports
+- Match history recording
+- Player name input fields
+- Set tracking for multi-set games
+
+## LED Scroller
+- Text input for custom messages
+- Color picker for text and background
+- Speed adjustment slider
+- Full-screen display mode
+- Pre-defined templates for common sports messages
+- Scrolling animation for text
+
+## Settings
+- App information section
+- Feature walkthrough option
+- Legal documents (License Agreement, Privacy Policy)
+- Feedback submission
+- Version information display
+- Preferences toggles (Dark Mode, Haptic Feedback, Sound Effects, Auto-save)

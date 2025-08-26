@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+# Coding Standards for Verzephronix
+
+1. **State Management**: Use `setState` for state management (no external state management libraries)
+2. **Data Storage**: Use `shared_preferences` for local data persistence
+3. **No External Assets**: 
+   - Do not use local image assets (`assets/images/`)
+   - Do not use `cached_network_image`
+4. **No Authentication**: No account/login functionality required
+5. **No Custom Fonts**: Use system fonts only, no external font packages
+6. **Code Structure**: 
+   - Do not use `freezed` package
+   - Do not use `part` syntax
+7. **Language**: All user-facing text should be in English
+8. **Theme**: Follow the "Deep Space Indigo" color scheme with cosmic blue accents
