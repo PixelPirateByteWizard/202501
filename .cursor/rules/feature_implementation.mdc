@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+---
+# Luvimestra Feature Implementation Guidelines
+
+## Parallel Realities Feature
+- Display multiple parallel reality characters as cards
+- Each card should show character name, description, avatar, and background image
+- Tapping a card opens the chat interface
+- AI-powered chat functionality with character personas
+
+## Encounter Feature (Tarot & Astrology)
+- Display interactive tarot cards with animations
+- Allow users to select cards for readings
+- Collect minimal user information for astrology readings
+- AI-powered analysis of tarot and astrology results
+
+## Time Voices Feature (Radio)
+- Display radio stations as a grid/list with cover images
+- Implement audio playback functionality
+- Create visual audio player with play/pause controls
+- Include audio visualization effects
+
+## Settings Feature
+- User profile display (no account functionality)
+- Theme and appearance settings
+- Notification preferences
+- App information section
+
+## General Implementation Notes
+- Use network images for all visual assets
+- Implement smooth animations and transitions
+- Follow the mockup design from index.html
+- Keep the UI consistent across all features
