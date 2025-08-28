@@ -240,6 +240,14 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
                     fontSize: 14,
                   ),
                 ),
+                const SizedBox(height: 8),
+                const Text(
+                  '每次和智能顾问聊天将消耗1金币',
+                  style: TextStyle(
+                    color: Colors.white60,
+                    fontSize: 12,
+                  ),
+                ),
               ],
             ),
           ),
