@@ -257,7 +257,7 @@ class _SplashScreenState extends State<SplashScreen>
                                     ],
                                   ).createShader(bounds),
                                   child: const Text(
-                                    'Luvimestra',
+                                    '摘星猫',
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
