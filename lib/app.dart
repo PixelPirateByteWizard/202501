@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'dart:math' as math;
 import 'pages/realities_page.dart';
 import 'pages/encounter_page.dart';
 import 'pages/radio_page.dart';
+import 'pages/music_page.dart';
 import 'pages/settings_page.dart';
 
 class AppScreen extends StatefulWidget {
@@ -21,6 +21,7 @@ class _AppScreenState extends State<AppScreen> {
     const RealitiesPage(),
     const EncounterPage(),
     const RadioPage(),
+    const MusicPage(),
     const SettingsPage(),
   ];
 
@@ -29,30 +30,33 @@ class _AppScreenState extends State<AppScreen> {
     '平行时空',
     '遇见',
     '时空之声',
+    '音律',
     '我的',
   ];
 
-  // 页面图标
+  // 页面图标 - 使用更圆润的图标
   final List<IconData> _icons = [
-    Icons.blur_circular, // 平行时空
-    Icons.auto_awesome, // 遇见
-    Icons.satellite_alt, // 时空之声
-    Icons.person, // 我的
+    Icons.blur_circular_rounded, // 平行时空
+    Icons.auto_awesome_rounded, // 遇见
+    Icons.radio_rounded, // 时空之声
+    Icons.music_note_rounded, // 音律
+    Icons.person_rounded, // 我的
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // 背景渐变 - 使用主题中定义的颜色，不使用透明度
+      // 轻盈的背景渐变 - 卡通风格
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
-            Color(0xFF0F1A2C), // 深蓝色调
-            Color(0xFF2A0B47), // 深紫色 (brand-purple-deep)
+            Color(0xFFFAF9FC), // 浅紫色
+            Color(0xFFF5F0FA), // 更浅的紫色
+            Colors.white,
           ],
-          stops: [0.2, 1.0],
+          stops: [0.0, 0.6, 1.0],
         ),
       ),
       child: Scaffold(
@@ -71,46 +75,49 @@ class _AppScreenState extends State<AppScreen> {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      height: 64 + bottomPadding, // 增加导航栏高度 + 底部安全区域
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF2A0B47), // 深紫色 (brand-purple-deep)
-            Color(0xFF1A0625), // 更深的紫色
-          ],
+      height: 65 + bottomPadding, // 进一步优化导航栏高度
+      decoration: BoxDecoration(
+        // 白色半透明背景，保持轻盈感
+        color: Colors.white.withValues(alpha: 0.95),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(32), // 更大的圆角
+          topRight: Radius.circular(32),
         ),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
+        // 柔和的阴影效果
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 20,
+            spreadRadius: 0,
+            offset: const Offset(0, -4),
+          ),
+          BoxShadow(
+            color: const Color(0xFF6B2C9E).withValues(alpha: 0.05),
+            blurRadius: 40,
+            spreadRadius: 0,
+            offset: const Offset(0, -8),
+          ),
+        ],
+        // 顶部分隔线
         border: Border(
           top: BorderSide(
-            color: Color(0xFF6B2C9E), // 使用固定颜色而不是透明度
+            color: Colors.grey.withValues(alpha: 0.1),
             width: 1.0,
           ),
         ),
-        // 优化阴影效果，使用固定颜色
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 0,
-            spreadRadius: 1,
-            offset: Offset(0, -2),
-          ),
-        ],
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(32),
+          topRight: Radius.circular(32),
         ),
-        // 移除BackdropFilter毛玻璃效果，使用普通Container
         child: Container(
           color: Colors.transparent,
           child: Padding(
-            padding: EdgeInsets.only(bottom: bottomPadding),
+            padding: EdgeInsets.only(
+              bottom: bottomPadding,
+              top: 8, // 减少顶部内边距
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
@@ -126,10 +133,9 @@ class _AppScreenState extends State<AppScreen> {
 
   Widget _buildNavItem(int index) {
     final bool isActive = _currentIndex == index;
-    // 移除不必要的变量，使用固定颜色
 
     // 计算每个导航项的宽度，避免溢出
-    final itemWidth = math.min(MediaQuery.of(context).size.width / 5, 80.0);
+    final itemWidth = math.min(MediaQuery.of(context).size.width / 5, 85.0);
 
     return SizedBox(
       width: itemWidth,
@@ -137,90 +143,120 @@ class _AppScreenState extends State<AppScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => setState(() => _currentIndex = index),
-          borderRadius: BorderRadius.circular(20),
-          splashColor: const Color(0xFF3A1257),
-          highlightColor: const Color(0xFF2A0B47),
+          borderRadius: BorderRadius.circular(24), // 更圆润的点击区域
+          splashColor: const Color(0xFF6B2C9E).withValues(alpha: 0.1),
+          highlightColor: const Color(0xFF6B2C9E).withValues(alpha: 0.05),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutQuint,
-            // 减少垂直内边距，防止溢出
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              // 移除透明度
-              color: isActive ? Color(0xFF3A1257) : Colors.transparent,
+              borderRadius: BorderRadius.circular(24),
+              // 活跃状态使用渐变背景
+              gradient: isActive
+                  ? LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xFF6B2C9E).withValues(alpha: 0.15),
+                        const Color(0xFF4A1A6B).withValues(alpha: 0.1),
+                      ],
+                    )
+                  : null,
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min, // 确保列不会扩展超出其内容
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // 图标和指示器
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // 活跃状态时的底部指示器 - 使用固定颜色
-                    if (isActive)
-                      Positioned(
-                        top: 0, // 调整位置，避免溢出
-                        child: Container(
-                          width: 20,
-                          height: 2, // 减小高度
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFF2A6D), // 品红色 (brand-magenta)
-                            borderRadius: BorderRadius.circular(2),
-                            // 移除阴影以减少溢出风险
-                          ),
+                // 图标容器
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 400),
+                  height: isActive ? 36 : 32,
+                  width: isActive ? 36 : 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    // 活跃状态使用渐变背景
+                    gradient: isActive
+                        ? const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF6B2C9E),
+                              Color(0xFF4A1A6B),
+                            ],
+                          )
+                        : null,
+                    // 非活跃状态使用浅色背景
+                    color: isActive ? null : Colors.grey.withValues(alpha: 0.1),
+                    // 柔和的阴影
+                    boxShadow: isActive
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFF6B2C9E).withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              spreadRadius: 0,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // 图标
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: Icon(
+                          _icons[index],
+                          key: ValueKey('${index}_${isActive}'),
+                          size: isActive ? 20 : 18,
+                          color: isActive ? Colors.white : Colors.grey[600],
                         ),
                       ),
-
-                    // 图标容器 - 减小尺寸，移除渐变
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      height: 26, // 减小高度
-                      width: 26, // 减小宽度
-                      decoration: isActive
-                          ? const BoxDecoration(
+                      // 活跃状态的光晕效果
+                      if (isActive)
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color(0xFF3A1257), // 使用固定颜色替代渐变
-                            )
-                          : null,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // 图标 - 减小尺寸
-                          Icon(
-                            _icons[index],
-                            size: isActive ? 22 : 20, // 减小图标尺寸
-                            color: isActive
-                                ? Color(0xFF6B2C9E)
-                                : Color(0xCCFFFFFF), // 使用固定颜色
+                              gradient: RadialGradient(
+                                colors: [
+                                  Colors.white.withValues(alpha: 0.2),
+                                  Colors.transparent,
+                                ],
+                                stops: const [0.3, 1.0],
+                              ),
+                            ),
                           ),
+                        ),
+                    ],
+                  ),
+                ),
 
-                          // 移除光晕效果，避免溢出
-                        ],
-                      ),
+                const SizedBox(height: 1),
+
+                // 标题文本 - 使用Flexible避免溢出
+                Flexible(
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 300),
+                    style: TextStyle(
+                      fontSize: isActive ? 9 : 8,
+                      color: isActive 
+                          ? const Color(0xFF2A0B47) 
+                          : Colors.grey[600],
+                      fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                      letterSpacing: 0.3,
                     ),
-                  ],
-                ),
-
-                const SizedBox(height: 2), // 减小间距
-
-                // 标题文本 - 简化样式
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 200),
-                  style: TextStyle(
-                    fontSize: 10, // 统一减小字体大小
-                    color:
-                        isActive ? Colors.white : Color(0xAAFFFFFF), // 使用固定颜色
-                    fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                    letterSpacing: 0.2, // 统一字间距
-                  ),
-                  child: Text(
-                    _titles[index],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Text(
+                      _titles[index],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
+
+                // 移除指示点以节省空间
               ],
             ),
           ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 import '../app.dart';
+import '../utils/cartoon_ui.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -157,9 +157,14 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF0F1A2C), Color(0xFF1A0625)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFFAF9FC), // 浅紫色
+              Color(0xFFF5F0FA), // 更浅的紫色
+              Colors.white,
+            ],
+            stops: [0.0, 0.6, 1.0],
           ),
         ),
         child: Stack(
@@ -188,60 +193,93 @@ class _SplashScreenState extends State<SplashScreen>
                     padding: const EdgeInsets.all(24.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: isSmallScreen ? 40 : 80),
-                        // Logo 动画
+                        // Logo 动画 - 卡通风格，确保居中
                         AnimatedBuilder(
                           animation: _controller,
                           builder: (context, child) {
-                            return Transform.scale(
-                              scale: _logoScaleAnimation.value,
-                              child: Transform.rotate(
-                                angle: _logoRotationAnimation.value,
-                                child: Container(
-                                  width: 120,
-                                  height: 120,
+                            return Center(
+                              child: Transform.scale(
+                                scale: _logoScaleAnimation.value,
+                                child: Transform.rotate(
+                                  angle: _logoRotationAnimation.value,
+                                  child: Container(
+                                  width: 140,
+                                  height: 140,
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.3),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color(0xFF6B2C9E),
+                                        Color(0xFF4A1A6B),
+                                      ],
+                                    ),
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary
-                                            .withOpacity(0.5),
+                                        color: const Color(0xFF6B2C9E).withValues(alpha: 0.3),
+                                        blurRadius: 30,
+                                        spreadRadius: 0,
+                                        offset: const Offset(0, 10),
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.1),
                                         blurRadius: 20,
-                                        spreadRadius: 5,
+                                        spreadRadius: 0,
+                                        offset: const Offset(0, 5),
                                       ),
                                     ],
                                   ),
-                                  child: Center(
-                                    child: ShaderMask(
-                                      shaderCallback: (bounds) =>
-                                          LinearGradient(
-                                        colors: [
-                                          Theme.of(context).colorScheme.primary,
-                                          Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ).createShader(bounds),
-                                      child: const Icon(
-                                        Icons.blur_circular,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      // 内部光晕
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: RadialGradient(
+                                            colors: [
+                                              Colors.white.withValues(alpha: 0.3),
+                                              Colors.transparent,
+                                            ],
+                                            stops: const [0.3, 1.0],
+                                          ),
+                                        ),
+                                      ),
+                                      // 主图标
+                                      const Icon(
+                                        Icons.blur_circular_rounded,
                                         size: 80,
                                         color: Colors.white,
                                       ),
-                                    ),
+                                      // 装饰性小圆点
+                                      Positioned(
+                                        top: 20,
+                                        right: 25,
+                                        child: Container(
+                                          width: 8,
+                                          height: 8,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
+                            ),
                             );
                           },
                         ),
                         const SizedBox(height: 40),
-                        // 文字动画
+                        // 文字动画 - 卡通风格，确保居中
                         AnimatedBuilder(
                           animation: _controller,
                           builder: (context, child) {
@@ -249,20 +287,25 @@ class _SplashScreenState extends State<SplashScreen>
                               opacity: _textOpacityAnimation.value,
                               child: Transform.translate(
                                 offset: Offset(0, _textSlideAnimation.value),
-                                child: ShaderMask(
-                                  shaderCallback: (bounds) => LinearGradient(
-                                    colors: [
-                                      Theme.of(context).colorScheme.primary,
-                                      Theme.of(context).colorScheme.secondary,
-                                    ],
-                                  ).createShader(bounds),
-                                  child: const Text(
-                                    '摘星猫',
-                                    style: TextStyle(
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      letterSpacing: 2,
+                                child: Center(
+                                  child: ShaderMask(
+                                    shaderCallback: (bounds) => const LinearGradient(
+                                      colors: [
+                                        Color(0xFF6B2C9E),
+                                        Color(0xFF4A1A6B),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ).createShader(bounds),
+                                    child: const Text(
+                                      'Luvimestra',
+                                      style: TextStyle(
+                                        fontSize: 42,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white,
+                                        letterSpacing: 1.5,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ),
@@ -270,7 +313,7 @@ class _SplashScreenState extends State<SplashScreen>
                             );
                           },
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         AnimatedBuilder(
                           animation: _controller,
                           builder: (context, child) {
@@ -278,12 +321,33 @@ class _SplashScreenState extends State<SplashScreen>
                               opacity: _textOpacityAnimation.value,
                               child: Transform.translate(
                                 offset: Offset(0, _textSlideAnimation.value),
-                                child: Text(
-                                  '探索平行时空的奇妙旅程',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[400],
-                                    letterSpacing: 1,
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.9),
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.1),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Text(
+                                      '探索平行时空的奇妙旅程',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[700],
+                                        letterSpacing: 0.8,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -291,77 +355,100 @@ class _SplashScreenState extends State<SplashScreen>
                           },
                         ),
                         SizedBox(height: isSmallScreen ? 60 : 120),
-                        // 协议勾选
+                        // 协议勾选 - 卡通风格，确保居中
                         AnimatedBuilder(
                           animation: _checkboxAnimation,
                           builder: (context, child) {
                             return Transform.scale(
                               scale: math.min(1.0, _checkboxAnimation.value),
                               child: Opacity(
-                                opacity:
-                                    math.min(1.0, _checkboxAnimation.value),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: Theme(
-                                        data: Theme.of(context).copyWith(
-                                          unselectedWidgetColor:
-                                              Colors.grey[600],
+                                opacity: math.min(1.0, _checkboxAnimation.value),
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.9),
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.1),
+                                          blurRadius: 15,
+                                          offset: const Offset(0, 4),
                                         ),
-                                        child: Checkbox(
-                                          value: _eulaAccepted,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _eulaAccepted = value ?? false;
-                                            });
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          checkColor: Colors.white,
-                                          activeColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 8),
-                                    Flexible(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: '我同意 ',
-                                          style: const TextStyle(
-                                              color: Colors.white70),
-                                          children: [
-                                            TextSpan(
-                                              text: 'EULA',
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                fontWeight: FontWeight.bold,
-                                                decoration:
-                                                    TextDecoration.underline,
+                                    child: IntrinsicWidth(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 28,
+                                            height: 28,
+                                            decoration: BoxDecoration(
+                                              color: _eulaAccepted 
+                                                  ? const Color(0xFF6B2C9E)
+                                                  : Colors.transparent,
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: _eulaAccepted 
+                                                    ? const Color(0xFF6B2C9E)
+                                                    : Colors.grey[400]!,
+                                                width: 2,
                                               ),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = _launchEulaUrl,
                                             ),
-                                          ],
-                                        ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _eulaAccepted = !_eulaAccepted;
+                                                  });
+                                                },
+                                                borderRadius: BorderRadius.circular(8),
+                                                child: _eulaAccepted
+                                                    ? const Icon(
+                                                        Icons.check_rounded,
+                                                        color: Colors.white,
+                                                        size: 18,
+                                                      )
+                                                    : null,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          RichText(
+                                            text: TextSpan(
+                                              text: '我同意 ',
+                                              style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: 14,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: 'EULA',
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF6B2C9E),
+                                                    fontWeight: FontWeight.bold,
+                                                    decoration: TextDecoration.underline,
+                                                  ),
+                                                  recognizer: TapGestureRecognizer()
+                                                    ..onTap = _launchEulaUrl,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             );
                           },
                         ),
                         const SizedBox(height: 24),
-                        // 进入按钮
+                        // 进入按钮 - 卡通风格，确保居中
                         AnimatedBuilder(
                           animation: _buttonAnimation,
                           builder: (context, child) {
@@ -369,30 +456,14 @@ class _SplashScreenState extends State<SplashScreen>
                               scale: math.min(1.0, _buttonAnimation.value),
                               child: Opacity(
                                 opacity: math.min(1.0, _buttonAnimation.value),
-                                child: ElevatedButton(
-                                  onPressed: _navigateToApp,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    foregroundColor: Colors.white,
+                                child: Center(
+                                  child: CartoonUI.cartoonButton(
+                                    text: '开始探索',
+                                    icon: Icons.rocket_launch_rounded,
+                                    onPressed: _navigateToApp,
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 40,
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    elevation: 8,
-                                    shadowColor: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.5),
-                                  ),
-                                  child: const Text(
-                                    '进入应用',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                      horizontal: 48,
+                                      vertical: 18,
                                     ),
                                   ),
                                 ),
@@ -445,8 +516,8 @@ class SimpleParticlesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     try {
-      // 使用固定不透明度，避免计算错误
-      final paint = Paint()..color = particleColor.withOpacity(0.5);
+      // 使用柔和的紫色粒子，适配亮色主题
+      final paint = Paint()..color = const Color(0xFF6B2C9E).withValues(alpha: 0.2);
 
       for (var particle in _particles) {
         // 简化位置计算

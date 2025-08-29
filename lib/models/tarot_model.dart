@@ -23,6 +23,25 @@ class Assistant {
   }
 }
 
+class ChatMessage {
+  final String text;
+  final bool isUser;
+  final DateTime timestamp;
+  final String? id;
+
+  ChatMessage({
+    required this.text,
+    required this.isUser,
+    required this.timestamp,
+    this.id,
+  });
+
+  @override
+  String toString() {
+    return 'ChatMessage{text: $text, isUser: $isUser, timestamp: $timestamp}';
+  }
+}
+
 // Keep these for backward compatibility
 class TarotCard {
   final String id;

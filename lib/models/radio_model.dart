@@ -27,7 +27,7 @@ class RadioStation {
       // 特色电台
       RadioStation(
         id: '1',
-        name: '经典音乐广播',
+        name: '经典音乐',
         description: '聆听永恒的经典旋律',
         imageUrl:
             'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop',
@@ -47,7 +47,7 @@ class RadioStation {
       ),
       RadioStation(
         id: '3',
-        name: '乡村广播',
+        name: '乡村',
         description: '乡村故事与民俗文化',
         imageUrl:
             'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop',
@@ -56,7 +56,7 @@ class RadioStation {
       ),
       RadioStation(
         id: '4',
-        name: '戏曲广播',
+        name: '国风',
         description: '传统戏曲艺术的魅力',
         imageUrl:
             'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800&auto=format&fit=crop',
@@ -75,7 +75,7 @@ class RadioStation {
       ),
       RadioStation(
         id: '7',
-        name: '金曲音乐广播',
+        name: '金曲音乐',
         description: '经典金曲不间断',
         imageUrl:
             'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop',
@@ -84,7 +84,7 @@ class RadioStation {
       ),
       RadioStation(
         id: '8',
-        name: '青少年广播',
+        name: '华语民谣',
         description: '青春活力的声音',
         imageUrl:
             'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?q=80&w=800&auto=format&fit=crop',
@@ -96,13 +96,13 @@ class RadioStation {
         name: '交通之声',
         description: '实时路况与交通资讯',
         imageUrl:
-            'https://images.unsplash.com/photo-1597762117709-859f744b84c3?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=800&auto=format&fit=crop',
         audioUrl: 'https://lhttp.qingting.fm/live/20212386/64k.mp3',
         category: '资讯',
       ),
       RadioStation(
         id: '11',
-        name: '音乐故事广播',
+        name: '音乐故事',
         description: '音乐背后的故事',
         imageUrl:
             'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop',
