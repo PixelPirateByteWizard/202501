@@ -41,6 +41,8 @@ dependencies:
   url_launcher: ^6.2.5
   in_app_purchase: ^3.2.3
   audioplayers: ^6.0.0
+  just_audio: ^0.9.36
+  audio_session: ^0.1.18
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
+import '../services/audio_service.dart';
 
 class MusicPage extends StatefulWidget {
   const MusicPage({super.key});
@@ -9,7 +10,7 @@ class MusicPage extends StatefulWidget {
 }
 
 class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioService _audioService = AudioService();
   late AnimationController _rotationController;
   late AnimationController _pulseController;
   
@@ -65,12 +66,15 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
     _initializePlayer();
   }
 
-  void _initializePlayer() {
+  void _initializePlayer() async {
+    // 初始化音频服务
+    await _audioService.initialize();
+    
     // 监听播放状态
-    _audioPlayer.onPlayerStateChanged.listen((state) {
+    _audioService.playerStateStream.listen((state) {
       if (mounted) {
         setState(() {
-          _isPlaying = state == PlayerState.playing;
+          _isPlaying = state.playing;
         });
         
         if (_isPlaying) {
@@ -84,7 +88,7 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
     });
 
     // 监听播放位置
-    _audioPlayer.onPositionChanged.listen((position) {
+    _audioService.positionStream.listen((position) {
       if (mounted) {
         setState(() {
           _position = position;
@@ -93,8 +97,8 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
     });
 
     // 监听音频时长
-    _audioPlayer.onDurationChanged.listen((duration) {
-      if (mounted) {
+    _audioService.durationStream.listen((duration) {
+      if (mounted && duration != null) {
         setState(() {
           _duration = duration;
         });
@@ -102,8 +106,8 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
     });
 
     // 监听播放完成
-    _audioPlayer.onPlayerComplete.listen((_) {
-      if (mounted) {
+    _audioService.playerStateStream.listen((state) {
+      if (mounted && state.processingState == ProcessingState.completed) {
         _nextTrack();
       }
     });
@@ -111,7 +115,7 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    _audioService.dispose();
     _rotationController.dispose();
     _pulseController.dispose();
     super.dispose();
@@ -309,7 +313,7 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
                 final position = Duration(
                   milliseconds: (value * _duration.inMilliseconds).round(),
                 );
-                _audioPlayer.seek(position);
+                _audioService.seek(position);
               },
             ),
           ),
@@ -477,7 +481,7 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
 
   void _togglePlayPause() async {
     if (_isPlaying) {
-      await _audioPlayer.pause();
+      await _audioService.pause();
     } else {
       await _playCurrentTrack();
     }
@@ -513,7 +517,11 @@ class _MusicPageState extends State<MusicPage> with TickerProviderStateMixin {
   Future<void> _playCurrentTrack() async {
     try {
       final track = _musicList[_currentIndex];
-      await _audioPlayer.play(AssetSource(track['path']!));
+      await _audioService.playAsset(
+        track['path']!,
+        title: track['title'],
+        artist: track['artist'],
+      );
     } catch (e) {
       print('Error playing audio: $e');
     }

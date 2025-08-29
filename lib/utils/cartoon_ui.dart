@@ -108,12 +108,16 @@ class CartoonUI {
                   ),
                   const SizedBox(width: 8),
                 ],
-                Text(
-                  text,
-                  style: TextStyle(
-                    color: isOutlined ? bgColor : txtColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                Flexible(
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: isOutlined ? bgColor : txtColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -266,12 +270,16 @@ class CartoonUI {
             ),
             const SizedBox(width: 4),
           ],
-          Text(
-            text,
-            style: TextStyle(
-              color: txtColor,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: txtColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-/// 增强版卡通风格UI组件 - 专为平行界面优化
+/// 增强版卡通风格UI组件 - 专为平行界面优化，支持小屏幕适配
 class EnhancedCartoonUI {
   // 主色调
   static const Color primaryPurple = Color(0xFF6B2C9E);
@@ -82,284 +82,153 @@ class EnhancedCartoonUI {
   }) {
     final gradient = gradientColors ?? _getDreamyGradient();
 
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: gradient,
-            stops: const [0.0, 1.0],
-          ),
-          borderRadius: BorderRadius.circular(28), // 大圆角矩形
-          boxShadow: [
-            BoxShadow(
-              color: gradient.first.withValues(alpha: 0.3),
-              blurRadius: 20,
-              spreadRadius: 0,
-              offset: const Offset(0, 10),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 根据可用空间调整布局
+        final isSmallScreen = constraints.maxHeight < 200;
+        final isVerySmallScreen = constraints.maxHeight < 180;
+        
+        return GestureDetector(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: gradient,
+                stops: const [0.0, 1.0],
+              ),
+              borderRadius: BorderRadius.circular(isSmallScreen ? 20 : 28),
+              boxShadow: [
+                BoxShadow(
+                  color: gradient.first.withValues(alpha: 0.3),
+                  blurRadius: isSmallScreen ? 12 : 20,
+                  spreadRadius: 0,
+                  offset: Offset(0, isSmallScreen ? 6 : 10),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: isSmallScreen ? 6 : 10,
+                  spreadRadius: 0,
+                  offset: Offset(0, isSmallScreen ? 2 : 4),
+                ),
+              ],
             ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              spreadRadius: 0,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // 装饰元素
-            _buildCardDecorations(),
-            
-            // 主要内容
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 顶部区域：头像和在线状态
-                  Row(
+            child: Stack(
+              children: [
+                // 装饰元素 - 小屏幕时简化
+                if (!isVerySmallScreen) _buildCardDecorations(),
+                
+                // 主要内容
+                Padding(
+                  padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildDreamyAvatar(avatarUrl, isOnline),
+                      // 顶部区域：头像和在线状态
+                      Row(
+                        children: [
+                          _buildDreamyAvatar(
+                            avatarUrl, 
+                            isOnline, 
+                            size: isSmallScreen ? 45 : 60
+                          ),
+                          const Spacer(),
+                          if (isOnline && !isVerySmallScreen) 
+                            _buildDreamyOnlineIndicator(isSmall: isSmallScreen),
+                        ],
+                      ),
+                      
+                      SizedBox(height: isSmallScreen ? 8 : 16),
+                      
+                      // 角色名称 - 响应式字体大小
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                          shadows: const [
+                            Shadow(
+                              offset: Offset(0, 2),
+                              blurRadius: 4,
+                              color: Colors.black26,
+                            ),
+                          ],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      
+                      SizedBox(height: isSmallScreen ? 4 : 8),
+                      
+                      // 角色描述 - 响应式显示
+                      Flexible(
+                        child: Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: isSmallScreen ? 11 : 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            height: 1.3,
+                            shadows: const [
+                              Shadow(
+                                offset: Offset(0, 1),
+                                blurRadius: 3,
+                                color: Colors.black26,
+                              ),
+                            ],
+                          ),
+                          maxLines: isVerySmallScreen ? 2 : (isSmallScreen ? 2 : 3),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      
                       const Spacer(),
-                      if (isOnline) _buildDreamyOnlineIndicator(),
-                    ],
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  // 角色名称 - 白色粗体叠加
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 0.5,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 2),
-                          blurRadius: 4,
-                          color: Colors.black26,
+                      
+                      // 底部操作区域 - 小屏幕时简化
+                      if (!isVerySmallScreen) ...[
+                        SizedBox(height: isSmallScreen ? 4 : 8),
+                        Row(
+                          children: [
+                            // 聊天按钮
+                            Expanded(
+                              child: _buildDreamyMiniButton(
+                                icon: Icons.chat_bubble_outline,
+                                text: '对话',
+                                isSmall: isSmallScreen,
+                              ),
+                            ),
+                            SizedBox(width: isSmallScreen ? 8 : 12),
+                            // 更多按钮
+                            _buildDreamyIconButton(
+                              icon: Icons.more_horiz,
+                              isSmall: isSmallScreen,
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  // 角色描述 - 白色粗体叠加
-                  Text(
-                    description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      height: 1.4,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 3,
-                          color: Colors.black26,
-                        ),
-                      ],
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  
-                  const Spacer(),
-                  
-                  // 底部操作区域
-                  Row(
-                    children: [
-                      // 聊天按钮
-                      Expanded(
-                        child: _buildDreamyMiniButton(
-                          icon: Icons.chat_bubble_outline,
-                          text: '对话',
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // 更多按钮
-                      _buildDreamyIconButton(
-                        icon: Icons.more_horiz,
-                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 构建头像组件
-  static Widget _buildAvatar(String avatarUrl, bool isOnline) {
-    return Container(
-      width: 56,
-      height: 56,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-          width: 3,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ClipOval(
-        child: Image.network(
-          avatarUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    primaryPurple.withValues(alpha: 0.3),
-                    secondaryPink.withValues(alpha: 0.3),
-                  ],
                 ),
-              ),
-              child: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 28,
-              ),
-            );
-          },
-        ),
-      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  /// 构建在线状态指示器
-  static Widget _buildOnlineIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.withValues(alpha: 0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(width: 4),
-          const Text(
-            '在线',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  /// 构建迷你按钮
-  static Widget _buildMiniButton({
-    required IconData icon,
-    required String text,
-    required Color color,
-    VoidCallback? onTap,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: color.withValues(alpha: 0.2),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 16,
-                color: color,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
-  /// 构建图标按钮
-  static Widget _buildIconButton({
-    required IconData icon,
-    required Color color,
-    VoidCallback? onTap,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: color,
-          ),
-        ),
-      ),
-    );
-  }
+
+
+
+
+
 
   /// 创建浮动操作按钮
   static Widget floatingActionButton({
@@ -592,97 +461,112 @@ class EnhancedCartoonUI {
     final cardColor = color ?? primaryPurple;
     final gradientColors = _getStatsGradient(cardColor);
     
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: gradientColors,
-        ),
-        borderRadius: BorderRadius.circular(22), // 大圆角
-        boxShadow: [
-          BoxShadow(
-            color: cardColor.withValues(alpha: 0.25),
-            blurRadius: 15,
-            offset: const Offset(0, 6),
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // 装饰星星
-          Positioned(
-            top: 5,
-            right: 10,
-            child: Icon(
-              Icons.star,
-              color: Colors.white.withValues(alpha: 0.3),
-              size: 14,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallCard = constraints.maxWidth < 120;
+        
+        return Container(
+          padding: EdgeInsets.all(isSmallCard ? 12 : 18),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: gradientColors,
             ),
+            borderRadius: BorderRadius.circular(isSmallCard ? 16 : 22),
+            boxShadow: [
+              BoxShadow(
+                color: cardColor.withValues(alpha: 0.25),
+                blurRadius: isSmallCard ? 10 : 15,
+                offset: Offset(0, isSmallCard ? 4 : 6),
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: isSmallCard ? 6 : 8,
+                offset: Offset(0, isSmallCard ? 1 : 2),
+              ),
+            ],
           ),
-          // 主要内容
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 22,
-                    ),
+              // 装饰星星 - 小卡片时隐藏
+              if (!isSmallCard)
+                Positioned(
+                  top: 5,
+                  right: 10,
+                  child: Icon(
+                    Icons.star,
+                    color: Colors.white.withValues(alpha: 0.3),
+                    size: 14,
                   ),
-                  const Spacer(),
+                ),
+              // 主要内容
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(isSmallCard ? 6 : 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.25),
+                          borderRadius: BorderRadius.circular(isSmallCard ? 10 : 14),
+                        ),
+                        child: Icon(
+                          icon,
+                          color: Colors.white,
+                          size: isSmallCard ? 16 : 22,
+                        ),
+                      ),
+                      SizedBox(width: isSmallCard ? 4 : 8),
+                      Expanded(
+                        child: Text(
+                          value,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontSize: isSmallCard ? 18 : 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: const [
+                              Shadow(
+                                offset: Offset(0, 2),
+                                blurRadius: 4,
+                                color: Colors.black26,
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isSmallCard ? 8 : 14),
                   Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                    title,
+                    style: TextStyle(
+                      fontSize: isSmallCard ? 11 : 15,
                       color: Colors.white,
-                      shadows: [
+                      fontWeight: FontWeight.w600,
+                      shadows: const [
                         Shadow(
-                          offset: Offset(0, 2),
-                          blurRadius: 4,
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
                           color: Colors.black26,
                         ),
                       ],
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 2,
-                      color: Colors.black26,
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -788,21 +672,21 @@ class EnhancedCartoonUI {
   }
 
   /// 构建梦幻头像组件
-  static Widget _buildDreamyAvatar(String avatarUrl, bool isOnline) {
+  static Widget _buildDreamyAvatar(String avatarUrl, bool isOnline, {double size = 60}) {
     return Container(
-      width: 60,
-      height: 60,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.3),
-          width: 3,
+          width: size < 50 ? 2 : 3,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.white.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: size < 50 ? 6 : 10,
+            offset: Offset(0, size < 50 ? 2 : 4),
           ),
         ],
       ),
@@ -821,10 +705,10 @@ class EnhancedCartoonUI {
                   ],
                 ),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person,
                 color: Colors.white,
-                size: 32,
+                size: size * 0.5,
               ),
             );
           },
@@ -834,12 +718,15 @@ class EnhancedCartoonUI {
   }
 
   /// 构建梦幻在线状态指示器
-  static Widget _buildDreamyOnlineIndicator() {
+  static Widget _buildDreamyOnlineIndicator({bool isSmall = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: isSmall ? 6 : 10, 
+        vertical: isSmall ? 4 : 6
+      ),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(isSmall ? 12 : 15),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.3),
           width: 1,
@@ -847,8 +734,8 @@ class EnhancedCartoonUI {
         boxShadow: [
           BoxShadow(
             color: Colors.white.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            blurRadius: isSmall ? 4 : 8,
+            offset: Offset(0, isSmall ? 1 : 2),
           ),
         ],
       ),
@@ -856,21 +743,21 @@ class EnhancedCartoonUI {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 8,
-            height: 8,
+            width: isSmall ? 6 : 8,
+            height: isSmall ? 6 : 8,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
             ),
           ),
-          const SizedBox(width: 6),
-          const Text(
+          SizedBox(width: isSmall ? 4 : 6),
+          Text(
             '在线',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 11,
+              fontSize: isSmall ? 9 : 11,
               fontWeight: FontWeight.bold,
-              shadows: [
+              shadows: const [
                 Shadow(
                   offset: Offset(0, 1),
                   blurRadius: 2,
@@ -889,17 +776,21 @@ class EnhancedCartoonUI {
     required IconData icon,
     required String text,
     VoidCallback? onTap,
+    bool isSmall = false,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isSmall ? 16 : 20),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          padding: EdgeInsets.symmetric(
+            vertical: isSmall ? 6 : 10, 
+            horizontal: isSmall ? 10 : 16
+          ),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.25),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(isSmall ? 16 : 20),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.3),
               width: 1,
@@ -907,33 +798,38 @@ class EnhancedCartoonUI {
             boxShadow: [
               BoxShadow(
                 color: Colors.white.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+                blurRadius: isSmall ? 4 : 8,
+                offset: Offset(0, isSmall ? 1 : 2),
               ),
             ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
-                size: 18,
+                size: isSmall ? 14 : 18,
                 color: Colors.white,
               ),
-              const SizedBox(width: 6),
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 2,
-                      color: Colors.black26,
-                    ),
-                  ],
+              SizedBox(width: isSmall ? 4 : 6),
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: isSmall ? 10 : 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(0, 1),
+                        blurRadius: 2,
+                        color: Colors.black26,
+                      ),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -947,18 +843,23 @@ class EnhancedCartoonUI {
   static Widget _buildDreamyIconButton({
     required IconData icon,
     VoidCallback? onTap,
+    bool isSmall = false,
   }) {
+    final size = isSmall ? 32.0 : 40.0;
+    final iconSize = isSmall ? 16.0 : 20.0;
+    final borderRadius = isSmall ? 12.0 : 16.0;
+    
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: Container(
-          width: 40,
-          height: 40,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.25),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.3),
               width: 1,
@@ -966,18 +867,90 @@ class EnhancedCartoonUI {
             boxShadow: [
               BoxShadow(
                 color: Colors.white.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+                blurRadius: isSmall ? 4 : 8,
+                offset: Offset(0, isSmall ? 1 : 2),
               ),
             ],
           ),
           child: Icon(
             icon,
-            size: 20,
+            size: iconSize,
             color: Colors.white,
           ),
         ),
       ),
+    );
+  }
+
+  /// 小屏幕适配工具方法
+  
+  /// 获取响应式字体大小
+  static double getResponsiveFontSize(BuildContext context, double baseFontSize) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return baseFontSize * 0.9; // 小屏幕缩小10%
+    } else if (screenWidth < 400) {
+      return baseFontSize * 0.95; // 中小屏幕缩小5%
+    }
+    return baseFontSize;
+  }
+
+  /// 获取响应式边距
+  static EdgeInsets getResponsivePadding(BuildContext context, EdgeInsets basePadding) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    if (screenWidth < 360) {
+      return basePadding * 0.8; // 小屏幕缩小20%
+    } else if (screenWidth < 400) {
+      return basePadding * 0.9; // 中小屏幕缩小10%
+    }
+    return basePadding;
+  }
+
+  /// 创建响应式Row组件，自动处理溢出
+  static Widget responsiveRow({
+    required List<Widget> children,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 如果可用宽度太小，使用Column布局
+        if (constraints.maxWidth < 200) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          );
+        }
+        
+        return Row(
+          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisSize: mainAxisSize,
+          children: children,
+        );
+      },
+    );
+  }
+
+  /// 创建自适应文本，防止溢出
+  static Widget adaptiveText(
+    String text, {
+    TextStyle? style,
+    int? maxLines,
+    TextOverflow overflow = TextOverflow.ellipsis,
+    TextAlign textAlign = TextAlign.start,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Text(
+          text,
+          style: style,
+          maxLines: maxLines ?? (constraints.maxWidth < 200 ? 2 : 1),
+          overflow: overflow,
+          textAlign: textAlign,
+        );
+      },
     );
   }
 }

@@ -367,17 +367,20 @@ class _EncounterPageState extends State<EncounterPage>
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _selectedAssistantName,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _selectedAssistantName,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
                       Text(
                         '在线',
                         style: TextStyle(
@@ -386,6 +389,7 @@ class _EncounterPageState extends State<EncounterPage>
                         ),
                       ),
                     ],
+                    ),
                   ),
                 ],
               )

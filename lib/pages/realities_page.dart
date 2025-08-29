@@ -505,38 +505,47 @@ class _RealitiesPageState extends State<RealitiesPage> {
   }
 
   Widget _buildStatsRow() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: EnhancedCartoonUI.statsCard(
-              title: '总角色数',
-              value: '${_realities.length}',
-              icon: Icons.people,
-              color: const Color(0xFF6B2C9E),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallScreen = constraints.maxWidth < 400;
+        
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: isSmallScreen ? 12 : 16, 
+            vertical: 8
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: EnhancedCartoonUI.statsCard(
-              title: '在线角色',
-              value: '${_getOnlineCount()}',
-              icon: Icons.online_prediction,
-              color: const Color(0xFF4CAF50),
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: EnhancedCartoonUI.statsCard(
+                  title: '总角色数',
+                  value: '${_realities.length}',
+                  icon: Icons.people,
+                  color: const Color(0xFF6B2C9E),
+                ),
+              ),
+              SizedBox(width: isSmallScreen ? 8 : 12),
+              Expanded(
+                child: EnhancedCartoonUI.statsCard(
+                  title: '在线角色',
+                  value: '${_getOnlineCount()}',
+                  icon: Icons.online_prediction,
+                  color: const Color(0xFF4CAF50),
+                ),
+              ),
+              SizedBox(width: isSmallScreen ? 8 : 12),
+              Expanded(
+                child: EnhancedCartoonUI.statsCard(
+                  title: '当前显示',
+                  value: '${_filteredRealities.length}',
+                  icon: Icons.visibility,
+                  color: const Color(0xFFFF6B35),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: EnhancedCartoonUI.statsCard(
-              title: '当前显示',
-              value: '${_filteredRealities.length}',
-              icon: Icons.visibility,
-              color: const Color(0xFFFF6B35),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -549,19 +558,38 @@ class _RealitiesPageState extends State<RealitiesPage> {
       return _buildEmptyState();
     }
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: _filteredRealities.length,
-      itemBuilder: (context, index) {
-        final reality = _filteredRealities[index];
-        final originalIndex = _realities.indexOf(reality);
-        return _buildEnhancedRealityCard(reality, originalIndex);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 根据屏幕宽度调整网格配置
+        final screenWidth = constraints.maxWidth;
+        final isSmallScreen = screenWidth < 400;
+        final isVerySmallScreen = screenWidth < 350;
+        
+        // 动态调整childAspectRatio以适应不同屏幕
+        double aspectRatio;
+        if (isVerySmallScreen) {
+          aspectRatio = 0.85; // 更高的卡片以容纳内容
+        } else if (isSmallScreen) {
+          aspectRatio = 0.75;
+        } else {
+          aspectRatio = 0.7;
+        }
+        
+        return GridView.builder(
+          padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: aspectRatio,
+            crossAxisSpacing: isSmallScreen ? 8 : 12,
+            mainAxisSpacing: isSmallScreen ? 8 : 12,
+          ),
+          itemCount: _filteredRealities.length,
+          itemBuilder: (context, index) {
+            final reality = _filteredRealities[index];
+            final originalIndex = _realities.indexOf(reality);
+            return _buildEnhancedRealityCard(reality, originalIndex);
+          },
+        );
       },
     );
   }

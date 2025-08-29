@@ -194,17 +194,20 @@ class _RadioChatPageState extends State<RadioChatPage> {
               ),
             ),
             const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.station.name,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.station.name,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
                 Row(
                   children: [
                     Container(
@@ -234,6 +237,7 @@ class _RadioChatPageState extends State<RadioChatPage> {
                   ],
                 ),
               ],
+              ),
             ),
           ],
         ),

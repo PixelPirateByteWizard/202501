@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'utils/shared_prefs.dart';
 import 'pages/splash_screen.dart';
-// import 'package:just_audio_background/just_audio_background.dart';
+import 'services/audio_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,21 +15,11 @@ Future<void> main() async {
     systemNavigationBarIconBrightness: Brightness.dark, // 深色导航栏图标
   ));
 
-  // // 初始化后台音频播放
-  // try {
-  //   await JustAudioBackground.init(
-  //     androidNotificationChannelId: 'com.luvimestra.channel.audio',
-  //     androidNotificationChannelName: 'Luvimestra Audio',
-  //     androidNotificationOngoing: true,
-  //     androidShowNotificationBadge: true,
-  //   );
-  // } catch (e) {
-  //   print('初始化后台音频播放失败: $e');
-  //   // 继续执行，不中断应用启动
-  // }
-
   // 初始化SharedPreferences
   await SharedPrefs.init();
+
+  // 初始化音频服务
+  await AudioService().initialize();
 
   runApp(const LuvimestraApp());
 }

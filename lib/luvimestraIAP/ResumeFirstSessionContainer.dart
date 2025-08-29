@@ -276,9 +276,9 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
-              childAspectRatio: 0.9,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              childAspectRatio: _getChildAspectRatio(context),
+              crossAxisSpacing: MediaQuery.of(context).size.width > 400 ? 12 : 8,
+              mainAxisSpacing: MediaQuery.of(context).size.width > 400 ? 12 : 8,
             ),
             itemCount: _shopItems.length,
             itemBuilder: (context, index) => _buildPackageCard(_shopItems[index]),
@@ -338,31 +338,33 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width < 360 ? 8 : 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildPackageIcon(bundle),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
                   bundle.name,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width < 360 ? 12 : 13,
                     fontWeight: FontWeight.bold,
                     color: primaryColor,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   bundle.description,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: MediaQuery.of(context).size.width < 360 ? 8 : 9,
                     color: Colors.grey.shade600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Row(
                   children: [
                     const Icon(
@@ -384,16 +386,16 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
                 const SizedBox(height: 2),
                 Text(
                   product?.price ?? bundle.price,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width < 360 ? 14 : 15,
                     fontWeight: FontWeight.bold,
                     color: secondaryColor,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Container(
                   width: double.infinity,
-                  height: 36,
+                  height: 32,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
@@ -427,12 +429,12 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
-                            : const Text(
+                            : Text(
                                 '购买',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: MediaQuery.of(context).size.width < 360 ? 11 : 12,
                                 ),
                               ),
                       ),
@@ -445,6 +447,22 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
         ],
       ),
     );
+  }
+
+  double _getChildAspectRatio(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    // 对于非常小的屏幕，使用更小的宽高比
+    if (screenWidth < 360 || screenHeight < 640) {
+      return 0.65;
+    } else if (screenWidth < 400) {
+      return 0.7;
+    } else if (screenWidth > 600) {
+      return 0.9;
+    } else {
+      return 0.75;
+    }
   }
 
   Widget _buildPackageIcon(OffsetUnsortedRotationFactory bundle) {
@@ -478,15 +496,15 @@ class EraseRequiredIndicatorGroup extends State<UpgradeAsynchronousCaptionType> 
     }
 
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: iconColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Icon(
         icon,
         color: iconColor,
-        size: 20,
+        size: 18,
       ),
     );
   }
