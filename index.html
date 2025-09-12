@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>烽尘绘谱 - 高保真原型</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#2d3748',
+                        accent: '#d4af37',
+                        light: '#e2e8f0',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #2d3748;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%);
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 4px solid #2d3748;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background-color: rgba(26, 54, 93, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+        
+        .app-content {
+            height: calc(100% - 44px - 80px);
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .tab-bar {
+            height: 80px;
+            background-color: rgba(26, 54, 93, 0.95);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e0;
+            font-size: 12px;
+            padding: 8px 0;
+        }
+        
+        .tab-item.active {
+            color: #d4af37;
+        }
+        
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .card {
+            background: rgba(26, 54, 93, 0.6);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to bottom, #d4af37, #b8941f);
+            color: #1a365d;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        .general-card {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.8) 0%, rgba(45, 55, 72, 0.8) 100%);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .general-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1a365d;
+            margin-right: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .formation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin: 16px 0;
+        }
+        
+        .formation-cell {
+            background: rgba(26, 54, 93, 0.5);
+            border-radius: 12px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+        }
+        
+        .formation-cell.filled {
+            border: 2px solid #d4af37;
+        }
+        
+        .battle-log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            height: 200px;
+            overflow-y: auto;
+            margin: 16px 0;
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1.6;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .equipment-card {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.7) 0%, rgba(45, 55, 72, 0.7) 100%);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .equipment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #1a365d;
+            margin-right: 12px;
+        }
+        
+        .stats-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        
+        .stats-fill {
+            height: 100%;
+            background: linear-gradient(to right, #d4af37, #f0c350);
+            border-radius: 4px;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 10px;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .choice-card {
+            background: rgba(26, 54, 93, 0.7);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.2s;
+        }
+        
+        .choice-card:hover {
+            background: rgba(26, 54, 93, 0.9);
+            border: 1px solid #d4af37;
+            transform: translateY(-2px);
+            cursor: pointer;
+        }
+        
+        .narrative-text {
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1.8;
+            font-size: 16px;
+            text-align: justify;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-3xl font-bold my-6 text-accent">《烽尘绘谱》高保真原型</h1>
+    
+    <div class="iphone-frame">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div>
+                <i class="fas fa-signal mr-2"></i>
+                <i class="fas fa-wifi mr-2"></i>
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
+        </div>
+        
+        <!-- 应用内容区域 -->
+        <div class="app-content">
+            <!-- 首页/征程界面 -->
+            <div id="home-screen" class="screen active">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-accent">征程</h2>
+                    <div class="text-light">第3章·第2节</div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4 text-accent">官渡之战·前夕</h3>
+                    <div class="narrative-text">
+                        建安五年，袁绍率精兵十万，战马万匹，意图南下进攻许都。曹操麾下仅有两万兵马，众将皆惧。你作为军师中郎将，需为曹公出谋划策，决定此战策略。
+                    </div>
+                    
+                    <div class="my-6 text-center">
+                        <div class="btn w-full">继续征程</div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg font-medium mb-3 text-accent">征程日志</h4>
+                        <p class="text-light text-sm">昨日你于白马坡设计斩颜良诛文丑，曹公大悦。今日袁绍大军已至官渡，两军对峙，大战一触即发。</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">近期战功</h4>
+                    <div class="general-card">
+                        <div class="general-avatar">关</div>
+                        <div>
+                            <h5 class="font-medium">关羽</h5>
+                            <p class="text-sm text-light">于万军之中斩颜良，勇冠三军</p>
+                        </div>
+                    </div>
+                    <div class="general-card">
+                        <div class="general-avatar">张</div>
+                        <div>
+                            <h5 class="font-medium">张辽</h5>
+                            <p class="text-sm text-light">白马坡突袭建功，挫敌锐气</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 武将界面 -->
+            <div id="generals-screen" class="screen">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-accent">武将</h2>
+                    <div class="text-light">12/20</div>
+                </div>
+                
+                <div class="flex justify-around mb-6">
+                    <div class="btn">全部</div>
+                    <div class="btn">前锋</div>
+                    <div class="btn">谋士</div>
+                    <div class="btn">辅助</div>
+                </div>
+                
+                <div class="general-card">
+                    <div class="general-avatar">关</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">关羽</h3>
+                            <span class="text-accent text-sm">★5</span>
+                        </div>
+                        <p class="text-sm text-light">武力：98 | 统率：92 | 智力：75</p>
+                        <div class="stats-bar">
+                            <div class="stats-fill" style="width: 92%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>等级：48</span>
+                            <span>经验：1280/1500</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="general-card">
+                    <div class="general-avatar">张</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">张辽</h3>
+                            <span class="text-accent text-sm">★4</span>
+                        </div>
+                        <p class="text-sm text-light">武力：90 | 统率：88 | 智力：70</p>
+                        <div class="stats-bar">
+                            <div class="stats-fill" style="width: 85%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>等级：42</span>
+                            <span>经验：980/1200</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="general-card">
+                    <div class="general-avatar">郭</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">郭嘉</h3>
+                            <span class="text-accent text-sm">★5</span>
+                        </div>
+                        <p class="text-sm text-light">武力：30 | 统率：65 | 智力：98</p>
+                        <div class="stats-bar">
+                            <div class="stats-fill" style="width: 88%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>等级：45</span>
+                            <span>经验：1120/1400</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="general-card">
+                    <div class="general-avatar">夏</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">夏侯惇</h3>
+                            <span class="text-accent text-sm">★4</span>
+                        </div>
+                        <p class="text-sm text-light">武力：92 | 统率：85 | 智力：60</p>
+                        <div class="stats-bar">
+                            <div class="stats-fill" style="width: 80%;"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>等级：40</span>
+                            <span>经验：760/1000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 阵型界面 -->
+            <div id="formation-screen" class="screen">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-accent">阵型布局</h2>
+                    <div class="text-light">锋矢阵</div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">当前阵型：锋矢阵</h4>
+                    <p class="text-sm text-light mb-4">攻击型阵型，前锋伤害+15%，中军伤害+10%，但承伤增加20%</p>
+                    
+                    <div class="formation-grid">
+                        <div class="formation-cell"></div>
+                        <div class="formation-cell filled">
+                            <div class="general-avatar">关</div>
+                        </div>
+                        <div class="formation-cell"></div>
+                        <div class="formation-cell"></div>
+                        <div class="formation-cell filled">
+                            <div class="general-avatar">张</div>
+                        </div>
+                        <div class="formation-cell"></div>
+                        <div class="formation-cell filled">
+                            <div class="general-avatar">郭</div>
+                        </div>
+                        <div class="formation-cell"></div>
+                        <div class="formation-cell"></div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <div class="btn">更换阵型</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">可用武将</h4>
+                    <div class="flex overflow-x-auto py-2">
+                        <div class="general-card mr-2">
+                            <div class="general-avatar">关</div>
+                        </div>
+                        <div class="general-card mr-2">
+                            <div class="general-avatar">张</div>
+                        </div>
+                        <div class="general-card mr-2">
+                            <div class="general-avatar">郭</div>
+                        </div>
+                        <div class="general-card mr-2">
+                            <div class="general-avatar">夏</div>
+                        </div>
+                        <div class="general-card mr-2">
+                            <div class="general-avatar">许</div>
+                        </div>
+                        <div class="general-card">
+                            <div class="general-avatar">徐</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 背包界面 -->
+            <div id="inventory-screen" class="screen">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-accent">背包</h2>
+                    <div class="text-light">容量：42/60</div>
+                </div>
+                
+                <div class="flex justify-around mb-6">
+                    <div class="btn">装备</div>
+                    <div class="btn">道具</div>
+                    <div class="btn">材料</div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">青龙偃月刀</h3>
+                            <span class="text-accent text-sm">★5</span>
+                        </div>
+                        <p class="text-sm text-light">武力+25，暴击率+15%</p>
+                        <p class="text-xs text-light mt-1">装备效果：攻击时有几率触发"龙吟"，对目标造成额外伤害</p>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-hat-wizard"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">诸葛巾</h3>
+                            <span class="text-accent text-sm">★4</span>
+                        </div>
+                        <p class="text-sm text-light">智力+18，计策成功率+12%</p>
+                        <p class="text-xs text-light mt-1">装备效果：每回合有几率恢复己方兵力最少的单位10%兵力</p>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-horse"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">的卢</h3>
+                            <span class="text-accent text-sm">★5</span>
+                        </div>
+                        <p class="text-sm text-light">速度+15，闪避率+10%</p>
+                        <p class="text-xs text-light mt-1">装备效果：首次受到致命伤害时，必定闪避并回复20%兵力</p>
+                    </div>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon"><i class="fas fa-ring"></i></div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold">朱雀羽扇</h3>
+                            <span class="text-accent text-sm">★4</span>
+                        </div>
+                        <p class="text-sm text-light">智力+20，火系计策伤害+25%</p>
+                        <p class="text-xs text-light mt-1">装备效果：使用火计时有几率使目标陷入"灼烧"状态</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 设置界面 -->
+            <div id="settings-screen" class="screen">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-accent">设置</h2>
+                    <div class="text-light">v1.0.0</div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">音画设置</h4>
+                    <div class="flex justify-between items-center py-2">
+                        <span>背景音乐</span>
+                        <div class="w-24 bg-secondary rounded-full h-6 relative">
+                            <div class="h-6 bg-accent rounded-full" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span>音效音量</span>
+                        <div class="w-24 bg-secondary rounded-full h-6 relative">
+                            <div class="h-6 bg-accent rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span>文本速度</span>
+                        <div class="w-24 bg-secondary rounded-full h-6 relative">
+                            <div class="h-6 bg-accent rounded-full" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">AI偏好设置</h4>
+                    <div class="flex justify-between items-center py-2">
+                        <span>叙事风格</span>
+                        <select class="bg-secondary text-light rounded px-2 py-1">
+                            <option>正史风格</option>
+                            <option>演义风格</option>
+                            <option>白话风格</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span>生成速度</span>
+                        <select class="bg-secondary text-light rounded px-2 py-1">
+                            <option>较快</option>
+                            <option>适中</option>
+                            <option>较慢</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">游戏选项</h4>
+                    <div class="flex justify-between items-center py-2">
+                        <span>推送通知</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                        </label>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span>战斗动画</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-6">
+                    <div class="btn">保存设置</div>
+                </div>
+            </div>
+            
+            <!-- 战斗界面 -->
+            <div id="battle-screen" class="screen">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-accent">官渡之战</h2>
+                    <div class="text-light">回合：3</div>
+                </div>
+                
+                <div class="card">
+                    <div class="battle-log">
+                        <div class="log-entry">
+                            <span class="text-accent">【战报】</span> 关羽大喝一声，挥动青龙偃月刀直取颜良！
+                        </div>
+                        <div class="log-entry">
+                            <span class="text-accent">【效果】</span> 触发"龙吟"效果，造成额外伤害！
+                        </div>
+                        <div class="log-entry">
+                            <span class="text-accent">【战报】</span> 颜良措手不及，被关羽一刀斩于马下！
+                        </div>
+                        <div class="log-entry">
+                            <span class="text-accent">【士气】</span> 敌军士气大跌，我军士气大振！
+                        </div>
+                        <div class="log-entry">
+                            <span class="text-accent">【战报】</span> 袁绍急令文丑出战，为颜良报仇！
+                        </div>
+                        <div class="log-entry">
+                            <span class="text-accent">【策略】</span> 郭嘉献计："可诱敌深入，以伏兵破之。"
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-around mt-4">
+                        <div class="btn">攻击</div>
+                        <div class="btn">计策</div>
+                        <div class="btn">防御</div>
+                        <div class="btn">道具</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4 class="text-lg font-medium mb-3 text-accent">战场态势</h4>
+                    <div class="flex justify-between">
+                        <div class="text-center">
+                            <div class="text-accent font-bold">我军</div>
+                            <div class="text-light">兵力: 85%</div>
+                            <div class="text-light">士气: 高涨</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-accent font-bold">敌军</div>
+                            <div class="text-light">兵力: 65%</div>
+                            <div class="text-light">士气: 低落</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <div class="btn">结束回合</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <div class="tab-item active" onclick="showScreen('home-screen')">
+                <div class="tab-icon"><i class="fas fa-map"></i></div>
+                <span>征程</span>
+            </div>
+            <div class="tab-item" onclick="showScreen('generals-screen')">
+                <div class="tab-icon"><i class="fas fa-users"></i></div>
+                <span>武将</span>
+            </div>
+            <div class="tab-item" onclick="showScreen('formation-screen')">
+                <div class="tab-icon"><i class="fas fa-chess-board"></i></div>
+                <span>阵型</span>
+            </div>
+            <div class="tab-item" onclick="showScreen('inventory-screen')">
+                <div class="tab-icon"><i class="fas fa-backpack"></i></div>
+                <span>背包</span>
+            </div>
+            <div class="tab-item" onclick="showScreen('settings-screen')">
+                <div class="tab-icon"><i class="fas fa-cog"></i></div>
+                <span>设置</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 grid grid-cols-2 gap-4 max-w-4xl">
+        <div class="bg-primary p-4 rounded-lg">
+            <h3 class="text-xl font-bold text-accent mb-2">设计说明</h3>
+            <p class="text-light">采用深蓝色(#1a365d)作为主色调，搭配金色(#d4af37)作为强调色，营造古典高贵的氛围。界面设计遵循iOS设计规范，采用圆角、卡片式布局和恰当的留白。</p>
+        </div>
+        
+        <div class="bg-primary p-4 rounded-lg">
+            <h3 class="text-xl font-bold text-accent mb-2">核心功能</h3>
+            <ul class="text-light list-disc pl-5">
+                <li>AI驱动的动态叙事</li>
+                <li>武将收集与培养</li>
+                <li>阵型布局与策略</li>
+                <li>装备与道具系统</li>
+                <li>回合制战斗</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // 隐藏所有屏幕
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // 显示选中的屏幕
+            document.getElementById(screenId).classList.add('active');
+            
+            // 更新标签栏活动状态
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 找到与屏幕对应的标签并激活它
+            const tabs = document.querySelectorAll('.tab-item');
+            for (let tab of tabs) {
+                if (tab.textContent.includes(document.getElementById(screenId).querySelector('h2').textContent)) {
+                    tab.classList.add('active');
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
