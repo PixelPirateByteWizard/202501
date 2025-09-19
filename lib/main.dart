@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'screens/main_screen.dart';
+import 'providers/event_provider.dart';
+import 'providers/ai_provider.dart';
+import 'theme/app_theme.dart';
+
+void main() {
+  runApp(const KaelixApp());
+}
+
+class KaelixApp extends StatelessWidget {
+  const KaelixApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => EventProvider()),
+        ChangeNotifierProvider(create: (_) => AIProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Kaelix - Smart Calendar',
+        theme: AppTheme.darkTheme,
+        home: const MainScreen(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}

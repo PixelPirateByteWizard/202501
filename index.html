@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calendar & Scheduling</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            start: '#1A2980',
+                            end: '#26D0CE',
+                        },
+                        dark: {
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #E2E8F0;
+        }
+        
+        .phone-mockup {
+            width: 390px;
+            height: 844px;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: #0F172A;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: rgba(26, 41, 128, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0 20px;
+        }
+        
+        .tab-bar {
+            height: 84px;
+            background: rgba(26, 41, 128, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .voice-bar {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            border-radius: 20px;
+        }
+        
+        .event-block {
+            border-left: 4px solid;
+            transition: all 0.2s ease;
+        }
+        
+        .event-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .wave-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            height: 20px;
+        }
+        
+        .wave-loader div {
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            border-radius: 2px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        
+        .wave-loader div:nth-child(1) { animation-delay: 0s; }
+        .wave-loader div:nth-child(2) { animation-delay: 0.1s; }
+        .wave-loader div:nth-child(3) { animation-delay: 0.2s; }
+        .wave-loader div:nth-child(4) { animation-delay: 0.3s; }
+        .wave-loader div:nth-child(5) { animation-delay: 0.4s; }
+        
+        @keyframes wave {
+            0%, 40%, 100% { transform: scaleY(0.6); }
+            20% { transform: scaleY(1); }
+        }
+        
+        .heatmap-cell {
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+        }
+        
+        .ai-chat-bubble {
+            max-width: 70%;
+            border-radius: 18px;
+            padding: 12px 16px;
+            margin: 8px 0;
+        }
+        
+        .user-message {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            margin-left: auto;
+        }
+        
+        .ai-message {
+            background: rgba(255, 255, 255, 0.1);
+            margin-right: auto;
+        }
+        
+        .suggestion-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(38, 208, 206, 0.3);
+        }
+        
+        .tab-button.active {
+            color: #26D0CE;
+            position: relative;
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Smart Calendar & Scheduling</h1>
+    <p class="text-gray-400 mb-8">AI-powered calendar that proactively plans your time</p>
+    
+    <div class="flex flex-wrap justify-center gap-8">
+        <!-- Agenda Screen -->
+        <div class="phone-mockup">
+            <div class="status-bar flex items-center justify-between">
+                <div class="text-white font-medium">9:41</div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-signal text-xs text-white"></i>
+                    <i class="fas fa-wifi text-xs text-white"></i>
+                    <i class="fas fa-battery-three-quarters text-xs text-white"></i>
+                </div>
+            </div>
+            
+            <div class="p-5 h-[calc(100%-128px)] overflow-y-auto">
+                <h2 class="text-xl font-semibold mb-4">Agenda</h2>
+                
+                <!-- Voice Input -->
+                <div class="voice-bar flex items-center justify-between p-4 mb-6">
+                    <i class="fas fa-microphone text-white"></i>
+                    <div class="wave-loader">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="w-6 h-6 rounded-full bg-white"></div>
+                </div>
+                
+                <!-- Now Card -->
+                <div class="bg-dark-800 rounded-2xl p-5 mb-6 glow">
+                    <h3 class="font-medium mb-2 text-cyan-300">Now</h3>
+                    <div class="flex items-center justify-center py-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-300 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-check-double text-white text-2xl"></i>
+                            </div>
+                            <p class="text-gray-300">You're all caught up.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline -->
+                <h3 class="font-medium mb-4">Today</h3>
+                
+                <div class="relative mb-8">
+                    <!-- Timeline -->
+                    <div class="absolute left-2 top-0 bottom-0 w-0.5 bg-gray-700"></div>
+                    
+                    <!-- Event 1 -->
+                    <div class="event-block pl-6 mb-4 relative" style="border-left-color: #26D0CE;">
+                        <div class="bg-dark-800 rounded-xl p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-cyan-300 text-sm">10:00 - 11:00</span>
+                                    <h4 class="font-medium">Team Standup</h4>
+                                    <p class="text-gray-400 text-sm">Daily sync with product team</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-dark-700 flex items-center justify-center">
+                                    <i class="fas fa-video text-cyan-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-3px] top-4 w-2 h-2 rounded-full bg-cyan-300"></div>
+                    </div>
+                    
+                    <!-- Event 2 -->
+                    <div class="event-block pl-6 mb-4 relative" style="border-left-color: #F87171;">
+                        <div class="bg-dark-800 rounded-xl p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-red-300 text-sm">11:30 - 12:30</span>
+                                    <h4 class="font-medium">Design Review</h4>
+                                    <p class="text-gray-400 text-sm">New dashboard designs</p>
+                                </div>
+                                <div class="flex">
+                                    <i class="fas fa-bolt text-red-400 mr-2"></i>
+                                    <div class="w-8 h-8 rounded-full bg-dark-700 flex items-center justify-center">
+                                        <i class="fas fa-palette text-red-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-3px] top-4 w-2 h-2 rounded-full bg-red-300"></div>
+                    </div>
+                    
+                    <!-- Event 3 -->
+                    <div class="event-block pl-6 mb-4 relative" style="border-left-color: #A78BFA;">
+                        <div class="bg-dark-800 rounded-xl p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-purple-300 text-sm">14:00 - 15:00</span>
+                                    <h4 class="font-medium">Deep Work</h4>
+                                    <p class="text-gray-400 text-sm">Focus on project proposal</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-dark-700 flex items-center justify-center">
+                                    <i class="fas fa-brain text-purple-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-3px] top-4 w-2 h-2 rounded-full bg-purple-300"></div>
+                    </div>
+                </div>
+                
+                <h3 class="font-medium mb-4">Tomorrow</h3>
+                
+                <div class="relative">
+                    <!-- Timeline -->
+                    <div class="absolute left-2 top-0 bottom-0 w-0.5 bg-gray-700"></div>
+                    
+                    <!-- Event 1 -->
+                    <div class="event-block pl-6 mb-4 relative" style="border-left-color: #FBBF24;">
+                        <div class="bg-dark-800 rounded-xl p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-yellow-300 text-sm">09:00 - 10:00</span>
+                                    <h4 class="font-medium">Client Meeting</h4>
+                                    <p class="text-gray-400 text-sm">Quarterly review with ABC Corp</p>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-dark-700 flex items-center justify-center">
+                                    <i class="fas fa-handshake text-yellow-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute left-[-3px] top-4 w-2 h-2 rounded-full bg-yellow-300"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Bar -->
+            <div class="tab-bar absolute bottom-0 w-full flex items-center justify-around">
+                <div class="tab-button active">
+                    <i class="fas fa-calendar-day text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-fire text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Forge Screen -->
+        <div class="phone-mockup">
+            <div class="status-bar flex items-center justify-between">
+                <div class="text-white font-medium">9:41</div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-signal text-xs text-white"></i>
+                    <i class="fas fa-wifi text-xs text-white"></i>
+                    <i class="fas fa-battery-three-quarters text-xs text-white"></i>
+                </div>
+            </div>
+            
+            <div class="p-5 h-[calc(100%-128px)] overflow-y-auto">
+                <h2 class="text-xl font-semibold mb-4">Forge</h2>
+                <p class="text-gray-400 mb-6">Optimize your upcoming week</p>
+                
+                <!-- Week Heatmap -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-3">This Week</h3>
+                    <div class="grid grid-cols-7 gap-2">
+                        <div class="text-center text-gray-400 text-sm">Mon</div>
+                        <div class="text-center text-gray-400 text-sm">Tue</div>
+                        <div class="text-center text-gray-400 text-sm">Wed</div>
+                        <div class="text-center text-gray-400 text-sm">Thu</div>
+                        <div class="text-center text-gray-400 text-sm">Fri</div>
+                        <div class="text-center text-gray-400 text-sm">Sat</div>
+                        <div class="text-center text-gray-400 text-sm">Sun</div>
+                        
+                        <!-- Heatmap cells -->
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-500 to-cyan-400 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-700 to-blue-500 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-800 to-blue-600 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-400 to-blue-300 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-500 to-cyan-400 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-900 to-blue-700 h-12"></div>
+                        <div class="heatmap-cell bg-gradient-to-b from-blue-900 to-blue-700 h-12"></div>
+                    </div>
+                </div>
+                
+                <!-- AI Suggestions -->
+                <h3 class="font-medium mb-3">AI Suggestions</h3>
+                
+                <!-- Suggestion 1 -->
+                <div class="suggestion-card p-4 mb-4">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-3">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">Reschedule Design Review</h4>
+                            <p class="text-gray-400 text-sm">Move to Thu 10 am for 23% focus gain</p>
+                            <div class="flex mt-3">
+                                <button class="bg-cyan-500 text-white px-4 py-1.5 rounded-lg text-sm mr-2">Accept</button>
+                                <button class="bg-dark-700 text-gray-300 px-4 py-1.5 rounded-lg text-sm">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Suggestion 2 -->
+                <div class="suggestion-card p-4 mb-4">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-3">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">Add Focus Time</h4>
+                            <p class="text-gray-400 text-sm">Schedule 2h deep work on Wednesday morning</p>
+                            <div class="flex mt-3">
+                                <button class="bg-cyan-500 text-white px-4 py-1.5 rounded-lg text-sm mr-2">Accept</button>
+                                <button class="bg-dark-700 text-gray-300 px-4 py-1.5 rounded-lg text-sm">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Suggestion 3 -->
+                <div class="suggestion-card p-4">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-3">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">Meeting Consolidation</h4>
+                            <p class="text-gray-400 text-sm">Group all client calls on Tuesday afternoon</p>
+                            <div class="flex mt-3">
+                                <button class="bg-cyan-500 text-white px-4 py-1.5 rounded-lg text-sm mr-2">Accept</button>
+                                <button class="bg-dark-700 text-gray-300 px-4 py-1.5 rounded-lg text-sm">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Bar -->
+            <div class="tab-bar absolute bottom-0 w-full flex items-center justify-around">
+                <div class="tab-button">
+                    <i class="fas fa-calendar-day text-xl"></i>
+                </div>
+                <div class="tab-button active">
+                    <i class="fas fa-fire text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Assistant Screen -->
+        <div class="phone-mockup">
+            <div class="status-bar flex items-center justify-between">
+                <div class="text-white font-medium">9:41</div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-signal text-xs text-white"></i>
+                    <i class="fas fa-wifi text-xs text-white"></i>
+                    <i class="fas fa-battery-three-quarters text-xs text-white"></i>
+                </div>
+            </div>
+            
+            <div class="p-5 h-[calc(100%-128px)] flex flex-col">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-3">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-semibold">AI Assistant</h2>
+                        <p class="text-cyan-300 text-sm">Online - Ready to help</p>
+                    </div>
+                </div>
+                
+                <!-- Chat Container -->
+                <div class="flex-1 overflow-y-auto mb-4">
+                    <!-- AI Message -->
+                    <div class="ai-chat-bubble ai-message">
+                        <p>Hi there! I'm your scheduling assistant. How can I help you today?</p>
+                    </div>
+                    
+                    <!-- User Message -->
+                    <div class="ai-chat-bubble user-message">
+                        <p>What does my day look like tomorrow?</p>
+                    </div>
+                    
+                    <!-- AI Message -->
+                    <div class="ai-chat-bubble ai-message">
+                        <p>You have 3 meetings tomorrow:</p>
+                        <ul class="mt-2 ml-4 list-disc text-gray-300">
+                            <li>Client call at 9:00 AM (1 hour)</li>
+                            <li>Team sync at 11:30 AM (45 mins)</li>
+                            <li>Project review at 2:00 PM (1 hour)</li>
+                        </ul>
+                        <p class="mt-2">You also have 2 hours of focus time scheduled in the morning.</p>
+                    </div>
+                    
+                    <!-- User Message -->
+                    <div class="ai-chat-bubble user-message">
+                        <p>Can you move my focus time to the afternoon?</p>
+                    </div>
+                    
+                    <!-- AI Message -->
+                    <div class="ai-chat-bubble ai-message">
+                        <p>Sure! I can move your focus time to 3:30 PM - 5:30 PM. Would you like me to make this change?</p>
+                        <div class="flex mt-3">
+                            <button class="bg-cyan-500 text-white px-3 py-1 rounded-lg text-sm mr-2">Yes, move it</button>
+                            <button class="bg-dark-700 text-gray-300 px-3 py-1 rounded-lg text-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="flex items-center">
+                    <div class="flex-1 bg-dark-800 rounded-2xl px-4 py-2.5 mr-2">
+                        <input type="text" placeholder="Type a message..." class="bg-transparent w-full text-white outline-none">
+                    </div>
+                    <button class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center">
+                        <i class="fas fa-paper-plane text-white"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tab Bar -->
+            <div class="tab-bar absolute bottom-0 w-full flex items-center justify-around">
+                <div class="tab-button">
+                    <i class="fas fa-calendar-day text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-fire text-xl"></i>
+                </div>
+                <div class="tab-button active">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Screen -->
+        <div class="phone-mockup">
+            <div class="status-bar flex items-center justify-between">
+                <div class="text-white font-medium">9:41</div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-signal text-xs text-white"></i>
+                    <i class="fas fa-wifi text-xs text-white"></i>
+                    <i class="fas fa-battery-three-quarters text-xs text-white"></i>
+                </div>
+            </div>
+            
+            <div class="p-5 h-[calc(100%-128px)] overflow-y-auto">
+                <h2 class="text-xl font-semibold mb-6">Settings</h2>
+                
+                <!-- Profile -->
+                <div class="flex items-center mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-4">
+                        <i class="fas fa-user text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">Alex Morgan</h3>
+                        <p class="text-gray-400">alex@example.com</p>
+                    </div>
+                </div>
+                
+                <!-- Settings Groups -->
+                <div class="mb-6">
+                    <h3 class="font-medium mb-3 text-cyan-300">General</h3>
+                    
+                    <div class="bg-dark-800 rounded-2xl overflow-hidden mb-4">
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-bell text-cyan-300 mr-3"></i>
+                                <span>Notifications</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-palette text-cyan-300 mr-3"></i>
+                                <span>Appearance</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-400"></i>
+                        </div>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-language text-cyan-300 mr-3"></i>
+                                <span>Language</span>
+                            </div>
+                            <span class="text-gray-400">English</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium mb-3 text-cyan-300">Calendar</h3>
+                    
+                    <div class="bg-dark-800 rounded-2xl overflow-hidden mb-4">
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-sync text-cyan-300 mr-3"></i>
+                                <span>Sync Frequency</span>
+                            </div>
+                            <span class="text-gray-400">Every 15 minutes</span>
+                        </div>
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-cyan-300 mr-3"></i>
+                                <span>Default View</span>
+                            </div>
+                            <span class="text-gray-400">Agenda</span>
+                        </div>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-cyan-300 mr-3"></i>
+                                <span>Working Hours</span>
+                            </div>
+                            <span class="text-gray-400">9:00 - 18:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium mb-3 text-cyan-300">AI Assistant</h3>
+                    
+                    <div class="bg-dark-800 rounded-2xl overflow-hidden mb-4">
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-brain text-cyan-300 mr-3"></i>
+                                <span>AI Suggestions</span>
+                            </div>
+                            <div class="relative inline-block w-10 h-5 bg-cyan-500 rounded-full">
+                                <div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 border-b border-dark-700 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-robot text-cyan-300 mr-3"></i>
+                                <span>Proactive Scheduling</span>
+                            </div>
+                            <div class="relative inline-block w-10 h-5 bg-cyan-500 rounded-full">
+                                <div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-microphone text-cyan-300 mr-3"></i>
+                                <span>Voice Control</span>
+                            </div>
+                            <div class="relative inline-block w-10 h-5 bg-gray-600 rounded-full">
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-dark-800 rounded-2xl overflow-hidden">
+                    <div class="p-4 text-center text-cyan-300">
+                        <i class="fas fa-sign-out-alt mr-2"></i>
+                        <span>Sign Out</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Bar -->
+            <div class="tab-bar absolute bottom-0 w-full flex items-center justify-around">
+                <div class="tab-button">
+                    <i class="fas fa-calendar-day text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-fire text-xl"></i>
+                </div>
+                <div class="tab-button">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <div class="tab-button active">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simple tab switching for demonstration
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all tabs in the same phone
+                const phone = this.closest('.phone-mockup');
+                phone.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event - Smart Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            start: '#1A2980',
+                            end: '#26D0CE',
+                        },
+                        dark: {
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: #E2E8F0;
+        }
+        
+        .phone-mockup {
+            width: 390px;
+            height: 844px;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: #0F172A;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: rgba(26, 41, 128, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0 20px;
+        }
+        
+        .tab-bar {
+            height: 84px;
+            background: rgba(26, 41, 128, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .voice-bar {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            border-radius: 20px;
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #26D0CE;
+            box-shadow: 0 0 0 2px rgba(38, 208, 206, 0.2);
+        }
+        
+        .category-option {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .category-option:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .category-option.selected {
+            border-color: #26D0CE;
+            background: rgba(38, 208, 206, 0.1);
+        }
+        
+        .time-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .time-pill:hover, .time-pill.selected {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .glow {
+            box-shadow: 0 0 20px rgba(38, 208, 206, 0.3);
+        }
+        
+        .tab-button.active {
+            color: #26D0CE;
+            position: relative;
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #1A2980 0%, #26D0CE 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 class="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Smart Calendar & Scheduling</h1>
+    <p class="text-gray-400 mb-8">Add New Event - AI-powered scheduling</p>
+    
+    <div class="phone-mockup">
+        <div class="status-bar flex items-center justify-between">
+            <div class="text-white font-medium">9:41</div>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-signal text-xs text-white"></i>
+                <i class="fas fa-wifi text-xs text-white"></i>
+                <i class="fas fa-battery-three-quarters text-xs text-white"></i>
+            </div>
+        </div>
+        
+        <div class="p-5 h-[calc(100%-128px)] overflow-y-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Add Event</h2>
+                <button class="w-10 h-10 rounded-full bg-dark-700 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+            
+            <!-- Voice Input -->
+            <div class="voice-bar flex items-center justify-between p-4 mb-6">
+                <i class="fas fa-microphone text-white"></i>
+                <p class="text-white text-sm">Tap to speak</p>
+                <div class="w-6 h-6 rounded-full bg-white"></div>
+            </div>
+            
+            <!-- Event Title -->
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2">Event Title</label>
+                <div class="input-field p-4">
+                    <input type="text" placeholder="What's the event?" class="w-full bg-transparent text-white outline-none placeholder-gray-500">
+                </div>
+            </div>
+            
+            <!-- Date & Time -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Date</label>
+                    <div class="input-field p-4 flex items-center justify-between">
+                        <span class="text-white">Today</span>
+                        <i class="fas fa-calendar text-cyan-300"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-400 text-sm mb-2">Time</label>
+                    <div class="input-field p-4 flex items-center justify-between">
+                        <span class="text-white">2:00 PM</span>
+                        <i class="fas fa-clock text-cyan-300"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Duration -->
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2">Duration</label>
+                <div class="flex space-x-2 overflow-x-auto pb-2">
+                    <div class="time-pill selected">15 min</div>
+                    <div class="time-pill">30 min</div>
+                    <div class="time-pill">45 min</div>
+                    <div class="time-pill">1 hour</div>
+                    <div class="time-pill">Custom</div>
+                </div>
+            </div>
+            
+            <!-- Category -->
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2">Category</label>
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="category-option selected p-3 text-center">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-1">
+                            <i class="fas fa-briefcase text-blue-300"></i>
+                        </div>
+                        <span class="text-xs text-white">Work</span>
+                    </div>
+                    <div class="category-option p-3 text-center">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mx-auto mb-1">
+                            <i class="fas fa-users text-purple-300"></i>
+                        </div>
+                        <span class="text-xs text-white">Meeting</span>
+                    </div>
+                    <div class="category-option p-3 text-center">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-1">
+                            <i class="fas fa-brain text-cyan-300"></i>
+                        </div>
+                        <span class="text-xs text-white">Focus</span>
+                    </div>
+                    <div class="category-option p-3 text-center">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center mx-auto mb-1">
+                            <i class="fas fa-heart text-red-300"></i>
+                        </div>
+                        <span class="text-xs text-white">Personal</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Location -->
+            <div class="mb-6">
+                <label class="block text-gray-400 text-sm mb-2">Location</label>
+                <div class="input-field p-4 flex items-center">
+                    <i class="fas fa-map-marker-alt text-cyan-300 mr-3"></i>
+                    <input type="text" placeholder="Add location" class="w-full bg-transparent text-white outline-none placeholder-gray-500">
+                </div>
+            </div>
+            
+            <!-- Video Conference -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-video text-cyan-300 mr-3"></i>
+                        <div>
+                            <label class="block text-white">Video Conference</label>
+                            <p class="text-gray-400 text-sm">Add video meeting link</p>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div class="mb-8">
+                <label class="block text-gray-400 text-sm mb-2">Notes</label>
+                <div class="input-field p-4">
+                    <textarea placeholder="Add details about your event" class="w-full bg-transparent text-white outline-none placeholder-gray-500 resize-none h-20"></textarea>
+                </div>
+            </div>
+            
+            <!-- AI Suggestions -->
+            <div class="bg-dark-800 rounded-2xl p-4 mb-6">
+                <div class="flex items-start">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-300 flex items-center justify-center mr-3">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-1">AI Suggestion</h4>
+                        <p class="text-gray-400 text-sm">Schedule this for Thursday at 10:00 AM for optimal focus time.</p>
+                        <div class="flex mt-3">
+                            <button class="bg-cyan-500 text-white px-3 py-1 rounded-lg text-sm mr-2">Apply</button>
+                            <button class="bg-dark-700 text-gray-300 px-3 py-1 rounded-lg text-sm">Ignore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add Button -->
+            <button class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white py-4 rounded-2xl font-medium glow">
+                Add Event
+            </button>
+        </div>
+        
+        <!-- Tab Bar -->
+        <div class="tab-bar absolute bottom-0 w-full flex items-center justify-around">
+            <div class="tab-button">
+                <i class="fas fa-calendar-day text-xl"></i>
+            </div>
+            <div class="tab-button active">
+                <i class="fas fa-plus-circle text-xl"></i>
+            </div>
+            <div class="tab-button">
+                <i class="fas fa-robot text-xl"></i>
+            </div>
+            <div class="tab-button">
+                <i class="fas fa-cog text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Category selection
+        document.querySelectorAll('.category-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.category-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+        
+        // Time pill selection
+        document.querySelectorAll('.time-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                document.querySelectorAll('.time-pill').forEach(p => {
+                    p.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>
