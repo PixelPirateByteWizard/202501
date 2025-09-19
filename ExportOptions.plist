@@ -10,8 +10,8 @@
 	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.Solakai.ai</key>
-		<string>MAU45D2MZ9.com.Solakai.ai</string>
+		<key>com.kaelix.ai</key>
+		<string>MAU45D2MZ9.com.kaelix.ai</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
