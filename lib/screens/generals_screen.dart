@@ -1,0 +1,593 @@
+import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import '../models/general.dart';
+import '../models/item.dart';
+import '../services/game_data_service.dart';
+
+class GeneralsScreen extends StatefulWidget {
+  const GeneralsScreen({super.key});
+
+  @override
+  State<GeneralsScreen> createState() => _GeneralsScreenState();
+}
+
+class _GeneralsScreenState extends State<GeneralsScreen> {
+  List<General> _generals = [];
+  List<Item> _items = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final generals = await GameDataService.getGenerals();
+    final items = await GameDataService.getInventory();
+    setState(() {
+      _generals = generals;
+      _items = items;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: AppTheme.gradientBackground,
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryGold),
+                        ),
+                      )
+                    : _buildGeneralsList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: AppTheme.cardDecoration,
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: AppTheme.primaryGold,
+            ),
+          ),
+          const SizedBox(width: 16),
+          const Text(
+            '武将',
+            style: TextStyle(
+              color: AppTheme.primaryGold,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGeneralsList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(20),
+      itemCount: _generals.length,
+      itemBuilder: (context, index) {
+        final general = _generals[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: _buildGeneralCard(general),
+        );
+      },
+    );
+  }
+
+  Widget _buildGeneralCard(General general) {
+    return GestureDetector(
+      onTap: () => _showGeneralDetails(general),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: AppTheme.cardDecoration,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                // Avatar
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: AppTheme.goldGradient.copyWith(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      general.avatar,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.darkBlue,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                
+                // General Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        general.name,
+                        style: const TextStyle(
+                          color: AppTheme.primaryGold,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        general.position,
+                        style: const TextStyle(
+                          color: AppTheme.textLight,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                // Level
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryGold.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'Lv.${general.level}',
+                    style: const TextStyle(
+                      color: AppTheme.primaryGold,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            
+            // Stats (显示总属性)
+            Row(
+              children: [
+                Expanded(child: _buildStatItem('攻击', general.getTotalAttack(_items), general.attack)),
+                Expanded(child: _buildStatItem('防御', general.getTotalDefense(_items), general.defense)),
+                Expanded(child: _buildStatItem('智力', general.getTotalIntelligence(_items), general.intelligence)),
+                Expanded(child: _buildStatItem('速度', general.getTotalSpeed(_items), general.speed)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            
+            // Skills
+            Wrap(
+              spacing: 8,
+              children: general.skills.map((skill) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppTheme.cardBackgroundDark.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  skill,
+                  style: const TextStyle(
+                    color: AppTheme.primaryGold,
+                    fontSize: 12,
+                  ),
+                ),
+              )).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, int totalValue, int baseValue) {
+    final hasBonus = totalValue > baseValue;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackgroundDark.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppTheme.textLight,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                totalValue.toString(),
+                style: TextStyle(
+                  color: hasBonus ? Colors.green : AppTheme.primaryGold,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (hasBonus) ...[
+                const SizedBox(width: 2),
+                Text(
+                  '(+${totalValue - baseValue})',
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showGeneralDetails(General general) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: AppTheme.cardDecoration,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: AppTheme.goldGradient.copyWith(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        general.avatar,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkBlue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          general.name,
+                          style: const TextStyle(
+                            color: AppTheme.primaryGold,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          general.position,
+                          style: const TextStyle(
+                            color: AppTheme.textLight,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              
+              // Equipment Slots
+              const Text(
+                '装备:',
+                style: TextStyle(
+                  color: AppTheme.primaryGold,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildEquipmentSlot(general, 'weapon', '武器', Icons.sports_martial_arts),
+                  _buildEquipmentSlot(general, 'armor', '防具', Icons.shield),
+                  _buildEquipmentSlot(general, 'accessory', '饰品', Icons.diamond),
+                ],
+              ),
+              const SizedBox(height: 16),
+              
+              // Detailed Stats
+              GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                childAspectRatio: 2.5,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                children: [
+                  _buildDetailedStatItem('攻击力', general.getTotalAttack(_items), general.attack),
+                  _buildDetailedStatItem('防御力', general.getTotalDefense(_items), general.defense),
+                  _buildDetailedStatItem('智力', general.getTotalIntelligence(_items), general.intelligence),
+                  _buildDetailedStatItem('速度', general.getTotalSpeed(_items), general.speed),
+                ],
+              ),
+              const SizedBox(height: 16),
+              
+              // Skills
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '技能:',
+                  style: TextStyle(
+                    color: AppTheme.primaryGold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: general.skills.map((skill) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryGold.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    skill,
+                    style: const TextStyle(
+                      color: AppTheme.primaryGold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )).toList(),
+              ),
+              const SizedBox(height: 20),
+              
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('关闭'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailedStatItem(String label, int totalValue, int baseValue) {
+    final hasBonus = totalValue > baseValue;
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackgroundDark.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppTheme.textLight,
+              fontSize: 12,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                totalValue.toString(),
+                style: TextStyle(
+                  color: hasBonus ? Colors.green : AppTheme.primaryGold,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (hasBonus)
+                Text(
+                  '($baseValue+${totalValue - baseValue})',
+                  style: const TextStyle(
+                    color: AppTheme.textLight,
+                    fontSize: 10,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEquipmentSlot(General general, String slot, String slotName, IconData icon) {
+    final itemId = general.equipment[slot];
+    final item = itemId != null 
+        ? _items.firstWhere((i) => i.id == itemId, orElse: () => _items.first)
+        : null;
+
+    return GestureDetector(
+      onTap: () => _showEquipmentOptions(general, slot, slotName),
+      child: Container(
+        width: 60,
+        height: 80,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: item != null 
+              ? AppTheme.primaryGold.withOpacity(0.2)
+              : AppTheme.cardBackgroundDark.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppTheme.primaryGold.withOpacity(0.5),
+          ),
+        ),
+        child: Column(
+          children: [
+            if (item != null)
+              Text(
+                item.icon,
+                style: const TextStyle(fontSize: 20),
+              )
+            else
+              Icon(
+                icon,
+                color: AppTheme.primaryGold.withOpacity(0.5),
+                size: 20,
+              ),
+            const SizedBox(height: 4),
+            Text(
+              slotName,
+              style: const TextStyle(
+                color: AppTheme.primaryGold,
+                fontSize: 10,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (item != null)
+              Text(
+                item.name,
+                style: const TextStyle(
+                  color: AppTheme.textLight,
+                  fontSize: 8,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showEquipmentOptions(General general, String slot, String slotName) {
+    final currentItem = general.equipment[slot];
+    final availableItems = _items.where((item) {
+      switch (slot) {
+        case 'weapon':
+          return item.type == ItemType.weapon;
+        case 'armor':
+          return item.type == ItemType.armor;
+        case 'accessory':
+          return item.type == ItemType.accessory;
+        default:
+          return false;
+      }
+    }).toList();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: AppTheme.cardBackground,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '选择$slotName',
+              style: const TextStyle(
+                color: AppTheme.primaryGold,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            // 卸下装备选项
+            if (currentItem != null)
+              ListTile(
+                leading: const Icon(Icons.remove_circle, color: Colors.red),
+                title: const Text('卸下装备', style: TextStyle(color: AppTheme.textLight)),
+                onTap: () async {
+                  Navigator.pop(context);
+                  await GameDataService.unequipItemFromGeneral(general.id, slot);
+                  _loadData();
+                },
+              ),
+            
+            // 可用装备列表
+            if (availableItems.isEmpty)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  '没有可用的装备',
+                  style: TextStyle(color: AppTheme.textLight),
+                ),
+              )
+            else
+              ...availableItems.map((item) => ListTile(
+                leading: Text(item.icon, style: const TextStyle(fontSize: 24)),
+                title: Text(item.name, style: const TextStyle(color: AppTheme.primaryGold)),
+                subtitle: Text(
+                  item.description,
+                  style: const TextStyle(color: AppTheme.textLight, fontSize: 12),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: Text(
+                  'x${item.quantity}',
+                  style: const TextStyle(color: AppTheme.primaryGold),
+                ),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final success = await GameDataService.equipItemToGeneral(general.id, item.id, slot);
+                  if (success) {
+                    _loadData();
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${item.name} 已装备给 ${general.name}'),
+                          backgroundColor: AppTheme.primaryGold,
+                        ),
+                      );
+                    }
+                  }
+                },
+              )),
+          ],
+        ),
+      ),
+    );
+  }
+}
