@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/event_provider.dart';
 import '../providers/ai_provider.dart';
+import '../services/navigation_service.dart';
 import 'agenda_screen.dart';
 import 'forge_screen.dart';
 import 'ai_chat_screen.dart';
@@ -28,6 +29,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // Set up navigation service
+    NavigationService().setTabSwitcher((index) {
+      if (mounted) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }
+    });
+    
     // Load initial data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<EventProvider>().loadEvents();

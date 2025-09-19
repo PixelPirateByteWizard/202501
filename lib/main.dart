@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'screens/main_screen.dart';
 import 'providers/event_provider.dart';
 import 'providers/ai_provider.dart';
+import 'services/navigation_service.dart';
 import 'theme/app_theme.dart';
 
 void main() {
@@ -22,7 +23,11 @@ class KaelixApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Kaelix - Smart Calendar',
         theme: AppTheme.darkTheme,
-        home: const MainScreen(),
+        navigatorKey: NavigationService().navigatorKey,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MainScreen(),
+        },
         debugShowCheckedModeBanner: false,
       ),
     );

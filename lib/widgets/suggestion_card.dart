@@ -21,9 +21,13 @@ class SuggestionCard extends StatefulWidget {
 class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _pulseController;
+  late AnimationController _dismissController;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _pulseAnimation;
+  late Animation<double> _dismissAnimation;
+  late Animation<double> _scaleAnimation;
   bool _isExpanded = false;
+  bool _isDismissing = false;
 
   @override
   void initState() {
@@ -36,6 +40,11 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
     
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    
+    _dismissController = AnimationController(
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     
@@ -55,6 +64,22 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
       curve: Curves.easeInOut,
     ));
     
+    _dismissAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _dismissController,
+      curve: Curves.easeInCubic,
+    ));
+    
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.8,
+    ).animate(CurvedAnimation(
+      parent: _dismissController,
+      curve: Curves.easeInCubic,
+    ));
+    
     _slideController.forward();
     
     if (widget.suggestion.isHighPriority) {
@@ -66,7 +91,76 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
   void dispose() {
     _slideController.dispose();
     _pulseController.dispose();
+    _dismissController.dispose();
     super.dispose();
+  }
+
+  void _handleAccept() async {
+    if (_isDismissing) return;
+    
+    setState(() {
+      _isDismissing = true;
+    });
+    
+    // Show success feedback
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text('Suggestion accepted: ${widget.suggestion.title}'),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
+    
+    // Play dismiss animation
+    await _dismissController.forward();
+    
+    // Call original callback
+    widget.onAccept();
+  }
+
+  void _handleDismiss() async {
+    if (_isDismissing) return;
+    
+    setState(() {
+      _isDismissing = true;
+    });
+    
+    // Show feedback
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.close, color: Colors.white, size: 20),
+              const SizedBox(width: 8),
+              const Text('Suggestion dismissed'),
+            ],
+          ),
+          backgroundColor: Colors.grey.shade600,
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
+    
+    // Play dismiss animation
+    await _dismissController.forward();
+    
+    // Call original callback
+    widget.onDismiss();
   }
 
   IconData _getTypeIcon() {
@@ -124,11 +218,15 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
     return SlideTransition(
       position: _slideAnimation,
       child: AnimatedBuilder(
-        animation: _pulseAnimation,
+        animation: Listenable.merge([_pulseAnimation, _dismissAnimation, _scaleAnimation]),
         builder: (context, child) {
           return Transform.scale(
-            scale: widget.suggestion.isHighPriority ? _pulseAnimation.value : 1.0,
-            child: GestureDetector(
+            scale: _isDismissing 
+                ? _scaleAnimation.value 
+                : (widget.suggestion.isHighPriority ? _pulseAnimation.value : 1.0),
+            child: Opacity(
+              opacity: _dismissAnimation.value == 0.0 ? 1.0 : _dismissAnimation.value,
+              child: GestureDetector(
               onTap: () {
                 setState(() {
                   _isExpanded = !_isExpanded;
@@ -284,7 +382,7 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
                             children: [
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: widget.onAccept,
+                                  onPressed: _isDismissing ? null : _handleAccept,
                                   icon: const Icon(Icons.check, size: 16),
                                   label: const Text('Accept'),
                                   style: ElevatedButton.styleFrom(
@@ -302,7 +400,7 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
                               
                               Expanded(
                                 child: TextButton.icon(
-                                  onPressed: widget.onDismiss,
+                                  onPressed: _isDismissing ? null : _handleDismiss,
                                   icon: const Icon(Icons.close, size: 16),
                                   label: const Text('Dismiss'),
                                   style: TextButton.styleFrom(
@@ -327,6 +425,7 @@ class _SuggestionCardState extends State<SuggestionCard> with TickerProviderStat
                   ],
                 ),
               ),
+            ),
             ),
           );
         },

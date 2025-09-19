@@ -8,6 +8,7 @@ import '../widgets/week_heatmap.dart';
 import '../widgets/suggestion_card.dart';
 import '../widgets/chat_bubble.dart';
 import '../services/time_analytics_service.dart';
+import '../services/navigation_service.dart';
 import '../theme/app_theme.dart';
 
 class ForgeScreen extends StatefulWidget {
@@ -23,6 +24,12 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
   int _selectedTab = 0; // 0: Overview, 1: Analytics, 2: Optimization, 3: AI Assistant
   final TextEditingController _aiMessageController = TextEditingController();
   final ScrollController _aiScrollController = ScrollController();
+  
+  // Loading states for buttons
+  bool _isAddingFocusTime = false;
+  bool _isOptimizing = false;
+  bool _isFindingFreeTime = false;
+  bool _isResolvingConflicts = false;
 
   @override
   void initState() {
@@ -45,67 +52,240 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
     super.dispose();
   }
 
-  Widget _buildQuickActionCard(BuildContext context, String title, IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: AppTheme.primaryGradient,
+  Widget _buildQuickActionCard(BuildContext context, String title, IconData icon, VoidCallback onTap, {bool isLoading = false}) {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 80,
+        maxHeight: 120,
+        minWidth: 140,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isLoading ? null : () async {
+            // Add haptic feedback for better user experience
+            try {
+              // Show immediate visual feedback
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              
+              // Execute the action
+              onTap();
+            } catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: ${e.toString()}'),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            }
+          },
           borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
+          splashColor: Colors.white.withValues(alpha: 0.3),
+          highlightColor: Colors.white.withValues(alpha: 0.1),
+          child: Ink(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            decoration: BoxDecoration(
+              gradient: isLoading 
+                ? LinearGradient(colors: [Colors.grey.shade600, Colors.grey.shade700])
+                : AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: (isLoading ? Colors.grey : AppTheme.primaryEnd).withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-          ],
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: isLoading 
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Icon(icon, color: Colors.white, size: 24),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    isLoading ? 'Processing...' : title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  void _addFocusTime(BuildContext context) {
-    final now = DateTime.now();
-    final focusTime = DateTime(now.year, now.month, now.day, now.hour + 1);
+  void _addFocusTime(BuildContext context) async {
+    if (_isAddingFocusTime) return;
     
-    final event = Event(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: 'Focus Time',
-      description: 'Deep work session',
-      startTime: focusTime,
-      endTime: focusTime.add(const Duration(hours: 2)),
-      category: EventCategory.focus,
-    );
+    setState(() {
+      _isAddingFocusTime = true;
+    });
     
-    context.read<EventProvider>().addEvent(event);
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Focus time added to your calendar'),
-        backgroundColor: AppTheme.primaryEnd,
-      ),
-    );
+    try {
+      final eventProvider = context.read<EventProvider>();
+      final now = DateTime.now();
+      
+      // Find the next available slot
+      final availableSlots = eventProvider.getAvailableSlots(const Duration(hours: 2));
+      DateTime focusTime;
+      
+      if (availableSlots.isNotEmpty) {
+        focusTime = availableSlots.first;
+      } else {
+        // Default to next hour if no slots available
+        focusTime = DateTime(now.year, now.month, now.day, now.hour + 1);
+      }
+      
+      final event = Event(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: 'Focus Time',
+        description: 'Deep work session - Added by Forge',
+        startTime: focusTime,
+        endTime: focusTime.add(const Duration(hours: 2)),
+        category: EventCategory.focus,
+        priority: 4,
+      );
+      
+      await eventProvider.addEvent(event);
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Focus time added for ${_formatTime(focusTime)}'),
+            backgroundColor: AppTheme.primaryEnd,
+            action: SnackBarAction(
+              label: 'View',
+              textColor: Colors.white,
+              onPressed: () {
+                // Just dismiss the snackbar, user is already in the app
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add focus time: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isAddingFocusTime = false;
+        });
+      }
+    }
   }
 
-  void _optimizeSchedule(BuildContext context) {
-    final events = context.read<EventProvider>().events;
-    context.read<AIProvider>().loadSuggestions(events);
+  void _optimizeSchedule(BuildContext context) async {
+    if (_isOptimizing) return;
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Analyzing your schedule for optimization...'),
-        backgroundColor: AppTheme.primaryEnd,
-      ),
-    );
+    setState(() {
+      _isOptimizing = true;
+    });
+    
+    try {
+      final eventProvider = context.read<EventProvider>();
+      final aiProvider = context.read<AIProvider>();
+      
+      // Show loading state
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 12),
+              Text('Analyzing your schedule for optimization...'),
+            ],
+          ),
+          backgroundColor: AppTheme.primaryEnd,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      
+      // Load AI suggestions
+      await aiProvider.loadSuggestions(eventProvider.events);
+      
+      // Optimize schedule
+      await eventProvider.optimizeSchedule();
+      
+      if (context.mounted) {
+        // Switch to optimize tab
+        setState(() {
+          _selectedTab = 2;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Schedule optimization complete!'),
+            backgroundColor: Colors.green,
+            action: SnackBarAction(
+              label: 'View Results',
+              textColor: Colors.white,
+              onPressed: () {
+                setState(() {
+                  _selectedTab = 2;
+                });
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Optimization failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isOptimizing = false;
+        });
+      }
+    }
   }
 
   void _acceptSuggestion(BuildContext context, String suggestionId, AIProvider aiProvider, EventProvider eventProvider) {
@@ -224,48 +404,52 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
             ),
           ),
           const SizedBox(height: 16),
-          Row(
+          // Use GridView for better iPad layout
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Adjust grid based on screen width (better for iPad)
+              final crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
+              final childAspectRatio = constraints.maxWidth > 600 ? 2.5 : 2.2;
+              
+              return GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
             children: [
-              Expanded(
-                child: _buildQuickActionCard(
-                  context,
-                  'Add Focus Time',
-                  Icons.psychology,
-                  () => _addFocusTime(context),
-                ),
+              _buildQuickActionCard(
+                context,
+                'Add Focus Time',
+                Icons.psychology,
+                () => _addFocusTime(context),
+                isLoading: _isAddingFocusTime,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildQuickActionCard(
-                  context,
-                  'Optimize Schedule',
-                  Icons.auto_fix_high,
-                  () => _optimizeSchedule(context),
-                ),
+              _buildQuickActionCard(
+                context,
+                'Optimize Schedule',
+                Icons.auto_fix_high,
+                () => _optimizeSchedule(context),
+                isLoading: _isOptimizing,
+              ),
+              _buildQuickActionCard(
+                context,
+                'Find Free Time',
+                Icons.schedule,
+                () => _findFreeTime(context),
+                isLoading: _isFindingFreeTime,
+              ),
+              _buildQuickActionCard(
+                context,
+                'Resolve Conflicts',
+                Icons.warning,
+                () => _resolveConflicts(context),
+                isLoading: _isResolvingConflicts,
               ),
             ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _buildQuickActionCard(
-                  context,
-                  'Find Free Time',
-                  Icons.schedule,
-                  () => _findFreeTime(context),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildQuickActionCard(
-                  context,
-                  'Resolve Conflicts',
-                  Icons.warning,
-                  () => _resolveConflicts(context),
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ],
       ),
@@ -617,37 +801,137 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
     );
   }
 
-  void _findFreeTime(BuildContext context) {
-    final eventProvider = context.read<EventProvider>();
-    final freeSlots = eventProvider.findOptimalFocusSlots(const Duration(hours: 1));
+  void _findFreeTime(BuildContext context) async {
+    if (_isFindingFreeTime) return;
     
-    if (freeSlots.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Found ${freeSlots.length} available time slots'),
-          backgroundColor: AppTheme.primaryEnd,
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No available time slots found'),
-          backgroundColor: Colors.orange,
-        ),
-      );
+    setState(() {
+      _isFindingFreeTime = true;
+    });
+    
+    try {
+      final eventProvider = context.read<EventProvider>();
+      
+      // Simulate some processing time
+      await Future.delayed(const Duration(milliseconds: 800));
+      
+      final freeSlots = eventProvider.findOptimalFocusSlots(const Duration(hours: 1));
+      final todaySlots = eventProvider.getAvailableSlots(const Duration(hours: 1));
+      
+      if (context.mounted) {
+        if (freeSlots.isNotEmpty || todaySlots.isNotEmpty) {
+          final totalSlots = freeSlots.length + todaySlots.length;
+          final nextSlot = freeSlots.isNotEmpty ? freeSlots.first : todaySlots.first;
+          
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Found $totalSlots available slots. Next: ${_formatTime(nextSlot)}'),
+              backgroundColor: AppTheme.primaryEnd,
+              action: SnackBarAction(
+                label: 'Schedule',
+                textColor: Colors.white,
+                onPressed: () => _scheduleInSlot(context, nextSlot),
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('No available time slots found today'),
+              backgroundColor: Colors.orange,
+              action: SnackBarAction(
+                label: 'Add Anyway',
+                textColor: Colors.white,
+                onPressed: () => _addFocusTime(context),
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error finding free time: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isFindingFreeTime = false;
+        });
+      }
     }
   }
 
-  void _resolveConflicts(BuildContext context) {
-    final eventProvider = context.read<EventProvider>();
-    eventProvider.optimizeSchedule();
+  void _resolveConflicts(BuildContext context) async {
+    if (_isResolvingConflicts) return;
     
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Resolving schedule conflicts...'),
-        backgroundColor: AppTheme.primaryEnd,
-      ),
-    );
+    setState(() {
+      _isResolvingConflicts = true;
+    });
+    
+    try {
+      final eventProvider = context.read<EventProvider>();
+      final conflicts = eventProvider.getConflictingEvents();
+      
+      if (conflicts.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No schedule conflicts found!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        return;
+      }
+      
+      // Simulate processing time
+      await Future.delayed(const Duration(milliseconds: 1000));
+      
+      await eventProvider.optimizeSchedule();
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Resolved ${conflicts.length} schedule conflicts!'),
+            backgroundColor: Colors.green,
+            action: SnackBarAction(
+              label: 'View Calendar',
+              textColor: Colors.white,
+              onPressed: () {
+                // Switch to agenda tab using navigation service
+                NavigationService().switchToAgenda();
+                
+                // Show confirmation
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Switched to Calendar view'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to resolve conflicts: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isResolvingConflicts = false;
+        });
+      }
+    }
   }
 
   @override
@@ -701,9 +985,10 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
   }
 
   Widget _buildAIAssistantTab() {
-    return Column(
+    return SingleChildScrollView(
       key: ValueKey('ai_assistant'),
-      children: [
+      child: Column(
+        children: [
         // AI Assistant Header
         Container(
           padding: const EdgeInsets.all(16),
@@ -775,7 +1060,8 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
         const SizedBox(height: 20),
         
         // Chat Messages
-        Expanded(
+        SizedBox(
+          height: 300,
           child: Consumer<AIProvider>(
             builder: (context, aiProvider, child) {
               final messages = aiProvider.chatMessages
@@ -889,6 +1175,7 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
           ),
         ),
       ],
+      ),
     );
   }
 
@@ -949,5 +1236,62 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
         );
       }
     });
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+    final eventDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    
+    String dateStr;
+    if (eventDate == today) {
+      dateStr = 'Today';
+    } else if (eventDate == tomorrow) {
+      dateStr = 'Tomorrow';
+    } else {
+      dateStr = '${dateTime.day}/${dateTime.month}';
+    }
+    
+    final hour = dateTime.hour;
+    final minute = dateTime.minute;
+    final amPm = hour >= 12 ? 'PM' : 'AM';
+    final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+    
+    return '$dateStr at $displayHour:${minute.toString().padLeft(2, '0')} $amPm';
+  }
+
+  void _scheduleInSlot(BuildContext context, DateTime slotTime) async {
+    try {
+      final event = Event(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: 'Available Time Block',
+        description: 'Free time slot found by Forge',
+        startTime: slotTime,
+        endTime: slotTime.add(const Duration(hours: 1)),
+        category: EventCategory.focus,
+        priority: 3,
+      );
+      
+      await context.read<EventProvider>().addEvent(event);
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Event scheduled for ${_formatTime(slotTime)}'),
+            backgroundColor: AppTheme.primaryEnd,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to schedule: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

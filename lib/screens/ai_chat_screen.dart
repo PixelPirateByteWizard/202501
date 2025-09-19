@@ -4,6 +4,8 @@ import '../providers/ai_provider.dart';
 import '../providers/event_provider.dart';
 import '../models/chat_message.dart';
 import '../widgets/chat_bubble.dart';
+import '../widgets/role_selector.dart';
+import '../screens/role_selector_screen.dart';
 import '../theme/app_theme.dart';
 
 class AIChatScreen extends StatefulWidget {
@@ -33,11 +35,12 @@ class _AIChatScreenState extends State<AIChatScreen> {
     final aiProvider = context.read<AIProvider>();
     final welcomeMessage = ChatMessage(
       id: 'welcome_${DateTime.now().millisecondsSinceEpoch}',
-      content: "Hi! I'm Kaelix, your AI scheduling assistant. I can help you:\n\n• Schedule meetings and events\n• Optimize your calendar\n• Find free time slots\n• Resolve scheduling conflicts\n• Suggest focus time blocks\n\nJust type what you need help with, like 'schedule a meeting tomorrow at 2pm' or 'show me my free time today'.",
+      content:
+          "Hi! I'm Kaelix, your AI scheduling assistant. I can help you:\n\n• Schedule meetings and events\n• Optimize your calendar\n• Find free time slots\n• Resolve scheduling conflicts\n• Suggest focus time blocks\n\nJust type what you need help with, like 'schedule a meeting tomorrow at 2pm' or 'show me my free time today'.",
       type: MessageType.ai,
       timestamp: DateTime.now(),
     );
-    
+
     aiProvider.chatMessages.add(welcomeMessage);
   }
 
@@ -57,9 +60,12 @@ class _AIChatScreenState extends State<AIChatScreen> {
   }
 
   void _sendQuickMessage(String message) {
-    context.read<AIProvider>().sendMessage(message, onEventCreated: (event) {
-      context.read<EventProvider>().addEvent(event);
-    });
+    context.read<AIProvider>().sendMessage(
+      message,
+      onEventCreated: (event) {
+        context.read<EventProvider>().addEvent(event);
+      },
+    );
     _scrollToBottom();
   }
 
@@ -75,6 +81,21 @@ class _AIChatScreenState extends State<AIChatScreen> {
     });
   }
 
+  void _showRoleSelector(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FullScreenRoleSelector(
+          selectedRole: context.read<AIProvider>().selectedRole,
+          onRoleSelected: (role) {
+            context.read<AIProvider>().selectRole(role);
+            Navigator.pop(context);
+            _scrollToBottom();
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,61 +105,103 @@ class _AIChatScreenState extends State<AIChatScreen> {
             // Header
             Container(
               padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-
-                  
-                  // Kaelix avatar
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.primaryGradient,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.auto_awesome,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  
-                  // Kaelix info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kaelix',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+              child: Consumer<AIProvider>(
+                builder: (context, aiProvider, child) {
+                  final selectedRole = aiProvider.selectedRole;
+                  return Row(
+                    children: [
+                      // AI avatar
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: selectedRole != null
+                              ? Border.all(color: AppTheme.primaryEnd, width: 2)
+                              : null,
                         ),
-                        Consumer<AIProvider>(
-                          builder: (context, aiProvider, child) {
-                            return Text(
-                              aiProvider.isLoading ? 'Typing...' : 'Online - Ready to help',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: aiProvider.isLoading 
-                                  ? AppTheme.primaryEnd 
-                                  : Colors.green.shade300,
+                        child: selectedRole != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  selectedRole.imagePath,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        gradient: AppTheme.primaryGradient,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Icon(
+                                        Icons.auto_awesome,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  gradient: AppTheme.primaryGradient,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(
+                                  Icons.auto_awesome,
+                                  color: Colors.white,
+                                ),
                               ),
-                            );
-                          },
+                      ),
+                      const SizedBox(width: 12),
+
+                      // AI info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              selectedRole?.name ?? 'Kaelix',
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              aiProvider.isLoading
+                                  ? 'Typing...'
+                                  : selectedRole != null
+                                  ? selectedRole.personality
+                                  : 'Online - Ready to help',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: aiProvider.isLoading
+                                        ? AppTheme.primaryEnd
+                                        : Colors.green.shade300,
+                                  ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+
+                      // Role selector button
+                      IconButton(
+                        onPressed: () => _showRoleSelector(context),
+                        icon: Icon(
+                          Icons.face,
+                          color: selectedRole != null
+                              ? AppTheme.primaryEnd
+                              : AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
-            
+
             // Chat Messages
             Expanded(
               child: Consumer<AIProvider>(
                 builder: (context, aiProvider, child) {
                   final messages = aiProvider.chatMessages;
-                  
+
                   if (messages.isEmpty && !aiProvider.isLoading) {
                     return const Center(
                       child: Text('Start a conversation with Kaelix'),
@@ -164,7 +227,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                           ),
                         );
                       }
-                      
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: ChatBubble(message: messages[index]),
@@ -174,11 +237,31 @@ class _AIChatScreenState extends State<AIChatScreen> {
                 },
               ),
             ),
-            
+
+            // Role Selector - Show when no role is selected or chat is empty
+            Consumer<AIProvider>(
+              builder: (context, aiProvider, child) {
+                if (aiProvider.selectedRole == null ||
+                    (aiProvider.chatMessages.isEmpty &&
+                        !aiProvider.isLoading)) {
+                  return RoleSelector(
+                    selectedRole: aiProvider.selectedRole,
+                    onRoleSelected: (role) {
+                      aiProvider.selectRole(role);
+                      _scrollToBottom();
+                    },
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+
             // Quick Suggestions - Only show when chat is empty
             Consumer<AIProvider>(
               builder: (context, aiProvider, child) {
-                if (aiProvider.chatMessages.isEmpty && !aiProvider.isLoading) {
+                if (aiProvider.chatMessages.isEmpty &&
+                    !aiProvider.isLoading &&
+                    aiProvider.selectedRole == null) {
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -186,9 +269,8 @@ class _AIChatScreenState extends State<AIChatScreen> {
                       children: [
                         Text(
                           'Try asking me about:',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.textSecondary),
                         ),
                         const SizedBox(height: 8),
                         Wrap(
@@ -197,15 +279,21 @@ class _AIChatScreenState extends State<AIChatScreen> {
                           children: [
                             _QuickActionChip(
                               label: 'Schedule a meeting',
-                              onTap: () => _sendQuickMessage('Help me schedule a meeting'),
+                              onTap: () => _sendQuickMessage(
+                                'Help me schedule a meeting',
+                              ),
                             ),
                             _QuickActionChip(
                               label: 'Find free time',
-                              onTap: () => _sendQuickMessage('When do I have free time today?'),
+                              onTap: () => _sendQuickMessage(
+                                'When do I have free time today?',
+                              ),
                             ),
                             _QuickActionChip(
                               label: 'Add focus time',
-                              onTap: () => _sendQuickMessage('I need to add some focus time to my calendar'),
+                              onTap: () => _sendQuickMessage(
+                                'I need to add some focus time to my calendar',
+                              ),
                             ),
                           ],
                         ),
@@ -217,7 +305,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                 return const SizedBox.shrink();
               },
             ),
-            
+
             // Input Area
             Container(
               padding: const EdgeInsets.all(20),
@@ -257,15 +345,22 @@ class _AIChatScreenState extends State<AIChatScreen> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          gradient: aiProvider.isLoading 
-                            ? LinearGradient(colors: [Colors.grey.shade600, Colors.grey.shade700])
-                            : AppTheme.primaryGradient,
+                          gradient: aiProvider.isLoading
+                              ? LinearGradient(
+                                  colors: [
+                                    Colors.grey.shade600,
+                                    Colors.grey.shade700,
+                                  ],
+                                )
+                              : AppTheme.primaryGradient,
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: IconButton(
                           onPressed: aiProvider.isLoading ? null : _sendMessage,
                           icon: Icon(
-                            aiProvider.isLoading ? Icons.hourglass_empty : Icons.send,
+                            aiProvider.isLoading
+                                ? Icons.hourglass_empty
+                                : Icons.send,
                             color: Colors.white,
                           ),
                         ),
@@ -286,10 +381,7 @@ class _QuickActionChip extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const _QuickActionChip({
-    required this.label,
-    required this.onTap,
-  });
+  const _QuickActionChip({required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -303,9 +395,7 @@ class _QuickActionChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
           ),
           child: Text(
             label,

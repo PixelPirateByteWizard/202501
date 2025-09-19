@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../models/ai_suggestion.dart';
 import '../models/chat_message.dart';
 import '../models/event.dart';
+import '../models/ai_role.dart';
 import '../services/ai_service.dart';
 
 class AIProvider with ChangeNotifier {
@@ -12,11 +13,28 @@ class AIProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   Map<String, dynamic>? _pendingEventData;
+  AIRole? _selectedRole;
 
   List<AISuggestion> get suggestions => _suggestions.where((s) => !s.isDismissed).toList();
   List<ChatMessage> get chatMessages => _chatMessages;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  AIRole? get selectedRole => _selectedRole;
+
+  void selectRole(AIRole role) {
+    _selectedRole = role;
+    
+    // Add a system message about role change
+    final roleMessage = ChatMessage(
+      id: 'role_change_${DateTime.now().millisecondsSinceEpoch}',
+      content: "你好！我是${role.name}，${role.description}。我的性格特点是${role.personality}，擅长${role.specialties.join('、')}。有什么可以帮助你的吗？",
+      type: MessageType.ai,
+      timestamp: DateTime.now(),
+    );
+    
+    _chatMessages.add(roleMessage);
+    notifyListeners();
+  }
 
   Future<void> loadSuggestions([List<Event>? events]) async {
     _isLoading = true;
