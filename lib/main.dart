@@ -7,11 +7,11 @@ import 'services/navigation_service.dart';
 import 'theme/app_theme.dart';
 
 void main() {
-  runApp(const KaelixApp());
+  runApp(const SolakaiApp());
 }
 
-class KaelixApp extends StatelessWidget {
-  const KaelixApp({super.key});
+class SolakaiApp extends StatelessWidget {
+  const SolakaiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class KaelixApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AIProvider()),
       ],
       child: MaterialApp(
-        title: 'Kaelix - Smart Calendar',
+        title: 'Solakai - Smart Calendar',
         theme: AppTheme.darkTheme,
         navigatorKey: NavigationService().navigatorKey,
         initialRoute: '/',

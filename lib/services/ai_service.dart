@@ -115,7 +115,7 @@ class AIService {
       final messages = <Map<String, String>>[
         {
           'role': 'system',
-          'content': '''You are Kaelix, a helpful AI scheduling assistant. You help users manage their calendar and schedule events efficiently. 
+          'content': '''You are Solakai, a helpful AI scheduling assistant. You help users manage their calendar and schedule events efficiently. 
 
 Key capabilities:
 - Schedule meetings and events
@@ -132,7 +132,7 @@ Guidelines:
 - Ask clarifying questions when event details are unclear
 - Be proactive in suggesting improvements
 
-Current context: You're integrated into a smart calendar app called Kaelix.''',
+Current context: You're integrated into a smart calendar app called Solakai.''',
         },
       ];
 
@@ -181,7 +181,7 @@ Current context: You're integrated into a smart calendar app called Kaelix.''',
     final lowerMessage = message.toLowerCase();
     
     if (lowerMessage.contains('hello') || lowerMessage.contains('hi')) {
-      return "Hello! I'm Kaelix, your AI scheduling assistant. I'm here to help you manage your calendar efficiently. What would you like to do today?";
+      return "Hello! I'm Solakai, your AI scheduling assistant. I'm here to help you manage your calendar efficiently. What would you like to do today?";
     } else if (lowerMessage.contains('tomorrow') || lowerMessage.contains('schedule tomorrow')) {
       return "Here's your schedule for tomorrow:\n\n📅 **Tomorrow's Events:**\n• 9:00 AM - Client call (1 hour)\n• 11:30 AM - Team sync (45 mins)\n• 2:00 PM - Project review (1 hour)\n\n🎯 You also have 2 hours of focus time scheduled in the morning. Would you like me to optimize your schedule?";
     } else if (lowerMessage.contains('today') && (lowerMessage.contains('schedule') || lowerMessage.contains('events'))) {

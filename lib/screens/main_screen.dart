@@ -93,7 +93,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.auto_awesome),
-              label: 'Kaelix',
+              label: 'Solakai',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

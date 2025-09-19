@@ -1,4 +1,4 @@
-# Kaelix - Smart Calendar & Scheduling
+# Solakai - Smart Calendar & Scheduling
 
 A Flutter-based AI-powered calendar application that proactively plans your time and optimizes your schedule.
 
@@ -76,7 +76,7 @@ lib/
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd kaelix
+cd Solakai
 ```
 
 2. Install dependencies:
@@ -141,7 +141,7 @@ The app includes mock data for demonstration. To integrate with real services:
 
 ## Design Philosophy
 
-**From Passive Recording to Active Planning**: Kaelix transforms calendar management from a reactive tool to a proactive assistant that anticipates needs and optimizes schedules.
+**From Passive Recording to Active Planning**: Solakai transforms calendar management from a reactive tool to a proactive assistant that anticipates needs and optimizes schedules.
 
 ### Key Principles
 - **Minimal Friction**: Voice-first interaction reduces input barriers

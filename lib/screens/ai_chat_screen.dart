@@ -36,7 +36,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
     final welcomeMessage = ChatMessage(
       id: 'welcome_${DateTime.now().millisecondsSinceEpoch}',
       content:
-          "Hi! I'm Kaelix, your AI scheduling assistant. I can help you:\n\n• Schedule meetings and events\n• Optimize your calendar\n• Find free time slots\n• Resolve scheduling conflicts\n• Suggest focus time blocks\n\nJust type what you need help with, like 'schedule a meeting tomorrow at 2pm' or 'show me my free time today'.",
+          "Hi! I'm Solakai, your AI scheduling assistant. I can help you:\n\n• Schedule meetings and events\n• Optimize your calendar\n• Find free time slots\n• Resolve scheduling conflicts\n• Suggest focus time blocks\n\nJust type what you need help with, like 'schedule a meeting tomorrow at 2pm' or 'show me my free time today'.",
       type: MessageType.ai,
       timestamp: DateTime.now(),
     );
@@ -159,7 +159,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              selectedRole?.name ?? 'Kaelix',
+                              selectedRole?.name ?? 'Solakai',
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(fontWeight: FontWeight.w600),
                             ),
@@ -204,7 +204,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
 
                   if (messages.isEmpty && !aiProvider.isLoading) {
                     return const Center(
-                      child: Text('Start a conversation with Kaelix'),
+                      child: Text('Start a conversation with Solakai'),
                     );
                   }
 
@@ -323,7 +323,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                       child: TextField(
                         controller: _messageController,
                         decoration: const InputDecoration(
-                          hintText: 'Ask Kaelix anything...',
+                          hintText: 'Ask Solakai anything...',
                           hintStyle: TextStyle(color: AppTheme.textSecondary),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(

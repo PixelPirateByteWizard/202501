@@ -44,7 +44,7 @@ class PrivacyScreen extends StatelessWidget {
               // Introduction
               _buildSection(
                 title: '1. Introduction',
-                content: 'At Kaelix, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.\n\nWe are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy or our practices with regard to your personal information, please contact us.',
+                content: 'At Solakai, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services.\n\nWe are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about our policy or our practices with regard to your personal information, please contact us.',
               ),
               
               _buildSection(
@@ -76,7 +76,7 @@ class PrivacyScreen extends StatelessWidget {
                 subsections: [
                   _buildSubsection(
                     'Service Provision',
-                    '• Provide and maintain the Kaelix service\n• Process and manage your calendar events\n• Generate AI-powered scheduling suggestions',
+                    '• Provide and maintain the Solakai service\n• Process and manage your calendar events\n• Generate AI-powered scheduling suggestions',
                   ),
                   _buildSubsection(
                     'Personalization',
@@ -147,7 +147,7 @@ class PrivacyScreen extends StatelessWidget {
               
               _buildSection(
                 title: '8. AI and Machine Learning',
-                content: 'Kaelix uses artificial intelligence and machine learning to provide personalized recommendations. This processing is based on your calendar data and usage patterns. You can opt-out of AI-powered features in your account settings.',
+                content: 'Solakai uses artificial intelligence and machine learning to provide personalized recommendations. This processing is based on your calendar data and usage patterns. You can opt-out of AI-powered features in your account settings.',
               ),
               
               _buildSection(
@@ -167,7 +167,7 @@ class PrivacyScreen extends StatelessWidget {
               
               _buildSection(
                 title: '12. Contact Us',
-                content: 'If you have any questions about this Privacy Policy or our privacy practices, please contact us at:\n\nEmail: privacy@kaelix.app\nAddress: Kaelix Inc., Privacy Officer\nWebsite: www.kaelix.app/privacy',
+                content: 'If you have any questions about this Privacy Policy or our privacy practices, please contact us at:\n\nEmail: privacy@Solakai.app\nAddress: Solakai Inc., Privacy Officer\nWebsite: www.Solakai.app/privacy',
               ),
               
               const SizedBox(height: 40),

@@ -221,7 +221,7 @@ class AIProvider with ChangeNotifier {
     final event = Event(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _pendingEventData!['title'] as String,
-      description: 'Created by Kaelix',
+      description: 'Created by Solakai',
       startTime: startTime,
       endTime: startTime.add(duration),
       category: category,

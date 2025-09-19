@@ -69,7 +69,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Help us improve Kaelix by sharing your thoughts and suggestions',
+                  'Help us improve Solakai by sharing your thoughts and suggestions',
                   style: TextStyle(
                     color: AppTheme.textSecondary,
                     fontSize: 16,
@@ -214,7 +214,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'How would you rate Kaelix?',
+            'How would you rate Solakai?',
             style: TextStyle(
               color: AppTheme.textPrimary,
               fontSize: 16,
@@ -460,21 +460,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           _buildContactMethod(
             icon: Icons.email,
             title: 'Email',
-            value: 'feedback@kaelix.app',
+            value: 'feedback@Solakai.app',
             description: 'Send us detailed feedback',
           ),
           const SizedBox(height: 12),
           _buildContactMethod(
             icon: Icons.bug_report,
             title: 'Bug Reports',
-            value: 'bugs@kaelix.app',
+            value: 'bugs@Solakai.app',
             description: 'Report technical issues',
           ),
           const SizedBox(height: 12),
           _buildContactMethod(
             icon: Icons.lightbulb_outline,
             title: 'Feature Requests',
-            value: 'features@kaelix.app',
+            value: 'features@Solakai.app',
             description: 'Suggest new features',
           ),
         ],

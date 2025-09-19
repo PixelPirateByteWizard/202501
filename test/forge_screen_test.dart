@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:kaelix/screens/forge_screen.dart';
-import 'package:kaelix/providers/event_provider.dart';
-import 'package:kaelix/providers/ai_provider.dart';
+import 'package:Solakai/screens/forge_screen.dart';
+import 'package:Solakai/providers/event_provider.dart';
+import 'package:Solakai/providers/ai_provider.dart';
 
 void main() {
   group('ForgeScreen Tests', () {

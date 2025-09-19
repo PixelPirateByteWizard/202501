@@ -296,7 +296,7 @@ class _ForgeScreenState extends State<ForgeScreen> with TickerProviderStateMixin
     final event = Event(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: 'Optimized Event',
-      description: 'Event created from Kaelix suggestion',
+      description: 'Event created from Solakai suggestion',
       startTime: now.add(const Duration(hours: 2)),
       endTime: now.add(const Duration(hours: 3)),
       category: EventCategory.work,

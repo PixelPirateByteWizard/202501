@@ -46,7 +46,7 @@ jobs:
       - name: Upload using iTMSTransporter
         env:
           WORKING_DIRECTORY: build/ios/ipa
-          IPA_FILE_NAME: Kaelix.ipa
+          IPA_FILE_NAME: Solakai.ipa
           APPLE_USERNAME: zhangjianhua6417@icloud.com
           APPLE_PASSWORD: rhla-macx-dkkw-rcvu
           APPLE_ASC_PROVIDER: MAU45D2MZ9

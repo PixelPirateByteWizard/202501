@@ -1,4 +1,4 @@
-# Kaelix UI 更新总结
+# Solakai UI 更新总结
 
 ## 🎯 完成的UI更新
 
@@ -19,24 +19,24 @@ Row(
       onPressed: () => Navigator.of(context).pop(),
       icon: const Icon(Icons.arrow_back),
     ),
-    // Kaelix avatar and info
+    // Solakai avatar and info
     ...
   ],
 )
 ```
 
-### 2. 🤖 AI改名为Kaelix
+### 2. 🤖 AI改名为Solakai
 
 #### 实现的更改：
-- **统一品牌名称**: 将所有"AI"、"AI Assistant"改为"Kaelix"
+- **统一品牌名称**: 将所有"AI"、"AI Assistant"改为"Solakai"
 - **更新的位置**:
-  - AI聊天页面标题：`AI Assistant` → `Kaelix`
-  - 底部导航栏：`AI Chat` → `Kaelix`
-  - 空状态消息：`Start a conversation with your AI assistant` → `Start a conversation with Kaelix`
-  - 系统消息：`You are a helpful AI scheduling assistant` → `You are Kaelix, a helpful scheduling assistant`
-  - 问候消息：`I'm your scheduling assistant` → `I'm Kaelix, your scheduling assistant`
-  - Forge页面：`AI Suggestions` → `Kaelix Suggestions`
-  - 事件描述：`Created by AI Assistant` → `Created by Kaelix`
+  - AI聊天页面标题：`AI Assistant` → `Solakai`
+  - 底部导航栏：`AI Chat` → `Solakai`
+  - 空状态消息：`Start a conversation with your AI assistant` → `Start a conversation with Solakai`
+  - 系统消息：`You are a helpful AI scheduling assistant` → `You are Solakai, a helpful scheduling assistant`
+  - 问候消息：`I'm your scheduling assistant` → `I'm Solakai, your scheduling assistant`
+  - Forge页面：`AI Suggestions` → `Solakai Suggestions`
+  - 事件描述：`Created by AI Assistant` → `Created by Solakai`
 
 ### 3. 🎨 更新图标设计
 
@@ -47,7 +47,7 @@ Row(
 
 #### 视觉效果：
 - 使用星形/魔法棒图标代替机器人图标
-- 更好地体现了Kaelix的智能和创新特性
+- 更好地体现了Solakai的智能和创新特性
 - 与应用的整体设计风格更加协调
 
 ## 🎨 UI/UX 改进详情
@@ -58,11 +58,11 @@ Row(
 Row(
   children: [
     IconButton(onPressed: () => Navigator.pop(), ...),  // 返回按钮
-    Container(...),  // Kaelix头像
+    Container(...),  // Solakai头像
     Expanded(
       child: Column(
         children: [
-          Text('Kaelix'),  // 品牌名称
+          Text('Solakai'),  // 品牌名称
           Text('Online - Ready to help'),  // 状态信息
         ],
       ),
@@ -75,7 +75,7 @@ Row(
 ```dart
 BottomNavigationBarItem(
   icon: Icon(Icons.auto_awesome),  // 新图标
-  label: 'Kaelix',  // 新标签
+  label: 'Solakai',  // 新标签
 ),
 ```
 
@@ -87,7 +87,7 @@ BottomNavigationBarItem(
 - **减少困惑**: 明确的返回路径
 
 ### 2. 统一的品牌体验
-- **一致的命名**: 整个应用中统一使用"Kaelix"
+- **一致的命名**: 整个应用中统一使用"Solakai"
 - **品牌识别**: 用户更容易记住和识别应用品牌
 - **专业形象**: 统一的命名提升应用的专业度
 
@@ -116,16 +116,16 @@ BottomNavigationBarItem(
 | 功能 | 更新前 | 更新后 |
 |------|--------|--------|
 | 聊天页面导航 | 无返回按钮 | 有返回按钮 |
-| 助手名称 | AI Assistant | Kaelix |
-| 底部导航标签 | AI Chat | Kaelix |
+| 助手名称 | AI Assistant | Solakai |
+| 底部导航标签 | AI Chat | Solakai |
 | 图标设计 | smart_toy (机器人) | auto_awesome (魔法星) |
 | 品牌一致性 | 不统一 | 完全统一 |
 
 ## 🎯 用户价值
 
 1. **更好的导航体验**: 用户可以轻松在聊天和主界面间切换
-2. **清晰的品牌识别**: 统一的"Kaelix"命名增强品牌认知
+2. **清晰的品牌识别**: 统一的"Solakai"命名增强品牌认知
 3. **现代化的视觉**: 新图标更符合AI助手的现代形象
 4. **一致的用户体验**: 整个应用的命名和视觉保持一致
 
-这些更新使得Kaelix应用在用户体验和品牌一致性方面都有了显著提升！
+这些更新使得Solakai应用在用户体验和品牌一致性方面都有了显著提升！

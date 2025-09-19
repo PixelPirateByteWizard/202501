@@ -12,23 +12,23 @@ class _HelpScreenState extends State<HelpScreen> {
   final List<FAQItem> _faqItems = [
     FAQItem(
       question: 'How do I create a new event?',
-      answer: 'You can create events in several ways:\n\n1. Use the AI chat: Simply tell Kaelix "Schedule a meeting tomorrow at 2pm"\n2. Use the + button in the Agenda view\n3. Ask the AI assistant in natural language\n\nKaelix will understand your request and help you create the event with all the necessary details.',
+      answer: 'You can create events in several ways:\n\n1. Use the AI chat: Simply tell Solakai "Schedule a meeting tomorrow at 2pm"\n2. Use the + button in the Agenda view\n3. Ask the AI assistant in natural language\n\nSolakai will understand your request and help you create the event with all the necessary details.',
     ),
     FAQItem(
       question: 'How does the AI scheduling work?',
-      answer: 'Kaelix uses advanced AI to understand your scheduling needs:\n\n• Natural language processing to understand your requests\n• Smart conflict detection and resolution\n• Automatic time zone handling\n• Intelligent suggestions based on your patterns\n• Optimization recommendations for better productivity',
+      answer: 'Solakai uses advanced AI to understand your scheduling needs:\n\n• Natural language processing to understand your requests\n• Smart conflict detection and resolution\n• Automatic time zone handling\n• Intelligent suggestions based on your patterns\n• Optimization recommendations for better productivity',
     ),
     FAQItem(
       question: 'Can I sync with other calendar apps?',
-      answer: 'Currently, Kaelix works as a standalone calendar application. We are working on integrations with popular calendar services like Google Calendar, Outlook, and Apple Calendar. These features will be available in future updates.',
+      answer: 'Currently, Solakai works as a standalone calendar application. We are working on integrations with popular calendar services like Google Calendar, Outlook, and Apple Calendar. These features will be available in future updates.',
     ),
     FAQItem(
       question: 'How do I optimize my schedule?',
-      answer: 'Use the Forge feature to optimize your schedule:\n\n1. Go to the Forge tab\n2. Select "Optimize" to see AI suggestions\n3. Review and accept recommendations\n4. Use the AI Assistant for personalized advice\n\nKaelix analyzes your patterns and suggests improvements for better productivity.',
+      answer: 'Use the Forge feature to optimize your schedule:\n\n1. Go to the Forge tab\n2. Select "Optimize" to see AI suggestions\n3. Review and accept recommendations\n4. Use the AI Assistant for personalized advice\n\nSolakai analyzes your patterns and suggests improvements for better productivity.',
     ),
     FAQItem(
       question: 'What are focus time blocks?',
-      answer: 'Focus time blocks are dedicated periods for deep work without interruptions. Kaelix can:\n\n• Automatically suggest optimal focus times\n• Block distractions during focus periods\n• Analyze your most productive hours\n• Help you maintain work-life balance',
+      answer: 'Focus time blocks are dedicated periods for deep work without interruptions. Solakai can:\n\n• Automatically suggest optimal focus times\n• Block distractions during focus periods\n• Analyze your most productive hours\n• Help you maintain work-life balance',
     ),
     FAQItem(
       question: 'How do I use voice commands?',
@@ -40,7 +40,7 @@ class _HelpScreenState extends State<HelpScreen> {
     ),
     FAQItem(
       question: 'How do I delete my account?',
-      answer: 'To delete your account:\n\n1. Go to Settings\n2. Contact our support team at support@kaelix.app\n3. Request account deletion\n4. We\'ll process your request within 48 hours\n\nNote: This action is irreversible and will permanently delete all your data.',
+      answer: 'To delete your account:\n\n1. Go to Settings\n2. Contact our support team at support@Solakai.app\n3. Request account deletion\n4. We\'ll process your request within 48 hours\n\nNote: This action is irreversible and will permanently delete all your data.',
     ),
   ];
 
@@ -217,7 +217,7 @@ class _HelpScreenState extends State<HelpScreen> {
         _buildStepItem(
           step: '1',
           title: 'Explore the Interface',
-          description: 'Familiarize yourself with the four main tabs: Agenda, Forge, Kaelix (AI), and Settings.',
+          description: 'Familiarize yourself with the four main tabs: Agenda, Forge, Solakai (AI), and Settings.',
         ),
         _buildStepItem(
           step: '2',
@@ -351,7 +351,7 @@ class _HelpScreenState extends State<HelpScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Our support team is here to help you get the most out of Kaelix.',
+            'Our support team is here to help you get the most out of Solakai.',
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -364,7 +364,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 child: _buildContactMethod(
                   icon: Icons.email,
                   title: 'Email Support',
-                  value: 'support@kaelix.app',
+                  value: 'support@Solakai.app',
                 ),
               ),
               const SizedBox(width: 16),
@@ -452,7 +452,7 @@ class _HelpScreenState extends State<HelpScreen> {
           style: TextStyle(color: AppTheme.textPrimary),
         ),
         content: const Text(
-          'Video tutorials are coming soon! We\'re creating comprehensive guides to help you master Kaelix.\n\nIn the meantime, explore the app and don\'t hesitate to contact support if you need help.',
+          'Video tutorials are coming soon! We\'re creating comprehensive guides to help you master Solakai.\n\nIn the meantime, explore the app and don\'t hesitate to contact support if you need help.',
           style: TextStyle(color: AppTheme.textSecondary),
         ),
         actions: [

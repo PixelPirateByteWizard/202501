@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'Kaelix',
+                      'Solakai',
                       style: TextStyle(
                         color: AppTheme.textPrimary,
                         fontSize: 32,
@@ -64,7 +64,7 @@ class AboutScreen extends StatelessWidget {
               // Mission Section
               _buildSection(
                 title: 'Our Mission',
-                content: 'Kaelix is designed to revolutionize how you manage your time and schedule. We believe that everyone deserves an intelligent assistant that understands their unique needs and helps them achieve optimal productivity.',
+                content: 'Solakai is designed to revolutionize how you manage your time and schedule. We believe that everyone deserves an intelligent assistant that understands their unique needs and helps them achieve optimal productivity.',
               ),
               const SizedBox(height: 24),
               
@@ -100,7 +100,7 @@ class AboutScreen extends StatelessWidget {
               // Team Section
               _buildSection(
                 title: 'Our Team',
-                content: 'Kaelix is built by a passionate team of developers, designers, and AI specialists who are committed to creating the most intuitive and powerful calendar experience possible.',
+                content: 'Solakai is built by a passionate team of developers, designers, and AI specialists who are committed to creating the most intuitive and powerful calendar experience possible.',
               ),
               const SizedBox(height: 24),
               
@@ -119,17 +119,17 @@ class AboutScreen extends StatelessWidget {
                   _buildContactItem(
                     icon: Icons.email,
                     title: 'Email',
-                    value: 'hello@kaelix.app',
+                    value: 'hello@Solakai.app',
                   ),
                   _buildContactItem(
                     icon: Icons.language,
                     title: 'Website',
-                    value: 'www.kaelix.app',
+                    value: 'www.Solakai.app',
                   ),
                   _buildContactItem(
                     icon: Icons.support_agent,
                     title: 'Support',
-                    value: 'support@kaelix.app',
+                    value: 'support@Solakai.app',
                   ),
                 ],
               ),

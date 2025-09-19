@@ -42,19 +42,19 @@ class TermsScreen extends StatelessWidget {
               _buildSection(
                 title: '1. Introduction',
                 content:
-                    'Welcome to Kaelix! These Terms of Service ("Terms") govern your use of the Kaelix mobile application and related services (collectively, the "Service") operated by Kaelix Inc. ("we," "us," or "our").\n\nBy accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of these terms, then you may not access the Service.',
+                    'Welcome to Solakai! These Terms of Service ("Terms") govern your use of the Solakai mobile application and related services (collectively, the "Service") operated by Solakai Inc. ("we," "us," or "our").\n\nBy accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of these terms, then you may not access the Service.',
               ),
 
               _buildSection(
                 title: '2. Acceptance of Terms',
                 content:
-                    'By creating an account or using Kaelix, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms apply to all visitors, users, and others who access or use the Service.',
+                    'By creating an account or using Solakai, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. These Terms apply to all visitors, users, and others who access or use the Service.',
               ),
 
               _buildSection(
                 title: '3. Description of Service',
                 content:
-                    'Kaelix is an AI-powered calendar and scheduling assistant that helps users manage their time more effectively. Our Service includes:\n\n• Intelligent calendar management\n• AI-powered scheduling suggestions\n• Productivity analytics and insights\n• Natural language event creation\n• Schedule optimization recommendations',
+                    'Solakai is an AI-powered calendar and scheduling assistant that helps users manage their time more effectively. Our Service includes:\n\n• Intelligent calendar management\n• AI-powered scheduling suggestions\n• Productivity analytics and insights\n• Natural language event creation\n• Schedule optimization recommendations',
               ),
 
               _buildSection(
@@ -72,25 +72,25 @@ class TermsScreen extends StatelessWidget {
               _buildSection(
                 title: '6. Privacy and Data Protection',
                 content:
-                    'Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your information when you use our Service. By using Kaelix, you consent to the collection and use of information in accordance with our Privacy Policy.',
+                    'Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your information when you use our Service. By using Solakai, you consent to the collection and use of information in accordance with our Privacy Policy.',
               ),
 
               _buildSection(
                 title: '7. Intellectual Property Rights',
                 content:
-                    'The Service and its original content, features, and functionality are and will remain the exclusive property of Kaelix Inc. and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks may not be used without our prior written consent.',
+                    'The Service and its original content, features, and functionality are and will remain the exclusive property of Solakai Inc. and its licensors. The Service is protected by copyright, trademark, and other laws. Our trademarks may not be used without our prior written consent.',
               ),
 
               _buildSection(
                 title: '8. AI and Machine Learning',
                 content:
-                    'Kaelix uses artificial intelligence and machine learning technologies to provide personalized recommendations and insights. While we strive for accuracy, AI-generated suggestions are not guaranteed to be perfect and should be reviewed before implementation.',
+                    'Solakai uses artificial intelligence and machine learning technologies to provide personalized recommendations and insights. While we strive for accuracy, AI-generated suggestions are not guaranteed to be perfect and should be reviewed before implementation.',
               ),
 
               _buildSection(
                 title: '9. Limitation of Liability',
                 content:
-                    'In no event shall Kaelix Inc., its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.',
+                    'In no event shall Solakai Inc., its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.',
               ),
 
               _buildSection(
@@ -114,13 +114,13 @@ class TermsScreen extends StatelessWidget {
               _buildSection(
                 title: '13. Governing Law',
                 content:
-                    'These Terms shall be interpreted and governed by the laws of the jurisdiction in which Kaelix Inc. is incorporated, without regard to its conflict of law provisions. Any disputes arising from these Terms will be resolved in the appropriate courts of that jurisdiction.',
+                    'These Terms shall be interpreted and governed by the laws of the jurisdiction in which Solakai Inc. is incorporated, without regard to its conflict of law provisions. Any disputes arising from these Terms will be resolved in the appropriate courts of that jurisdiction.',
               ),
 
               _buildSection(
                 title: '14. Contact Information',
                 content:
-                    'If you have any questions about these Terms of Service, please contact us at:\n\nEmail: legal@kaelix.app\nAddress: Kaelix Inc., Legal Department\nWebsite: www.kaelix.app/legal',
+                    'If you have any questions about these Terms of Service, please contact us at:\n\nEmail: legal@Solakai.app\nAddress: Solakai Inc., Legal Department\nWebsite: www.Solakai.app/legal',
               ),
 
               const SizedBox(height: 40),
@@ -136,7 +136,7 @@ class TermsScreen extends StatelessWidget {
                 child: const Column(
                   children: [
                     Text(
-                      'Thank you for using Kaelix!',
+                      'Thank you for using Solakai!',
                       style: TextStyle(
                         color: AppTheme.primaryEnd,
                         fontSize: 16,

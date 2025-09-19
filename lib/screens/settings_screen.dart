@@ -61,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Kaelix User',
+                          'Solakai User',
                           style: TextStyle(
                             color: AppTheme.textPrimary,
                             fontSize: 18,
@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                             const SizedBox(height: 12),
                             const Text(
-                              'Kaelix',
+                              'Solakai',
                               style: TextStyle(
                                 color: AppTheme.textPrimary,
                                 fontSize: 18,
