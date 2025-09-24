@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../models/achievement.dart';
-import '../services/achievement_service.dart';
 import 'achievement_details_screen.dart';
 
 class AchievementsScreen extends StatefulWidget {
@@ -90,18 +89,35 @@ class _AchievementsScreenState extends State<AchievementsScreen> with TickerProv
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              if (_statistics != null) _buildStatisticsCard(),
-              _buildFilterTabs(),
-              _buildFilterOptions(),
-              Expanded(
-                child: _isLoading ? _buildLoadingWidget() : _buildAchievementsList(),
-              ),
-            ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_8.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                if (_statistics != null) _buildStatisticsCard(),
+                _buildFilterTabs(),
+                _buildFilterOptions(),
+                Expanded(
+                  child: _isLoading ? _buildLoadingWidget() : _buildAchievementsList(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -49,24 +49,41 @@ class _InventoryScreenState extends State<InventoryScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildTabBar(),
-              Expanded(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppTheme.primaryGold,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_6.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildTabBar(),
+                Expanded(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppTheme.primaryGold,
+                            ),
                           ),
-                        ),
-                      )
-                    : _buildTabBarView(),
-              ),
-            ],
+                        )
+                      : _buildTabBarView(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

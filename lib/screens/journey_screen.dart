@@ -55,7 +55,23 @@ class _JourneyScreenState extends State<JourneyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_3.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
         child: SafeArea(
           child: _isLoading
               ? const Center(
@@ -70,6 +86,7 @@ class _JourneyScreenState extends State<JourneyScreen> {
                 ),
         ),
       ),
+      ),
     );
   }
 
@@ -82,18 +99,18 @@ class _JourneyScreenState extends State<JourneyScreen> {
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back, color: AppTheme.primaryGold),
-          ),
-          const SizedBox(width: 16),
-          const Text(
+                  ),
+              const SizedBox(width: 16),
+              const Text(
             '征程',
             style: TextStyle(
               color: AppTheme.primaryGold,
               fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -122,7 +139,7 @@ class _JourneyScreenState extends State<JourneyScreen> {
                         : null,
                     icon: const Icon(Icons.chevron_left),
                     color: AppTheme.primaryGold,
-                  ),
+          ),
                   Text(
                     '第$_currentChapter章',
                     style: const TextStyle(
@@ -216,7 +233,7 @@ class _JourneyScreenState extends State<JourneyScreen> {
           style: TextStyle(color: AppTheme.textSecondary, fontSize: 16),
         ),
       );
-    }
+  }
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),

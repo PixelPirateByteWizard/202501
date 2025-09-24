@@ -12,6 +12,10 @@ class General {
   final int experience;
   final List<String> skills;
   final String avatar;
+  final String imagePath; // 角色图片路径
+  final String description; // 角色描述
+  final String? specialty; // 特色技能
+  final int rarity; // 稀有度 (1-5星)
   final Map<String, String?> equipment; // 装备槽位：weapon, armor, accessory
 
   General({
@@ -26,6 +30,10 @@ class General {
     required this.experience,
     required this.skills,
     required this.avatar,
+    required this.imagePath,
+    required this.description,
+    this.specialty,
+    this.rarity = 3,
     Map<String, String?>? equipment,
   }) : equipment =
            equipment ?? {'weapon': null, 'armor': null, 'accessory': null};
@@ -43,6 +51,10 @@ class General {
       'experience': experience,
       'skills': skills,
       'avatar': avatar,
+      'imagePath': imagePath,
+      'description': description,
+      'specialty': specialty,
+      'rarity': rarity,
       'equipment': equipment,
     };
   }
@@ -60,6 +72,10 @@ class General {
       experience: json['experience'],
       skills: List<String>.from(json['skills']),
       avatar: json['avatar'],
+      imagePath: json['imagePath'] ?? 'assets/role/小兵.png',
+      description: json['description'] ?? '',
+      specialty: json['specialty'],
+      rarity: json['rarity'] ?? 3,
       equipment: json['equipment'] != null
           ? Map<String, String?>.from(json['equipment'])
           : {'weapon': null, 'armor': null, 'accessory': null},
@@ -78,6 +94,10 @@ class General {
     int? experience,
     List<String>? skills,
     String? avatar,
+    String? imagePath,
+    String? description,
+    String? specialty,
+    int? rarity,
     Map<String, String?>? equipment,
   }) {
     return General(
@@ -92,6 +112,10 @@ class General {
       experience: experience ?? this.experience,
       skills: skills ?? this.skills,
       avatar: avatar ?? this.avatar,
+      imagePath: imagePath ?? this.imagePath,
+      description: description ?? this.description,
+      specialty: specialty ?? this.specialty,
+      rarity: rarity ?? this.rarity,
       equipment: equipment ?? this.equipment,
     );
   }

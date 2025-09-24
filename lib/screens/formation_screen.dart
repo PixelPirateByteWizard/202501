@@ -14,9 +14,9 @@ class FormationScreen extends StatefulWidget {
 class _FormationScreenState extends State<FormationScreen> {
   Formation? _currentFormation;
   List<General> _availableGenerals = [];
-  List<FormationType> _formationTypes = [];
+
   bool _isLoading = true;
-  bool _showFormationSelector = false;
+  int _selectedGeneralIndex = -1;
 
   @override
   void initState() {
@@ -27,12 +27,10 @@ class _FormationScreenState extends State<FormationScreen> {
   Future<void> _loadData() async {
     final formation = await GameDataService.getCurrentFormation();
     final generals = await GameDataService.getGenerals();
-    final types = GameDataService.getFormationTypes();
-    
+
     setState(() {
       _currentFormation = formation;
       _availableGenerals = generals;
-      _formationTypes = types;
       _isLoading = false;
     });
   }
@@ -41,65 +39,198 @@ class _FormationScreenState extends State<FormationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
-        child: SafeArea(
-          child: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryGold),
-                  ),
-                )
-              : Column(
-                  children: [
-                    _buildHeader(),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            _buildCurrentFormationInfo(),
-                            const SizedBox(height: 20),
-                            _buildFormationGrid(),
-                            const SizedBox(height: 20),
-                            _buildAvailableGenerals(),
-                          ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_5.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/bg/BG_7.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: SafeArea(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppTheme.primaryGold,
                         ),
                       ),
+                    )
+                  : Column(
+                      children: [
+                        _buildTopResourceBar(),
+                        Expanded(child: _buildFormationArea()),
+                        _buildBottomPanel(),
+                      ],
                     ),
-                  ],
-                ),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildTopResourceBar() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.brown.withValues(alpha: 0.9),
+            Colors.brown.shade800.withValues(alpha: 0.9),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: AppTheme.primaryGold, width: 2),
+      ),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppTheme.primaryGold,
+          // 左侧群组按钮
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.purple.shade700,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.primaryGold, width: 2),
+            ),
+            child: const Center(
+              child: Text(
+                '群',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 16),
-          const Text(
-            '阵型布局',
-            style: TextStyle(
-              color: AppTheme.primaryGold,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          const SizedBox(width: 12),
+          // 玩家名称和金币
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '白夜白',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.monetization_on,
+                      color: AppTheme.primaryGold,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        _formatNumber(254230031),
+                        style: const TextStyle(
+                          color: AppTheme.primaryGold,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          const Spacer(),
-          IconButton(
-            onPressed: _saveFormation,
-            icon: const Icon(
-              Icons.save,
-              color: AppTheme.primaryGold,
+          // 中间装饰
+          Container(
+            width: 50,
+            height: 35,
+            decoration: BoxDecoration(
+              color: Colors.brown.shade600,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // 右侧资源
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  '机敏招佳人',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.monetization_on,
+                      color: AppTheme.primaryGold,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        _formatNumber(295293),
+                        style: const TextStyle(
+                          color: AppTheme.primaryGold,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          // 右侧群组按钮
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.purple.shade700,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.primaryGold, width: 2),
+            ),
+            child: const Center(
+              child: Text(
+                '群',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ],
@@ -107,270 +238,381 @@ class _FormationScreenState extends State<FormationScreen> {
     );
   }
 
-  Widget _buildCurrentFormationInfo() {
-    if (_currentFormation == null) return const SizedBox.shrink();
-
+  Widget _buildFormationArea() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.cardDecoration,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '当前阵型：${_currentFormation!.name}',
-                style: const TextStyle(
-                  color: AppTheme.primaryGold,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showFormationSelector = true;
-                  });
-                  _showFormationTypeSelector();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryGold,
-                  foregroundColor: AppTheme.darkBlue,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                child: const Text('更换阵型'),
-              ),
-            ],
+          // 阵型网格区域
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: _buildFormationGrid(),
+            ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            _currentFormation!.description,
-            style: const TextStyle(
-              color: AppTheme.textLight,
-              fontSize: 14,
-              height: 1.4,
+          // 底部操作按钮区域
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildActionButton(
+                  Icons.arrow_back,
+                  '返回',
+                  () => Navigator.pop(context),
+                ),
+                _buildActionButton(Icons.people, '武将', () {}),
+                _buildActionButton(Icons.star, '竞技', () {}),
+                _buildActionButton(Icons.shopping_bag, '商店', () {}),
+                _buildActionButton(Icons.emoji_events, '成就', () {}),
+                _buildActionButton(Icons.group, '群组', () {}),
+                _buildActionButton(Icons.settings, '设置', () {}),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 45,
+        height: 45,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.brown.shade600, Colors.brown.shade800],
+          ),
+          shape: BoxShape.circle,
+          border: Border.all(color: AppTheme.primaryGold, width: 2),
+        ),
+        child: Icon(icon, color: AppTheme.primaryGold, size: 20),
       ),
     );
   }
 
   Widget _buildFormationGrid() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.cardDecoration,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '阵型布局',
-            style: TextStyle(
-              color: AppTheme.primaryGold,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1,
-            ),
-            itemCount: 9,
-            itemBuilder: (context, index) {
-              return _buildPositionSlot(index);
-            },
-          ),
-        ],
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+        childAspectRatio: 0.8,
       ),
+      itemCount: 9,
+      itemBuilder: (context, index) {
+        return _buildPositionSlot(index);
+      },
     );
   }
 
   Widget _buildPositionSlot(int index) {
     final generalId = _currentFormation?.positions[index];
-    final general = generalId != null 
-        ? _availableGenerals.firstWhere(
-            (g) => g.id == generalId,
-            orElse: () => _availableGenerals.first,
-          )
-        : null;
+    General? general;
+    if (generalId != null && _availableGenerals.isNotEmpty) {
+      try {
+        general = _availableGenerals.firstWhere((g) => g.id == generalId);
+      } catch (e) {
+        general = null;
+      }
+    }
 
     return GestureDetector(
       onTap: () => _onPositionTapped(index),
-      child: Container(
-        decoration: BoxDecoration(
-          color: general != null 
-              ? AppTheme.primaryGold.withOpacity(0.2)
-              : AppTheme.cardBackgroundDark.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppTheme.primaryGold.withOpacity(0.5),
-            width: 2,
+      child: Stack(
+        children: [
+          // 位置圆形底座
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: general != null
+                  ? Colors.brown.withValues(alpha: 0.3)
+                  : Colors.grey.withValues(alpha: 0.3),
+              border: Border.all(
+                color: general != null ? AppTheme.primaryGold : Colors.grey,
+                width: 2,
+              ),
+            ),
           ),
-        ),
-        child: general != null
-            ? Column(
+          // 武将角色图片
+          if (general != null)
+            Positioned.fill(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: AppTheme.goldGradient.copyWith(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        general.avatar,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkBlue,
+                  // 角色图片
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage('assets/role/${general.name}.png'),
+                          fit: BoxFit.cover,
+                          onError: (exception, stackTrace) {
+                            // 如果图片加载失败，显示默认头像
+                          },
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.3),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    general.name,
-                    style: const TextStyle(
-                      color: AppTheme.primaryGold,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                  // 等级标识
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
                     ),
-                    textAlign: TextAlign.center,
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade700,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.star, color: Colors.white, size: 12),
+                        const SizedBox(width: 2),
+                        const Text(
+                          '600级',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 4),
                 ],
-              )
-            : Column(
+              ),
+            )
+          else
+            // 空位置显示
+            Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.add,
-                    color: AppTheme.primaryGold,
-                    size: 32,
+                  Icon(
+                    Icons.add_circle_outline,
+                    color: Colors.grey.shade400,
+                    size: 30,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     _getPositionName(index),
-                    style: const TextStyle(
-                      color: AppTheme.primaryGold,
-                      fontSize: 10,
-                    ),
+                    style: TextStyle(color: Colors.grey.shade400, fontSize: 10),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
+            ),
+        ],
       ),
     );
   }
 
-  Widget _buildAvailableGenerals() {
+  Widget _buildBottomPanel() {
     final undeployedGenerals = _availableGenerals.where((general) {
       return !(_currentFormation?.positions.contains(general.id) ?? false);
     }).toList();
 
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppTheme.cardDecoration,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      height: 120,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.brown.withValues(alpha: 0.9),
+            Colors.brown.shade800.withValues(alpha: 0.9),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.primaryGold, width: 2),
+      ),
+      child: Row(
         children: [
-          const Text(
-            '可用武将',
-            style: TextStyle(
-              color: AppTheme.primaryGold,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (undeployedGenerals.isEmpty)
-            const Center(
-              child: Text(
-                '所有武将都已部署',
-                style: TextStyle(
-                  color: AppTheme.textLight,
-                  fontSize: 14,
-                ),
-              ),
-            )
-          else
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: undeployedGenerals.map((general) {
-                return GestureDetector(
-                  onTap: () => _onGeneralTapped(general),
-                  child: Container(
-                    width: 60,
-                    height: 80,
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.cardBackgroundDark.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppTheme.primaryGold.withOpacity(0.3),
-                      ),
+          // 可用武将列表
+          Expanded(
+            child: undeployedGenerals.isEmpty
+                ? const Center(
+                    child: Text(
+                      '所有武将都已部署',
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: AppTheme.goldGradient.copyWith(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              general.avatar,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.darkBlue,
-                              ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: undeployedGenerals.length,
+                    itemBuilder: (context, index) {
+                      final general = undeployedGenerals[index];
+                      final isSelected = _selectedGeneralIndex == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedGeneralIndex = isSelected ? -1 : index;
+                          });
+                        },
+                        child: Container(
+                          width: 80,
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppTheme.primaryGold.withValues(alpha: 0.3)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppTheme.primaryGold
+                                  : Colors.transparent,
+                              width: 2,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          general.name,
-                          style: const TextStyle(
-                            color: AppTheme.primaryGold,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                          child: Column(
+                            children: [
+                              // 角色图片
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        'assets/role/${general.name}.png',
+                                      ),
+                                      fit: BoxFit.cover,
+                                      onError: (exception, stackTrace) {
+                                        // 图片加载失败时的处理
+                                      },
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      // 等级标识
+                                      Positioned(
+                                        top: 4,
+                                        left: 4,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 2,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red.shade700,
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            '600',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      // 选中标识
+                                      if (isSelected)
+                                        const Positioned(
+                                          bottom: 4,
+                                          right: 4,
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                            size: 16,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // 武将名称
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 2,
+                                ),
+                                child: Text(
+                                  general.name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              }).toList(),
+          ),
+          // 保存按钮
+          Container(
+            width: 60,
+            height: 60,
+            margin: const EdgeInsets.only(left: 8),
+            child: ElevatedButton(
+              onPressed: _saveFormation,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryGold,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.zero,
+              ),
+              child: const Icon(Icons.save, size: 24),
             ),
+          ),
         ],
       ),
     );
   }
 
   String _getPositionName(int index) {
-    const positions = [
-      '左前', '中前', '右前',
-      '左中', '中军', '右中',
-      '左后', '中后', '右后',
-    ];
+    const positions = ['左前', '中前', '右前', '左中', '中军', '右中', '左后', '中后', '右后'];
     return positions[index];
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
+    }
+    return number.toString();
   }
 
   void _onPositionTapped(int index) {
     final generalId = _currentFormation?.positions[index];
+
     if (generalId != null) {
       // 移除武将
       setState(() {
@@ -378,172 +620,23 @@ class _FormationScreenState extends State<FormationScreen> {
           positions: List.from(_currentFormation!.positions)..[index] = null,
         );
       });
+    } else if (_selectedGeneralIndex >= 0) {
+      // 部署选中的武将
+      final undeployedGenerals = _availableGenerals.where((g) {
+        return !(_currentFormation?.positions.contains(g.id) ?? false);
+      }).toList();
+
+      if (_selectedGeneralIndex < undeployedGenerals.length) {
+        final selectedGeneral = undeployedGenerals[_selectedGeneralIndex];
+        setState(() {
+          _currentFormation = _currentFormation!.copyWith(
+            positions: List.from(_currentFormation!.positions)
+              ..[index] = selectedGeneral.id,
+          );
+          _selectedGeneralIndex = -1; // 清除选择
+        });
+      }
     }
-  }
-
-  void _onGeneralTapped(General general) {
-    // 显示位置选择对话框
-    _showPositionSelector(general);
-  }
-
-  void _showPositionSelector(General general) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: AppTheme.cardDecoration,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '选择${general.name}的位置',
-                style: const TextStyle(
-                  color: AppTheme.primaryGold,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 2,
-                ),
-                itemCount: 9,
-                itemBuilder: (context, index) {
-                  final isOccupied = _currentFormation?.positions[index] != null;
-                  return GestureDetector(
-                    onTap: isOccupied ? null : () {
-                      setState(() {
-                        _currentFormation = _currentFormation!.copyWith(
-                          positions: List.from(_currentFormation!.positions)..[index] = general.id,
-                        );
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isOccupied 
-                            ? Colors.grey.withOpacity(0.3)
-                            : AppTheme.primaryGold.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isOccupied 
-                              ? Colors.grey
-                              : AppTheme.primaryGold,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          _getPositionName(index),
-                          style: TextStyle(
-                            color: isOccupied 
-                                ? Colors.grey
-                                : AppTheme.primaryGold,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('取消'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showFormationTypeSelector() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: AppTheme.cardBackground,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '选择阵型',
-              style: TextStyle(
-                color: AppTheme.primaryGold,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ..._formationTypes.map((type) => GestureDetector(
-              onTap: () {
-                setState(() {
-                  _currentFormation = _currentFormation!.copyWith(
-                    id: type.id,
-                    name: type.name,
-                    description: type.description,
-                    bonuses: type.bonuses,
-                  );
-                });
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: _currentFormation?.id == type.id
-                      ? AppTheme.primaryGold.withOpacity(0.2)
-                      : AppTheme.cardBackgroundDark.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: _currentFormation?.id == type.id
-                        ? AppTheme.primaryGold
-                        : AppTheme.primaryGold.withOpacity(0.3),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      type.name,
-                      style: const TextStyle(
-                        color: AppTheme.primaryGold,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      type.description,
-                      style: const TextStyle(
-                        color: AppTheme.textLight,
-                        fontSize: 14,
-                        height: 1.4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-          ],
-        ),
-      ),
-    );
   }
 
   Future<void> _saveFormation() async {

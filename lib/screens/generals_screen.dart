@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../models/general.dart';
 import '../models/item.dart';
 import '../services/game_data_service.dart';
+import 'general_details_screen.dart';
 
 class GeneralsScreen extends StatefulWidget {
   const GeneralsScreen({super.key});
@@ -11,24 +12,75 @@ class GeneralsScreen extends StatefulWidget {
   State<GeneralsScreen> createState() => _GeneralsScreenState();
 }
 
-class _GeneralsScreenState extends State<GeneralsScreen> {
+class _GeneralsScreenState extends State<GeneralsScreen>
+    with TickerProviderStateMixin {
   List<General> _generals = [];
   List<Item> _items = [];
   bool _isLoading = true;
+  late AnimationController _animationController;
+  String _sortBy =
+      'level'; // level, attack, defense, intelligence, speed, rarity
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
     final generals = await GameDataService.getGenerals();
     final items = await GameDataService.getInventory();
     setState(() {
-      _generals = generals;
+      _generals = _sortGenerals(generals);
       _items = items;
       _isLoading = false;
+    });
+  }
+
+  List<General> _sortGenerals(List<General> generals) {
+    switch (_sortBy) {
+      case 'attack':
+        return generals..sort(
+          (a, b) =>
+              b.getTotalAttack(_items).compareTo(a.getTotalAttack(_items)),
+        );
+      case 'defense':
+        return generals..sort(
+          (a, b) =>
+              b.getTotalDefense(_items).compareTo(a.getTotalDefense(_items)),
+        );
+      case 'intelligence':
+        return generals..sort(
+          (a, b) => b
+              .getTotalIntelligence(_items)
+              .compareTo(a.getTotalIntelligence(_items)),
+        );
+      case 'speed':
+        return generals..sort(
+          (a, b) => b.getTotalSpeed(_items).compareTo(a.getTotalSpeed(_items)),
+        );
+      case 'rarity':
+        return generals..sort((a, b) => b.rarity.compareTo(a.rarity));
+      case 'level':
+      default:
+        return generals..sort((a, b) => b.level.compareTo(a.level));
+    }
+  }
+
+  void _changeSortOrder(String sortBy) {
+    setState(() {
+      _sortBy = sortBy;
+      _generals = _sortGenerals(_generals);
     });
   }
 
@@ -36,21 +88,41 @@ class _GeneralsScreenState extends State<GeneralsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryGold),
-                        ),
-                      )
-                    : _buildGeneralsList(),
-              ),
-            ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_4.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.3),
+                Colors.black.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                _buildSortBar(),
+                Expanded(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppTheme.primaryGold,
+                            ),
+                          ),
+                        )
+                      : _buildGeneralsList(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -65,528 +137,361 @@ class _GeneralsScreenState extends State<GeneralsScreen> {
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppTheme.primaryGold,
-            ),
+            icon: const Icon(Icons.arrow_back, color: AppTheme.primaryGold),
           ),
           const SizedBox(width: 16),
-          const Text(
-            '武将',
-            style: TextStyle(
-              color: AppTheme.primaryGold,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '武将',
+                  style: TextStyle(
+                    color: AppTheme.primaryGold,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '共 ${_generals.length} 位武将',
+                  style: const TextStyle(
+                    color: AppTheme.textLight,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSortBar() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            const Text(
+              '排序：',
+              style: TextStyle(color: AppTheme.textLight, fontSize: 14),
+            ),
+            const SizedBox(width: 8),
+            _buildSortButton('等级', 'level'),
+            _buildSortButton('攻击', 'attack'),
+            _buildSortButton('防御', 'defense'),
+            _buildSortButton('智力', 'intelligence'),
+            _buildSortButton('速度', 'speed'),
+            _buildSortButton('稀有度', 'rarity'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSortButton(String title, String value) {
+    final isSelected = _sortBy == value;
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: GestureDetector(
+        onTap: () => _changeSortOrder(value),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppTheme.primaryGold.withValues(alpha: 0.2)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: isSelected
+                  ? AppTheme.primaryGold
+                  : AppTheme.textLight.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: isSelected ? AppTheme.primaryGold : AppTheme.textLight,
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildGeneralsList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(20),
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
       itemCount: _generals.length,
       itemBuilder: (context, index) {
         final general = _generals[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: _buildGeneralCard(general),
+        return AnimatedContainer(
+          duration: Duration(milliseconds: 200 + (index * 50)),
+          curve: Curves.easeOutBack,
+          child: _buildGeneralCard(general, index),
         );
       },
     );
   }
 
-  Widget _buildGeneralCard(General general) {
+  Widget _buildGeneralCard(General general, int index) {
     return GestureDetector(
       onTap: () => _showGeneralDetails(general),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: AppTheme.cardDecoration,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                // Avatar
-                Container(
+      child: Hero(
+        tag: 'general_${general.id}',
+        child: Container(
+          decoration: AppTheme.cardDecoration.copyWith(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppTheme.cardBackgroundDark.withValues(alpha: 0.9),
+                AppTheme.cardBackgroundDark.withValues(alpha: 0.7),
+              ],
+            ),
+          ),
+          child: Stack(
+            children: [
+              // 背景装饰
+              Positioned(
+                top: -20,
+                right: -20,
+                child: Container(
                   width: 60,
                   height: 60,
-                  decoration: AppTheme.goldGradient.copyWith(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      general.avatar,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.darkBlue,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                
-                // General Info
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        general.name,
-                        style: const TextStyle(
-                          color: AppTheme.primaryGold,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        general.position,
-                        style: const TextStyle(
-                          color: AppTheme.textLight,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                
-                // Level
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryGold.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
+                    shape: BoxShape.circle,
+                    color: AppTheme.primaryGold.withValues(alpha: 0.1),
                   ),
-                  child: Text(
-                    'Lv.${general.level}',
-                    style: const TextStyle(
-                      color: AppTheme.primaryGold,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                ),
+              ),
+              // 主要内容
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    // 角色图片和稀有度
+                    Expanded(
+                      flex: 3,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // 角色图片
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: _getRarityColor(general.rarity),
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: _getRarityColor(
+                                    general.rarity,
+                                  ).withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                general.imagePath,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: AppTheme.cardBackgroundDark,
+                                    child: Center(
+                                      child: Text(
+                                        general.avatar,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppTheme.primaryGold,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          // 稀有度星级
+                          Positioned(
+                            top: 0,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: List.generate(
+                                general.rarity,
+                                (index) => Icon(
+                                  Icons.star,
+                                  color: AppTheme.primaryGold,
+                                  size: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    // 武将信息
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Text(
+                            general.name,
+                            style: const TextStyle(
+                              color: AppTheme.primaryGold,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            general.position,
+                            style: const TextStyle(
+                              color: AppTheme.textLight,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryGold.withValues(
+                                alpha: 0.2,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'Lv.${general.level}',
+                              style: const TextStyle(
+                                color: AppTheme.primaryGold,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // 属性预览
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildMiniStatItem(
+                            '攻',
+                            general.getTotalAttack(_items),
+                          ),
+                          _buildMiniStatItem(
+                            '防',
+                            general.getTotalDefense(_items),
+                          ),
+                          _buildMiniStatItem(
+                            '智',
+                            general.getTotalIntelligence(_items),
+                          ),
+                          _buildMiniStatItem(
+                            '速',
+                            general.getTotalSpeed(_items),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            
-            // Stats (显示总属性)
-            Row(
-              children: [
-                Expanded(child: _buildStatItem('攻击', general.getTotalAttack(_items), general.attack)),
-                Expanded(child: _buildStatItem('防御', general.getTotalDefense(_items), general.defense)),
-                Expanded(child: _buildStatItem('智力', general.getTotalIntelligence(_items), general.intelligence)),
-                Expanded(child: _buildStatItem('速度', general.getTotalSpeed(_items), general.speed)),
-              ],
-            ),
-            const SizedBox(height: 12),
-            
-            // Skills
-            Wrap(
-              spacing: 8,
-              children: general.skills.map((skill) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppTheme.cardBackgroundDark.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  skill,
-                  style: const TextStyle(
-                    color: AppTheme.primaryGold,
-                    fontSize: 12,
-                  ),
-                ),
-              )).toList(),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildStatItem(String label, int totalValue, int baseValue) {
-    final hasBonus = totalValue > baseValue;
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackgroundDark.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppTheme.textLight,
-              fontSize: 12,
-            ),
+  Color _getRarityColor(int rarity) {
+    switch (rarity) {
+      case 5:
+        return Colors.red;
+      case 4:
+        return Colors.purple;
+      case 3:
+        return Colors.blue;
+      case 2:
+        return Colors.green;
+      case 1:
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Widget _buildMiniStatItem(String label, int value) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(color: AppTheme.textLight, fontSize: 10),
+        ),
+        Text(
+          value.toString(),
+          style: const TextStyle(
+            color: AppTheme.primaryGold,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                totalValue.toString(),
-                style: TextStyle(
-                  color: hasBonus ? Colors.green : AppTheme.primaryGold,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (hasBonus) ...[
-                const SizedBox(width: 2),
-                Text(
-                  '(+${totalValue - baseValue})',
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 10,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   void _showGeneralDetails(General general) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: AppTheme.cardDecoration,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: AppTheme.goldGradient.copyWith(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        general.avatar,
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkBlue,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          general.name,
-                          style: const TextStyle(
-                            color: AppTheme.primaryGold,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          general.position,
-                          style: const TextStyle(
-                            color: AppTheme.textLight,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              
-              // Equipment Slots
-              const Text(
-                '装备:',
-                style: TextStyle(
-                  color: AppTheme.primaryGold,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildEquipmentSlot(general, 'weapon', '武器', Icons.sports_martial_arts),
-                  _buildEquipmentSlot(general, 'armor', '防具', Icons.shield),
-                  _buildEquipmentSlot(general, 'accessory', '饰品', Icons.diamond),
-                ],
-              ),
-              const SizedBox(height: 16),
-              
-              // Detailed Stats
-              GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                childAspectRatio: 2.5,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                children: [
-                  _buildDetailedStatItem('攻击力', general.getTotalAttack(_items), general.attack),
-                  _buildDetailedStatItem('防御力', general.getTotalDefense(_items), general.defense),
-                  _buildDetailedStatItem('智力', general.getTotalIntelligence(_items), general.intelligence),
-                  _buildDetailedStatItem('速度', general.getTotalSpeed(_items), general.speed),
-                ],
-              ),
-              const SizedBox(height: 16),
-              
-              // Skills
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '技能:',
-                  style: TextStyle(
-                    color: AppTheme.primaryGold,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: general.skills.map((skill) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryGold.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    skill,
-                    style: const TextStyle(
-                      color: AppTheme.primaryGold,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )).toList(),
-              ),
-              const SizedBox(height: 20),
-              
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('关闭'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            GeneralDetailsScreen(general: general, items: _items),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutCubic;
 
-  Widget _buildDetailedStatItem(String label, int totalValue, int baseValue) {
-    final hasBonus = totalValue > baseValue;
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackgroundDark.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppTheme.textLight,
-              fontSize: 12,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                totalValue.toString(),
-                style: TextStyle(
-                  color: hasBonus ? Colors.green : AppTheme.primaryGold,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (hasBonus)
-                Text(
-                  '($baseValue+${totalValue - baseValue})',
-                  style: const TextStyle(
-                    color: AppTheme.textLight,
-                    fontSize: 10,
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
 
-  Widget _buildEquipmentSlot(General general, String slot, String slotName, IconData icon) {
-    final itemId = general.equipment[slot];
-    final item = itemId != null 
-        ? _items.firstWhere((i) => i.id == itemId, orElse: () => _items.first)
-        : null;
-
-    return GestureDetector(
-      onTap: () => _showEquipmentOptions(general, slot, slotName),
-      child: Container(
-        width: 60,
-        height: 80,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: item != null 
-              ? AppTheme.primaryGold.withOpacity(0.2)
-              : AppTheme.cardBackgroundDark.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: AppTheme.primaryGold.withOpacity(0.5),
-          ),
-        ),
-        child: Column(
-          children: [
-            if (item != null)
-              Text(
-                item.icon,
-                style: const TextStyle(fontSize: 20),
-              )
-            else
-              Icon(
-                icon,
-                color: AppTheme.primaryGold.withOpacity(0.5),
-                size: 20,
-              ),
-            const SizedBox(height: 4),
-            Text(
-              slotName,
-              style: const TextStyle(
-                color: AppTheme.primaryGold,
-                fontSize: 10,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            if (item != null)
-              Text(
-                item.name,
-                style: const TextStyle(
-                  color: AppTheme.textLight,
-                  fontSize: 8,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showEquipmentOptions(General general, String slot, String slotName) {
-    final currentItem = general.equipment[slot];
-    final availableItems = _items.where((item) {
-      switch (slot) {
-        case 'weapon':
-          return item.type == ItemType.weapon;
-        case 'armor':
-          return item.type == ItemType.armor;
-        case 'accessory':
-          return item.type == ItemType.accessory;
-        default:
-          return false;
-      }
-    }).toList();
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: AppTheme.cardBackground,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '选择$slotName',
-              style: const TextStyle(
-                color: AppTheme.primaryGold,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            
-            // 卸下装备选项
-            if (currentItem != null)
-              ListTile(
-                leading: const Icon(Icons.remove_circle, color: Colors.red),
-                title: const Text('卸下装备', style: TextStyle(color: AppTheme.textLight)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await GameDataService.unequipItemFromGeneral(general.id, slot);
-                  _loadData();
-                },
-              ),
-            
-            // 可用装备列表
-            if (availableItems.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  '没有可用的装备',
-                  style: TextStyle(color: AppTheme.textLight),
-                ),
-              )
-            else
-              ...availableItems.map((item) => ListTile(
-                leading: Text(item.icon, style: const TextStyle(fontSize: 24)),
-                title: Text(item.name, style: const TextStyle(color: AppTheme.primaryGold)),
-                subtitle: Text(
-                  item.description,
-                  style: const TextStyle(color: AppTheme.textLight, fontSize: 12),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Text(
-                  'x${item.quantity}',
-                  style: const TextStyle(color: AppTheme.primaryGold),
-                ),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final success = await GameDataService.equipItemToGeneral(general.id, item.id, slot);
-                  if (success) {
-                    _loadData();
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${item.name} 已装备给 ${general.name}'),
-                          backgroundColor: AppTheme.primaryGold,
-                        ),
-                      );
-                    }
-                  }
-                },
-              )),
-          ],
-        ),
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 300),
       ),
     );
   }

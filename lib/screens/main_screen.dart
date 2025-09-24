@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../models/game_progress.dart';
 import '../services/game_data_service.dart';
+import '../services/daily_checkin_service.dart';
+import '../models/daily_checkin.dart';
 import 'generals_screen.dart';
 import 'journey_screen.dart';
 import 'inventory_screen.dart';
@@ -9,6 +11,7 @@ import 'settings_screen.dart';
 import 'formation_screen.dart';
 import 'shop_screen.dart';
 import 'achievements_screen.dart';
+import 'daily_checkin_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -19,11 +22,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   GameProgress? _gameProgress;
+  DailyCheckinData? _checkinData;
 
   @override
   void initState() {
     super.initState();
     _loadGameProgress();
+    _loadCheckinData();
   }
 
   Future<void> _loadGameProgress() async {
@@ -33,30 +38,56 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  Future<void> _loadCheckinData() async {
+    final checkinData = await DailyCheckinService.getCheckinData();
+    setState(() {
+      _checkinData = checkinData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppTheme.gradientBackground,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      if (_gameProgress != null) _buildProgressCard(),
-                      const SizedBox(height: 20),
-                      _buildGameMenu(),
-                      const SizedBox(height: 20),
-                    ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg/BG_2.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withValues(alpha: 0.2),
+                Colors.black.withValues(alpha: 0.6),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        if (_checkinData != null) _buildCheckinCard(),
+                        const SizedBox(height: 16),
+                        if (_gameProgress != null) _buildProgressCard(),
+                        const SizedBox(height: 20),
+                        _buildGameMenu(),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -93,107 +124,202 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildProgressCard() {
-    return Column(
-      children: [
-        // 宣传语
-       
-
-        // 当前进度
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: AppTheme.cardDecoration,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Row(
+  Widget _buildCheckinCard() {
+    final canCheckin = !(_checkinData?.hasCheckedToday ?? true);
+    
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DailyCheckinScreen()),
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.primaryGold.withValues(alpha: 0.3),
+              AppTheme.lightGold.withValues(alpha: 0.2),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.primaryGold.withValues(alpha: 0.6),
+            width: 2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.primaryGold.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // 角色头像
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppTheme.primaryGold,
+                  width: 2,
+                ),
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/role/貂蝉.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            // 文字信息
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.book, color: AppTheme.primaryGold, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    '当前进度',
+                  const Text(
+                    '每日签到',
                     style: TextStyle(
                       color: AppTheme.primaryGold,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  Text(
+                    canCheckin ? '今日未签到，点击领取奖励' : '今日已签到',
+                    style: const TextStyle(
+                      color: AppTheme.textLight,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
+            ),
+            // 状态指示器
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: canCheckin ? AppTheme.primaryGold : Colors.grey,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                canCheckin ? '可签到' : '已完成',
+                style: TextStyle(
+                  color: canCheckin ? AppTheme.darkBlue : AppTheme.textLight,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: AppTheme.cardDecoration,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.book, color: AppTheme.primaryGold, size: 20),
+              SizedBox(width: 8),
               Text(
-                '第${_gameProgress!.currentChapter}章·第${_gameProgress!.currentStage}节',
-                style: const TextStyle(color: AppTheme.textLight, fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryGold.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.person,
-                          color: AppTheme.primaryGold,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '武将 ${_gameProgress!.unlockedGenerals.length}人',
-                          style: const TextStyle(
-                            color: AppTheme.primaryGold,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryGold.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          color: AppTheme.primaryGold,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '等级 ${_gameProgress!.playerLevel}',
-                          style: const TextStyle(
-                            color: AppTheme.primaryGold,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                '当前进度',
+                style: TextStyle(
+                  color: AppTheme.primaryGold,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          Text(
+            '第${_gameProgress!.currentChapter}章·第${_gameProgress!.currentStage}节',
+            style: const TextStyle(color: AppTheme.textLight, fontSize: 16),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryGold.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.person,
+                      color: AppTheme.primaryGold,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '武将 ${_gameProgress!.unlockedGenerals.length}人',
+                      style: const TextStyle(
+                        color: AppTheme.primaryGold,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryGold.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: AppTheme.primaryGold,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '等级 ${_gameProgress!.playerLevel}',
+                      style: const TextStyle(
+                        color: AppTheme.primaryGold,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

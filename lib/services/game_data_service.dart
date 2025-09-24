@@ -20,24 +20,26 @@ class GameDataService {
   static Future<GameProgress> getGameProgress() async {
     final prefs = await SharedPreferences.getInstance();
     final progressJson = prefs.getString(_progressKey);
-    
+
     if (progressJson != null) {
       return GameProgress.fromJson(jsonDecode(progressJson));
     }
-    
+
     return GameProgress.defaultProgress;
   }
 
   // 保存游戏进度
   static Future<void> saveGameProgress(GameProgress progress) async {
     await saveGameProgressWithoutAchievementCheck(progress);
-    
+
     // 触发成就检查
     await AchievementService.checkAndUpdateAchievements();
   }
 
   // 内部保存方法，不触发成就检查（避免无限循环）
-  static Future<void> saveGameProgressWithoutAchievementCheck(GameProgress progress) async {
+  static Future<void> saveGameProgressWithoutAchievementCheck(
+    GameProgress progress,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_progressKey, jsonEncode(progress.toJson()));
   }
@@ -46,12 +48,12 @@ class GameDataService {
   static Future<List<General>> getGenerals() async {
     final prefs = await SharedPreferences.getInstance();
     final generalsJson = prefs.getString(_generalsKey);
-    
+
     if (generalsJson != null) {
       final List<dynamic> generalsList = jsonDecode(generalsJson);
       return generalsList.map((json) => General.fromJson(json)).toList();
     }
-    
+
     return _getDefaultGenerals();
   }
 
@@ -66,12 +68,12 @@ class GameDataService {
   static Future<List<Item>> getInventory() async {
     final prefs = await SharedPreferences.getInstance();
     final inventoryJson = prefs.getString(_inventoryKey);
-    
+
     if (inventoryJson != null) {
       final List<dynamic> itemsList = jsonDecode(inventoryJson);
       return itemsList.map((json) => Item.fromJson(json)).toList();
     }
-    
+
     return _getDefaultItems();
   }
 
@@ -86,7 +88,7 @@ class GameDataService {
   static Future<List<Stage>> getStages() async {
     final progress = await getGameProgress();
     final defaultStages = _getDefaultStages();
-    
+
     // 根据游戏进度更新关卡状态
     return defaultStages.map((stage) {
       if (progress.completedStages.contains(stage.id)) {
@@ -103,11 +105,11 @@ class GameDataService {
   static bool _isStageUnlocked(Stage stage, List<String> completedStages) {
     // 第一个关卡默认解锁
     if (stage.id == 'stage_1_1') return true;
-    
+
     // 获取前一个关卡ID
     final previousStageId = _getPreviousStageId(stage.id);
     if (previousStageId == null) return false;
-    
+
     // 检查前一个关卡是否已完成
     return completedStages.contains(previousStageId);
   }
@@ -116,10 +118,10 @@ class GameDataService {
   static String? _getPreviousStageId(String stageId) {
     final parts = stageId.split('_');
     if (parts.length != 3) return null;
-    
+
     final chapter = int.parse(parts[1]);
     final stage = int.parse(parts[2]);
-    
+
     if (stage > 1) {
       // 同章节的前一个关卡
       return 'stage_${chapter}_${stage - 1}';
@@ -130,19 +132,21 @@ class GameDataService {
         return previousChapterStages.last.id;
       }
     }
-    
+
     return null;
   }
 
   // 获取指定章节的所有关卡
   static List<Stage> _getStagesInChapter(int chapter) {
-    return _getDefaultStages().where((stage) => stage.chapter == chapter).toList();
+    return _getDefaultStages()
+        .where((stage) => stage.chapter == chapter)
+        .toList();
   }
 
   // 完成关卡并解锁下一关
   static Future<void> completeStage(String stageId) async {
     final progress = await getGameProgress();
-    
+
     if (!progress.completedStages.contains(stageId)) {
       final updatedProgress = progress.copyWith(
         completedStages: [...progress.completedStages, stageId],
@@ -155,11 +159,11 @@ class GameDataService {
   static Future<Formation> getCurrentFormation() async {
     final prefs = await SharedPreferences.getInstance();
     final formationJson = prefs.getString(_formationKey);
-    
+
     if (formationJson != null) {
       return Formation.fromJson(jsonDecode(formationJson));
     }
-    
+
     return _getDefaultFormation();
   }
 
@@ -175,84 +179,96 @@ class GameDataService {
   }
 
   // 装备物品给武将
-  static Future<bool> equipItemToGeneral(String generalId, String itemId, String slot) async {
+  static Future<bool> equipItemToGeneral(
+    String generalId,
+    String itemId,
+    String slot,
+  ) async {
     final generals = await getGenerals();
     final items = await getInventory();
-    
+
     final generalIndex = generals.indexWhere((g) => g.id == generalId);
-    final item = items.firstWhere((i) => i.id == itemId, orElse: () => items.first);
-    
+    final item = items.firstWhere(
+      (i) => i.id == itemId,
+      orElse: () => items.first,
+    );
+
     if (generalIndex == -1) return false;
-    
+
     // 检查物品类型是否匹配装备槽
     if (!_isItemTypeMatchSlot(item.type, slot)) return false;
-    
+
     final general = generals[generalIndex];
-    
+
     // 如果该槽位已有装备，先卸下
     final currentEquipment = general.equipment[slot];
     if (currentEquipment != null) {
       await _unequipItem(currentEquipment);
     }
-    
+
     // 装备新物品
     final updatedEquipment = Map<String, String?>.from(general.equipment);
     updatedEquipment[slot] = itemId;
-    
+
     generals[generalIndex] = general.copyWith(equipment: updatedEquipment);
-    
+
     // 从背包中移除物品（如果不是消耗品）
     if (item.type != ItemType.consumable) {
       final itemIndex = items.indexWhere((i) => i.id == itemId);
       if (itemIndex != -1) {
         if (items[itemIndex].quantity > 1) {
-          items[itemIndex] = items[itemIndex].copyWith(quantity: items[itemIndex].quantity - 1);
+          items[itemIndex] = items[itemIndex].copyWith(
+            quantity: items[itemIndex].quantity - 1,
+          );
         } else {
           items.removeAt(itemIndex);
         }
       }
     }
-    
+
     await saveGenerals(generals);
     await saveInventory(items);
-    
+
     return true;
   }
 
   // 卸下武将装备
-  static Future<bool> unequipItemFromGeneral(String generalId, String slot) async {
+  static Future<bool> unequipItemFromGeneral(
+    String generalId,
+    String slot,
+  ) async {
     final generals = await getGenerals();
     final items = await getInventory();
-    
+
     final generalIndex = generals.indexWhere((g) => g.id == generalId);
     if (generalIndex == -1) return false;
-    
+
     final general = generals[generalIndex];
     final itemId = general.equipment[slot];
     if (itemId == null) return false;
-    
+
     // 将装备放回背包
     final item = _getItemById(itemId);
     if (item != null) {
       final existingItemIndex = items.indexWhere((i) => i.id == itemId);
       if (existingItemIndex != -1) {
         items[existingItemIndex] = items[existingItemIndex].copyWith(
-          quantity: items[existingItemIndex].quantity + 1
+          quantity: items[existingItemIndex].quantity + 1,
         );
       } else {
         items.add(item.copyWith(quantity: 1));
       }
     }
-    
+
     // 从武将身上移除装备
     final updatedEquipment = Map<String, String?>.from(general.equipment);
     updatedEquipment[slot] = null;
-    
+
     generals[generalIndex] = general.copyWith(equipment: updatedEquipment);
-    
+
     await saveGenerals(generals);
     await saveInventory(items);
-    
+
     return true;
   }
 
@@ -278,7 +294,7 @@ class GameDataService {
       final existingItemIndex = items.indexWhere((i) => i.id == itemId);
       if (existingItemIndex != -1) {
         items[existingItemIndex] = items[existingItemIndex].copyWith(
-          quantity: items[existingItemIndex].quantity + 1
+          quantity: items[existingItemIndex].quantity + 1,
         );
       } else {
         items.add(item.copyWith(quantity: 1));
@@ -306,11 +322,11 @@ class GameDataService {
   static Future<Map<String, int>> getShopStock() async {
     final prefs = await SharedPreferences.getInstance();
     final stockJson = prefs.getString(_shopStockKey);
-    
+
     if (stockJson != null) {
       return Map<String, int>.from(jsonDecode(stockJson));
     }
-    
+
     return _getDefaultShopStock();
   }
 
@@ -326,39 +342,39 @@ class GameDataService {
     final shopItems = getShopItems();
     final stock = await getShopStock();
     final inventory = await getInventory();
-    
+
     final shopItem = shopItems.firstWhere(
       (item) => item.id == itemId,
       orElse: () => shopItems.first,
     );
-    
+
     final totalPrice = shopItem.price * quantity;
     final currentStock = stock[itemId] ?? shopItem.stock;
-    
+
     // 检查金币是否足够
     if (progress.gold < totalPrice) {
       return false;
     }
-    
+
     // 检查库存是否足够
     if (currentStock != -1 && currentStock < quantity) {
       return false;
     }
-    
+
     // 扣除金币
     final updatedProgress = progress.copyWith(gold: progress.gold - totalPrice);
     await saveGameProgress(updatedProgress);
-    
+
     // 更新库存
     if (currentStock != -1) {
       stock[itemId] = currentStock - quantity;
       await saveShopStock(stock);
     }
-    
+
     // 添加到背包
     final inventoryItem = shopItem.toInventoryItem(quantity: quantity);
     final existingItemIndex = inventory.indexWhere((item) => item.id == itemId);
-    
+
     if (existingItemIndex != -1) {
       inventory[existingItemIndex] = inventory[existingItemIndex].copyWith(
         quantity: inventory[existingItemIndex].quantity + quantity,
@@ -366,20 +382,22 @@ class GameDataService {
     } else {
       inventory.add(inventoryItem);
     }
-    
+
     await saveInventory(inventory);
-    
+
     // 记录购买历史
-    await _addPurchaseRecord(PurchaseRecord(
-      itemId: itemId,
-      quantity: quantity,
-      totalPrice: totalPrice,
-      purchaseTime: DateTime.now(),
-    ));
-    
+    await _addPurchaseRecord(
+      PurchaseRecord(
+        itemId: itemId,
+        quantity: quantity,
+        totalPrice: totalPrice,
+        purchaseTime: DateTime.now(),
+      ),
+    );
+
     // 触发成就检查
     await AchievementService.checkAndUpdateAchievements();
-    
+
     return true;
   }
 
@@ -387,12 +405,12 @@ class GameDataService {
   static Future<List<PurchaseRecord>> getPurchaseHistory() async {
     final prefs = await SharedPreferences.getInstance();
     final historyJson = prefs.getString(_purchaseHistoryKey);
-    
+
     if (historyJson != null) {
       final List<dynamic> historyList = jsonDecode(historyJson);
       return historyList.map((json) => PurchaseRecord.fromJson(json)).toList();
     }
-    
+
     return [];
   }
 
@@ -400,12 +418,12 @@ class GameDataService {
   static Future<void> _addPurchaseRecord(PurchaseRecord record) async {
     final history = await getPurchaseHistory();
     history.add(record);
-    
+
     // 只保留最近100条记录
     if (history.length > 100) {
       history.removeRange(0, history.length - 100);
     }
-    
+
     final prefs = await SharedPreferences.getInstance();
     final historyJson = history.map((r) => r.toJson()).toList();
     await prefs.setString(_purchaseHistoryKey, jsonEncode(historyJson));
@@ -417,53 +435,14 @@ class GameDataService {
     await saveShopStock(stock);
   }
 
-  // 默认武将数据
+  // 默认武将数据 - 只包含有图片资源的角色
   static List<General> _getDefaultGenerals() {
     return [
-      General(
-        id: 'liu_bei',
-        name: '刘备',
-        position: '蜀汉皇帝',
-        attack: 75,
-        defense: 80,
-        intelligence: 85,
-        speed: 70,
-        level: 1,
-        experience: 0,
-        skills: ['仁德', '激将'],
-        avatar: '刘',
-      ),
-      General(
-        id: 'guan_yu',
-        name: '关羽',
-        position: '武圣',
-        attack: 95,
-        defense: 85,
-        intelligence: 75,
-        speed: 80,
-        level: 1,
-        experience: 0,
-        skills: ['武圣', '义绝'],
-        avatar: '关',
-      ),
-      General(
-        id: 'zhang_fei',
-        name: '张飞',
-        position: '猛将',
-        attack: 90,
-        defense: 80,
-        intelligence: 60,
-        speed: 75,
-        level: 1,
-        experience: 0,
-        skills: ['咆哮', '嗜酒'],
-        avatar: '张',
-      ),
       General(
         id: 'zhao_yun',
         name: '赵云',
         position: '常胜将军',
-        attack: 85,
+        attack: 95,
         defense: 90,
         intelligence: 80,
         speed: 95,
@@ -471,32 +450,214 @@ class GameDataService {
         experience: 0,
         skills: ['龙胆', '冲阵'],
         avatar: '赵',
+        imagePath: 'assets/role/赵云.png',
+        description: '蜀汉五虎上将之一，以勇武闻名于世。常山赵子龙，百万军中取上将首级如探囊取物。长坂坡七进七出，单骑救主，威名远扬。',
+        specialty: '龙胆亮银枪法',
+        rarity: 5,
       ),
       General(
-        id: 'zhuge_liang',
-        name: '诸葛亮',
-        position: '卧龙',
-        attack: 60,
-        defense: 70,
-        intelligence: 100,
-        speed: 75,
+        id: 'lu_bu',
+        name: '吕布',
+        position: '飞将',
+        attack: 100,
+        defense: 85,
+        intelligence: 60,
+        speed: 90,
         level: 1,
         experience: 0,
-        skills: ['观星', '空城', '八阵'],
-        avatar: '诸',
+        skills: ['无双', '方天画戟'],
+        avatar: '吕',
+        imagePath: 'assets/role/吕布.png',
+        description: '三国第一猛将，人称"人中吕布，马中赤兔"。武艺超群，方天画戟舞得出神入化，但性格反复无常。',
+        specialty: '方天画戟',
+        rarity: 5,
       ),
       General(
-        id: 'cao_cao',
-        name: '曹操',
-        position: '魏武帝',
-        attack: 80,
+        id: 'sima_yi',
+        name: '司马懿',
+        position: '冢虎',
+        attack: 70,
         defense: 85,
-        intelligence: 95,
+        intelligence: 98,
+        speed: 80,
+        level: 1,
+        experience: 0,
+        skills: ['反间', '鹰视'],
+        avatar: '司',
+        imagePath: 'assets/role/司马懿.png',
+        description: '曹魏重臣，智谋深沉，善用兵法。与诸葛亮多次交锋，最终统一三国。被称为"冢虎"，意指其深藏不露的野心。',
+        specialty: '深谋远虑',
+        rarity: 5,
+      ),
+      General(
+        id: 'diao_chan',
+        name: '貂蝉',
+        position: '绝世美人',
+        attack: 60,
+        defense: 70,
+        intelligence: 90,
         speed: 85,
         level: 1,
         experience: 0,
-        skills: ['奸雄', '护驾'],
-        avatar: '曹',
+        skills: ['离间', '闭月'],
+        avatar: '貂',
+        imagePath: 'assets/role/貂蝉.png',
+        description: '四大美女之一，有"闭月"之貌。王允义女，为除董卓而施展美人计，成功离间董卓与吕布的关系。',
+        specialty: '美人计',
+        rarity: 4,
+      ),
+      General(
+        id: 'hua_tuo',
+        name: '华佗',
+        position: '神医',
+        attack: 40,
+        defense: 60,
+        intelligence: 95,
+        speed: 70,
+        level: 1,
+        experience: 0,
+        skills: ['青囊', '急救'],
+        avatar: '华',
+        imagePath: 'assets/role/华佗.png',
+        description: '神医华佗，医术高超，发明麻沸散，能进行外科手术。曾为关羽刮骨疗毒，医术堪称神乎其技。',
+        specialty: '青囊书',
+        rarity: 4,
+      ),
+      General(
+        id: 'jiang_wei',
+        name: '姜维',
+        position: '蜀汉大将军',
+        attack: 85,
+        defense: 80,
+        intelligence: 88,
+        speed: 75,
+        level: 1,
+        experience: 0,
+        skills: ['挑衅', '志继'],
+        avatar: '姜',
+        imagePath: 'assets/role/姜维.png',
+        description: '诸葛亮的继承人，天水麒麟儿。智勇双全，继承了诸葛亮的遗志，多次北伐中原，力图复兴汉室。',
+        specialty: '继承者',
+        rarity: 4,
+      ),
+      General(
+        id: 'sun_ce',
+        name: '孙策',
+        position: '小霸王',
+        attack: 92,
+        defense: 80,
+        intelligence: 75,
+        speed: 88,
+        level: 1,
+        experience: 0,
+        skills: ['激昂', '制霸'],
+        avatar: '孙',
+        imagePath: 'assets/role/孙策.png',
+        description: '江东小霸王，孙权之兄。年少有为，英勇善战，奠定了东吴的基业。性格豪迈，深得人心。',
+        specialty: '霸王之气',
+        rarity: 4,
+      ),
+      General(
+        id: 'sun_shangxiang',
+        name: '孙尚香',
+        position: '弓腰姬',
+        attack: 80,
+        defense: 75,
+        intelligence: 78,
+        speed: 90,
+        level: 1,
+        experience: 0,
+        skills: ['结姻', '枭姬'],
+        avatar: '孙',
+        imagePath: 'assets/role/孙尚香.png',
+        description: '孙权之妹，刘备夫人。性格刚烈，善骑射，有"弓腰姬"之称。为政治联姻而嫁给刘备，心系东吴。',
+        specialty: '神射手',
+        rarity: 4,
+      ),
+      General(
+        id: 'xu_chu',
+        name: '许褚',
+        position: '虎痴',
+        attack: 95,
+        defense: 88,
+        intelligence: 65,
+        speed: 70,
+        level: 1,
+        experience: 0,
+        skills: ['裸衣', '虎卫'],
+        avatar: '许',
+        imagePath: 'assets/role/许褚.png',
+        description: '曹操的贴身护卫，有"虎痴"之称。力大无穷，忠心耿耿，曾裸衣斗马超，威震敌胆。',
+        specialty: '虎卫军',
+        rarity: 3,
+      ),
+      General(
+        id: 'zhang_chunhua',
+        name: '张春华',
+        position: '宣穆皇后',
+        attack: 65,
+        defense: 75,
+        intelligence: 92,
+        speed: 80,
+        level: 1,
+        experience: 0,
+        skills: ['绝情', '伤逝'],
+        avatar: '张',
+        imagePath: 'assets/role/张春华.png',
+        description: '司马懿之妻，晋朝开国皇帝司马炎的祖母。智慧过人，在司马家族的崛起中发挥了重要作用。',
+        specialty: '政治手腕',
+        rarity: 4,
+      ),
+      General(
+        id: 'zhang_jiao',
+        name: '张角',
+        position: '太平道主',
+        attack: 70,
+        defense: 70,
+        intelligence: 90,
+        speed: 75,
+        level: 1,
+        experience: 0,
+        skills: ['雷击', '鬼道'],
+        avatar: '张',
+        imagePath: 'assets/role/张角.png',
+        description: '黄巾起义的领袖，太平道创始人。自称"大贤良师"，以太平要术蛊惑民心，掀起了席卷天下的农民起义。',
+        specialty: '太平要术',
+        rarity: 3,
+      ),
+      General(
+        id: 'zhao_feiyan',
+        name: '赵飞燕',
+        position: '汉成帝皇后',
+        attack: 55,
+        defense: 65,
+        intelligence: 85,
+        speed: 95,
+        level: 1,
+        experience: 0,
+        skills: ['轻舞', '飞燕'],
+        avatar: '赵',
+        imagePath: 'assets/role/赵飞燕.png',
+        description: '汉成帝皇后，以舞蹈闻名。身轻如燕，能在手掌上起舞，有"环肥燕瘦"中的"燕瘦"之誉。',
+        specialty: '飞燕舞',
+        rarity: 3,
+      ),
+      General(
+        id: 'xiao_bing',
+        name: '小兵',
+        position: '普通士兵',
+        attack: 30,
+        defense: 40,
+        intelligence: 35,
+        speed: 50,
+        level: 1,
+        experience: 0,
+        skills: ['冲锋', '坚守'],
+        avatar: '兵',
+        imagePath: 'assets/role/小兵.png',
+        description: '普通的士兵，虽然实力不强，但忠诚勇敢，是军队的基础力量。经过训练可以成长为优秀的战士。',
+        specialty: '基础训练',
+        rarity: 1,
       ),
     ];
   }
@@ -666,7 +827,7 @@ class GameDataService {
         name: '第一次北伐',
         description: '诸葛亮首次北伐，失街亭',
         difficulty: 9,
-        enemies: ['张郃', '司马懿', '郭淮'],
+        enemies: ['张角', '司马懿', '郭淮'],
         status: StageStatus.locked,
         chapter: 4,
         rewards: {'experience': 600, 'gold': 300},
@@ -738,7 +899,7 @@ class GameDataService {
         name: '蜀汉灭亡',
         description: '邓艾偷渡阴平，蜀汉灭亡',
         difficulty: 11,
-        enemies: ['姜维', '廖化', '张翼'],
+        enemies: ['姜维', '张春华', '张角'],
         status: StageStatus.locked,
         chapter: 5,
         rewards: {'experience': 750, 'gold': 375},
@@ -807,14 +968,14 @@ class GameDataService {
       description: '攻击型阵型，前锋伤害+15%，中军伤害+10%，但承伤增加20%',
       bonuses: {'attack': 15, 'damage_taken': 20},
       positions: [
-        'guan_yu', // 前排左
-        'liu_bei', // 前排中
-        'zhang_fei', // 前排右
+        'lu_bu', // 前排左 - 吕布
+        'zhao_yun', // 前排中 - 赵云
+        'sun_ce', // 前排右 - 孙策
         null, // 中排左
-        null, // 中排中
+        'sima_yi', // 中排中 - 司马懿
         null, // 中排右
         null, // 后排左
-        null, // 后排中
+        'hua_tuo', // 后排中 - 华佗
         null, // 后排右
       ],
     );
@@ -857,7 +1018,7 @@ class GameDataService {
         stock: 3,
         rarity: 'legendary',
       ),
-      
+
       // 防具类
       ShopItem(
         id: 'leather_armor',
@@ -892,7 +1053,7 @@ class GameDataService {
         stock: 5,
         rarity: 'epic',
       ),
-      
+
       // 饰品类
       ShopItem(
         id: 'power_ring',
@@ -927,7 +1088,7 @@ class GameDataService {
         stock: 7,
         rarity: 'rare',
       ),
-      
+
       // 消耗品类
       ShopItem(
         id: 'health_potion_small',
@@ -969,13 +1130,13 @@ class GameDataService {
   static Map<String, int> _getDefaultShopStock() {
     final shopItems = _getDefaultShopItems();
     final stock = <String, int>{};
-    
+
     for (final item in shopItems) {
       if (item.stock != -1) {
         stock[item.id] = item.stock;
       }
     }
-    
+
     return stock;
   }
 }
