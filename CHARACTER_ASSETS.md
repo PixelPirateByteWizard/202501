@@ -6,19 +6,19 @@
 
 ### 图片文件列表
 ```
-assets/role/貂蝉.png
-assets/role/华佗.png
-assets/role/姜维.png
-assets/role/吕布.png
-assets/role/司马懿.png
-assets/role/孙策.png
-assets/role/孙尚香.png
-assets/role/小兵.png
-assets/role/许褚.png
-assets/role/张春华.png
-assets/role/张角.png
-assets/role/赵飞燕.png
-assets/role/赵云.png
+assets/role/Role_1.png  # 赵云
+assets/role/Role_2.png  # 吕布
+assets/role/Role_3.png  # 司马懿
+assets/role/Role_4.png  # 貂蝉
+assets/role/Role_5.png  # 华佗
+assets/role/Role_6.png  # 姜维
+assets/role/Role_7.png  # 孙策
+assets/role/Role_8.png  # 孙尚香
+assets/role/Role_9.png  # 许褚
+assets/role/Role_10.png # 张春华
+assets/role/Role_11.png # 张角
+assets/role/Role_12.png # 赵飞燕
+assets/role/Role_13.png # 小兵
 ```
 
 ## 游戏中的角色配置
@@ -26,19 +26,19 @@ assets/role/赵云.png
 ### 默认武将列表
 所有游戏中出现的武将都已更新为有图片资源的角色：
 
-1. **赵云** - 常胜将军 (赵云.png)
-2. **吕布** - 飞将 (吕布.png)
-3. **司马懿** - 冢虎 (司马懿.png)
-4. **貂蝉** - 绝世美人 (貂蝉.png)
-5. **华佗** - 神医 (华佗.png)
-6. **姜维** - 蜀汉大将军 (姜维.png)
-7. **孙策** - 小霸王 (孙策.png)
-8. **孙尚香** - 弓腰姬 (孙尚香.png)
-9. **许褚** - 虎痴 (许褚.png)
-10. **张春华** - 宣穆皇后 (张春华.png)
-11. **张角** - 太平道主 (张角.png)
-12. **赵飞燕** - 汉成帝皇后 (赵飞燕.png)
-13. **小兵** - 普通士兵 (小兵.png)
+1. **赵云** - 常胜将军 (Role_1.png)
+2. **吕布** - 飞将 (Role_2.png)
+3. **司马懿** - 冢虎 (Role_3.png)
+4. **貂蝉** - 绝世美人 (Role_4.png)
+5. **华佗** - 神医 (Role_5.png)
+6. **姜维** - 蜀汉大将军 (Role_6.png)
+7. **孙策** - 小霸王 (Role_7.png)
+8. **孙尚香** - 弓腰姬 (Role_8.png)
+9. **许褚** - 虎痴 (Role_9.png)
+10. **张春华** - 宣穆皇后 (Role_10.png)
+11. **张角** - 太平道主 (Role_11.png)
+12. **赵飞燕** - 汉成帝皇后 (Role_12.png)
+13. **小兵** - 普通士兵 (Role_13.png)
 
 ### 默认阵型配置
 默认阵型已更新为使用有图片的角色：
@@ -49,7 +49,7 @@ assets/role/赵云.png
 - 后排中：华佗
 
 ### 图片加载机制
-- 阵型界面使用 `AssetImage('assets/role/${general.name}.png')` 加载角色图片
+- 阵型界面使用 `AssetImage(general.imagePath)` 加载角色图片
 - 包含错误处理机制，图片加载失败时有容错处理
 - 支持圆形裁剪和渐变遮罩效果
 

@@ -42,7 +42,8 @@
 
 ### 角色图片
 - 使用 `assets/role/` 目录下的角色图片
-- 只包含有图片资源的13个角色（赵云、吕布、司马懿等）
+- 现在使用Role_1.png到Role_32.png的新图片文件
+- 包含13个有数据的角色（赵云、吕布、司马懿等）
 - 支持图片加载失败的容错处理
 - 图片文件名与角色名称完全匹配
 
@@ -149,9 +150,10 @@ assets:
 
 ### 资源文件对应
 每个角色都有对应的PNG图片文件：
-- `assets/role/赵云.png`
-- `assets/role/吕布.png`
-- `assets/role/司马懿.png`
+- `assets/role/Role_1.png` - 赵云
+- `assets/role/Role_2.png` - 吕布
+- `assets/role/Role_3.png` - 司马懿
+- `assets/role/Role_4.png` - 貂蝉
 - 等等...
 
 ### 数据一致性

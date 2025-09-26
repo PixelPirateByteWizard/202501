@@ -354,7 +354,7 @@ class _FormationScreenState extends State<FormationScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/role/${general.name}.png'),
+                          image: AssetImage(general.imagePath),
                           fit: BoxFit.cover,
                           onError: (exception, stackTrace) {
                             // 如果图片加载失败，显示默认头像
@@ -497,9 +497,7 @@ class _FormationScreenState extends State<FormationScreen> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     image: DecorationImage(
-                                      image: AssetImage(
-                                        'assets/role/${general.name}.png',
-                                      ),
+                                      image: AssetImage(general.imagePath),
                                       fit: BoxFit.cover,
                                       onError: (exception, stackTrace) {
                                         // 图片加载失败时的处理

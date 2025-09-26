@@ -126,7 +126,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildCheckinCard() {
     final canCheckin = !(_checkinData?.hasCheckedToday ?? true);
-    
+
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -165,16 +165,10 @@ class _MainScreenState extends State<MainScreen> {
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppTheme.primaryGold,
-                  width: 2,
-                ),
+                border: Border.all(color: AppTheme.primaryGold, width: 2),
               ),
               child: ClipOval(
-                child: Image.asset(
-                  'assets/role/貂蝉.png',
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset('assets/role/Role_4.png', fit: BoxFit.cover),
               ),
             ),
             const SizedBox(width: 16),
@@ -204,10 +198,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             // 状态指示器
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: canCheckin ? AppTheme.primaryGold : Colors.grey,
                 borderRadius: BorderRadius.circular(20),
@@ -258,10 +249,7 @@ class _MainScreenState extends State<MainScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryGold.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -288,10 +276,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppTheme.primaryGold.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),

@@ -72,7 +72,7 @@ class General {
       experience: json['experience'],
       skills: List<String>.from(json['skills']),
       avatar: json['avatar'],
-      imagePath: json['imagePath'] ?? 'assets/role/小兵.png',
+      imagePath: json['imagePath'] ?? 'assets/role/Role_13.png',
       description: json['description'] ?? '',
       specialty: json['specialty'],
       rarity: json['rarity'] ?? 3,

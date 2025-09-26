@@ -284,7 +284,7 @@ class _DailyCheckinScreenState extends State<DailyCheckinScreen>
                     child: Opacity(
                       opacity: 0.7, // 增加透明度让人物更清晰
                       child: Image.asset(
-                        'assets/role/貂蝉.png',
+                        'assets/role/Role_4.png',
                         fit: BoxFit.contain, // 改为contain确保人物完整显示
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
