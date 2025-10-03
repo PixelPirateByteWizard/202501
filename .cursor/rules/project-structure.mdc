@@ -1,0 +1,30 @@
+---
+alwaysApply: true
+---
+# Project Structure
+
+The Coria app follows a Clean Architecture approach with three main layers:
+
+1. **Data Layer** (`lib/data/`): Contains data models and repositories
+2. **Domain Layer** (`lib/domain/`): Contains business entities and logic
+3. **Presentation Layer** (`lib/presentation/`): Contains UI screens, widgets, and utilities
+
+All code should respect this separation of concerns. Data flows from the outer layers (data) through domain to the inner layers (presentation).
+
+## Key Files Structure
+
+- `lib/main.dart` - Main entry point of the application
+- `lib/app.dart` - Root widget that sets up theme and navigation
+
+## Screens
+
+All screens should be placed in `lib/presentation/screens/` and follow the naming convention `*_screen.dart`.
+
+## Widgets
+
+Reusable widgets should be placed in `lib/presentation/widgets/` and follow the naming convention `*_widget.dart`.
+
+## Models and Entities
+
+- Data models in `lib/data/models/` with suffix `_model.dart`
+- Domain entities in `lib/domain/entities/` with suffix `_entity.dart`

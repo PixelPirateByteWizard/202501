@@ -1,0 +1,46 @@
+---
+alwaysApply: true
+---
+# Design Principles for Coria
+
+## Unique Design Style
+
+- **Brand Consistency**: Use the established dark color scheme throughout the app
+- **Visual Elements**: Create distinctive UI components for game tiles and cards
+- **Custom Components**: Design exclusive UI components rather than standard ones
+
+## Color Scheme
+
+- **Base Colors**: 
+  - Background: Near black (#0D0D0D)
+  - Accent colors: Purple (#805AD5), Cyan (#06B6D4)
+  - Text: White (#FFFFFF) and light gray (#E2E8F0) for primary content
+  
+- **Tile Colors**:
+  - "1" tiles: Blue (#3B82F6)
+  - "2" tiles: Red (#EF4444)
+  - "3" tiles and higher: White (#FFFFFF) with black text
+
+## Visual Effects
+
+- **Glassmorphism**: Use for cards and containers with:
+  - Background: rgba(28, 28, 30, 0.5)
+  - Backdrop filter: blur(20px)
+  - Border: 1px solid rgba(255, 255, 255, 0.1)
+
+- **Button Effects**: 
+  - Implement glow effect on hover/press
+  - Use subtle scale transform animations
+
+## Animation Guidelines
+
+- **Tile Animations**: 
+  - New tile appearance: Pop-in animation
+  - Merged tiles: Scale animation
+  - Movement: Smooth sliding
+
+## Layout Principles
+
+- **Spacing**: Consistent padding (16px/24px) between elements
+- **Alignment**: Center-aligned content for symmetry
+- **Responsive Design**: Ensure UI adapts to different screen sizes

@@ -1,0 +1,70 @@
+---
+globs: *.dart
+---
+# Animation Guidelines
+
+## Animation Principles
+
+1. **Subtle and Purposeful**: Animations should enhance the user experience without being distracting
+2. **Consistent Timing**: Use consistent duration for similar animations
+3. **Appropriate Easing**: Choose easing functions that match the action being performed
+
+## Standard Durations
+
+- **Quick actions** (button presses, toggles): 100-150ms
+- **Standard transitions** (page transitions, tile movements): 200-300ms
+- **Emphasis animations** (new tile appearance, merges): 300-500ms
+
+## Animation Types
+
+### Tile Animations
+
+- **New Tile Animation**: 
+  ```dart
+  // Scale from 0.5 to 1.0 with ease-out curve
+  AnimatedScale(
+    scale: isNew ? 1.0 : 0.5,
+    duration: Duration(milliseconds: 200),
+    curve: Curves.easeOut,
+    child: TileContent(),
+  )
+  ```
+
+- **Merge Animation**:
+  ```dart
+  // Scale up briefly then back to normal
+  TweenAnimationBuilder(
+    tween: Tween<double>(begin: 1.0, end: isMerging ? 1.2 : 1.0),
+    duration: Duration(milliseconds: 150),
+    curve: Curves.easeInOut,
+    builder: (context, value, child) {
+      return Transform.scale(scale: value, child: child);
+    },
+    child: TileContent(),
+  )
+  ```
+
+- **Movement Animation**:
+  ```dart
+  // Smooth position transition
+  AnimatedPositioned(
+    duration: Duration(milliseconds: 200),
+    curve: Curves.easeInOut,
+    left: calculateLeftPosition(),
+    top: calculateTopPosition(),
+    child: TileContent(),
+  )
+  ```
+
+### UI Element Animations
+
+- **Button Hover/Press**: Subtle scale and glow effect
+- **Toggle Switches**: Smooth movement with slight bounce
+- **Page Transitions**: Fade combined with slight slide
+
+## Performance Considerations
+
+- Use `AnimatedFoo` widgets for simple cases
+- Use `AnimationController` for more complex or chained animations
+- Avoid animating too many elements simultaneously
+- Consider using `RepaintBoundary` for complex animations

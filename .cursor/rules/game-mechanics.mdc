@@ -1,0 +1,41 @@
+---
+alwaysApply: true
+---
+# Game Mechanics Implementation Guide
+
+## Board Representation
+
+- Use a 4x4 grid represented as `List<List<TileEntity>>`
+- Empty spaces should be represented as `null` values
+- Each tile should track its value and animation state
+
+## Core Game Rules
+
+1. **Tile Movement**:
+   - All tiles move in the direction of the swipe until they hit a wall or another tile
+   - Movement must be processed in the correct order (from the edge in the direction of movement)
+
+2. **Merging Rules**:
+   - Special case: 1 + 2 = 3
+   - General case: n + n = 2n (where n ≥ 3)
+   - Tiles can only merge once per move
+   - "1" and "2" tiles cannot merge with any other values except each other
+
+3. **New Tile Generation**:
+   - After each valid move, a new tile appears from the opposite edge
+   - New tiles should be weighted: more common for 1 and 2, less common for higher values
+   - The "next tile" should always be visible to the player
+
+4. **Valid Move Detection**:
+   - A move is only valid if at least one tile changes position or merges
+   - If no tiles can move in a direction, the swipe in that direction is ignored
+
+5. **Game Over Detection**:
+   - Game ends when the board is full AND no valid moves remain
+   - Check all four directions for possible moves
+
+## Scoring System
+
+- Base points for each merge: value of the resulting tile
+- Track highest tile achieved
+- Store and display best score
