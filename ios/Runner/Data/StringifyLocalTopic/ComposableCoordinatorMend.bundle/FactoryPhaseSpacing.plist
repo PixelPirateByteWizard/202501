@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoGridviewStyle</key>
+	<string>permanentTabviewCenter</string>
+	<key>cardEnvironmentInterval</key>
+	<string>mobileCosineBound</string>
+	<key>dynamicPresenterDuration</key>
+	<string>tabbarAwayMediator</string>
+	<key>effectFormTension</key>
+	<string>greatDescriptionOrigin</string>
+	<key>entitySingletonName</key>
+	<string>topicPerVar</string>
+	<key>multiEffectVisibility</key>
+	<string>optimizerAdapterHue</string>
+	<key>relationalSymbolSkewy</key>
+	<string>cacheAgainstVar</string>
+</dict>
+</plist>

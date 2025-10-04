@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>constraintStageKind</key>
+	<string>usageFunctionLeft</string>
+	<key>eventContextValidation</key>
+	<string>navigatorAgainstCommand</string>
+	<key>futureBesideProcess</key>
+	<string>unsortedRouteStatus</string>
+	<key>granularRichtextSkewx</key>
+	<string>labelPatternSkewy</string>
+	<key>navigatorVisitorDirection</key>
+	<string>anchorBridgeMargin</string>
+	<key>segmentAgainstLevel</key>
+	<string>playbackThanFramework</string>
+	<key>utilOutsideVariable</key>
+	<string>multiResultIndex</string>
+</dict>
+</plist>

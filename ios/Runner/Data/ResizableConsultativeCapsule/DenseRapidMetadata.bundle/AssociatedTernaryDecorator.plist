@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>builderVariableSpacing</key>
+	<string>interactorAtPlatform</string>
+	<key>cupertinoAnimationEdge</key>
+	<string>gradientBeyondState</string>
+	<key>dynamicSegueRight</key>
+	<string>iterativeCacheSpacing</string>
+	<key>euclideanIsolateSkewy</key>
+	<string>alertBeyondProxy</string>
+	<key>extensionBridgeTheme</key>
+	<string>anchorParameterDepth</string>
+	<key>functionalUsecaseCount</key>
+	<string>rapidActionShade</string>
+	<key>hyperbolicViewBorder</key>
+	<string>futureNumberCoord</string>
+	<key>opaqueActionInteraction</key>
+	<string>transformerStyleScale</string>
+	<key>progressbarDespitePhase</key>
+	<string>imageSinceSingleton</string>
+	<key>statelessWorkVisibility</key>
+	<string>layoutCommandDelay</string>
+</dict>
+</plist>

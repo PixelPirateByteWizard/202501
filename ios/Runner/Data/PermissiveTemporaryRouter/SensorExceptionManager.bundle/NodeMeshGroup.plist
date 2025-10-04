@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>checklistMethodBehavior</key>
+	<string>retainedTransformerCount</string>
+	<key>cubitPlatformDirection</key>
+	<string>sliderAsLevel</string>
+	<key>drawerFlyweightHead</key>
+	<string>sharedBufferVisible</string>
+	<key>hashPerFlyweight</key>
+	<string>deferredSampleCoord</string>
+	<key>intermediateEffectSkewy</key>
+	<string>consultativeIntegerSize</string>
+	<key>matrixOperationPosition</key>
+	<string>kernelAroundParam</string>
+	<key>mobileMusicStatus</key>
+	<string>channelsLikeProcess</string>
+	<key>persistentGroupState</key>
+	<string>seamlessReducerShape</string>
+	<key>queryVarDensity</key>
+	<string>repositoryLayerDelay</string>
+	<key>symmetricIntegerLocation</key>
+	<string>paddingWithoutDecorator</string>
+</dict>
+</plist>

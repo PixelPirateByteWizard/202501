@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>buttonBufferOffset</key>
+	<string>sceneStageSpeed</string>
+	<key>dependencyBesideMemento</key>
+	<string>flexOrContext</string>
+	<key>gridForTier</key>
+	<string>explicitClipperSize</string>
+	<key>mediocreLossAppearance</key>
+	<string>statefulReducerState</string>
+	<key>mobileBuilderHead</key>
+	<string>unaryAboutTemple</string>
+	<key>reactiveBuilderRotation</key>
+	<string>awaitInterpreterDepth</string>
+	<key>relationalModelLocation</key>
+	<string>fixedSpriteRotation</string>
+</dict>
+</plist>

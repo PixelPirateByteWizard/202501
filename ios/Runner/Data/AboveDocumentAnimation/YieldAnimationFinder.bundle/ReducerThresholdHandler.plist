@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>basicLayoutStyle</key>
+	<string>axisThroughFacade</string>
+	<key>decorationDespiteParam</key>
+	<string>smartMediaValidation</string>
+	<key>decorationOperationLeft</key>
+	<string>widgetProxyHead</string>
+	<key>firstPrecisionSpeed</key>
+	<string>chartStrategyDelay</string>
+	<key>interactorAndTask</key>
+	<string>layerPerNumber</string>
+	<key>permanentHandlerStatus</key>
+	<string>inkwellInterpreterTheme</string>
+	<key>sizeStrategyName</key>
+	<string>taskInPattern</string>
+	<key>tableWithComposite</key>
+	<string>layerProxyAppearance</string>
+</dict>
+</plist>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>activeControllerBrightness</key>
+	<string>textureProxySize</string>
+	<key>draggableSizedboxFeedback</key>
+	<string>labelStateShade</string>
+	<key>interactiveArithmeticSpeed</key>
+	<string>keyEffectForce</string>
+	<key>interpolationAsBuffer</key>
+	<string>chartVariableOffset</string>
+	<key>lossLikeProxy</key>
+	<string>mobxAgainstStage</string>
+	<key>lostSpotSpeed</key>
+	<string>allocatorViaMediator</string>
+	<key>missedLabelSkewy</key>
+	<string>durationLayerInset</string>
+	<key>originalRiverpodOrientation</key>
+	<string>denseSubscriptionCoord</string>
+	<key>serviceStageState</key>
+	<string>coordinatorAndCycle</string>
+</dict>
+</plist>

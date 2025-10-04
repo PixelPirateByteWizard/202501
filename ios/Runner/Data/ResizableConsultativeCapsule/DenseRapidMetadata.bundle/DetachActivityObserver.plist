@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dropdownbuttonOutsideFacade</key>
+	<string>custompaintInForm</string>
+	<key>exceptionUntilStrategy</key>
+	<string>managerStrategySize</string>
+	<key>frameInsideMemento</key>
+	<string>originalGradientScale</string>
+	<key>menuFrameworkSkewy</key>
+	<string>priorMediaInteraction</string>
+	<key>modulusFormTop</key>
+	<string>requestAroundLevel</string>
+	<key>observerNearDecorator</key>
+	<string>queueOutsideStructure</string>
+	<key>popupStructureMode</key>
+	<string>routePatternDepth</string>
+	<key>transitionContainAction</key>
+	<string>sharedFutureResponse</string>
+	<key>uniquePlaybackRight</key>
+	<string>webOptimizerDirection</string>
+</dict>
+</plist>

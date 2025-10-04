@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>containerAtPattern</key>
+	<string>routeSinceTask</string>
+	<key>iconIncludeState</key>
+	<string>cupertinoTempleFormat</string>
+	<key>resolverAroundParameter</key>
+	<string>interfaceAsActivity</string>
+	<key>statefulResponseMomentum</key>
+	<string>routerAboutVisitor</string>
+</dict>
+</plist>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>blocBridgeSkewx</key>
+	<string>resourceWithMediator</string>
+	<key>containerForStructure</key>
+	<string>threadByFramework</string>
+	<key>masterMediatorPressure</key>
+	<string>touchShapeMomentum</string>
+	<key>offsetStateInset</key>
+	<string>gridviewFrameworkDistance</string>
+	<key>reducerObserverHue</key>
+	<string>prevMediaContrast</string>
+	<key>resultInCommand</key>
+	<string>cacheAdapterName</string>
+	<key>timerOrFlyweight</key>
+	<string>musicWorkEdge</string>
+</dict>
+</plist>

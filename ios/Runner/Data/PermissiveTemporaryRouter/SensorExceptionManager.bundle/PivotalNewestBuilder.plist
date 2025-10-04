@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>flexDecoratorFeedback</key>
+	<string>movementSystemFeedback</string>
+	<key>immediatePriorityBound</key>
+	<string>sophisticatedSingletonStyle</string>
+	<key>mediocreConstraintAcceleration</key>
+	<string>specifierThroughMethod</string>
+	<key>primaryProviderFormat</key>
+	<string>typicalSampleTint</string>
+	<key>relationalQueueOrigin</key>
+	<string>optionStyleVisibility</string>
+	<key>utilWithType</key>
+	<string>scrollableRequestDelay</string>
+</dict>
+</plist>

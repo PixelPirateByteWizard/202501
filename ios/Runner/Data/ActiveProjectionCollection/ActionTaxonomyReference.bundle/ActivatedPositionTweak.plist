@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>basicCubitAcceleration</key>
+	<string>streamKindOpacity</string>
+	<key>isolateBeyondAction</key>
+	<string>layoutWorkAcceleration</string>
+	<key>tweenOperationInset</key>
+	<string>synchronousGridMode</string>
+</dict>
+</plist>

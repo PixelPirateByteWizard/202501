@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoAnimationCoord</key>
+	<string>arithmeticConstraintFrequency</string>
+	<key>autoModelType</key>
+	<string>spriteLikeStructure</string>
+	<key>intensityLikeState</key>
+	<string>singletonIncludeLevel</string>
+	<key>oldAnchorDepth</key>
+	<string>completerPlatformBound</string>
+	<key>paddingCycleVisibility</key>
+	<string>activatedMethodResponse</string>
+	<key>reusableRowOpacity</key>
+	<string>channelInMode</string>
+	<key>specifyContainerVelocity</key>
+	<string>routeParameterTint</string>
+	<key>synchronousNormDuration</key>
+	<string>consumerStageDistance</string>
+	<key>tickerThroughStructure</key>
+	<string>significantWidgetSpacing</string>
+</dict>
+</plist>

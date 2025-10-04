@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>catalystVarFormat</key>
+	<string>catalystAdapterAppearance</string>
+	<key>currentOptimizerBound</key>
+	<string>curveVersusParam</string>
+	<key>descriptionProcessBorder</key>
+	<string>metadataExceptStrategy</string>
+	<key>imperativeIconInteraction</key>
+	<string>coordinatorValueAlignment</string>
+	<key>tappableObserverValidation</key>
+	<string>spineTempleRate</string>
+	<key>textEnvironmentDirection</key>
+	<string>disparateSignatureBehavior</string>
+</dict>
+</plist>

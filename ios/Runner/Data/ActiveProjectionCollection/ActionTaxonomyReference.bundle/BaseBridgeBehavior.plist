@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoUsecaseDuration</key>
+	<string>compositionalLoopSaturation</string>
+	<key>challengeMethodFeedback</key>
+	<string>modulusByFacade</string>
+	<key>cupertinoStackLocation</key>
+	<string>immediateResourceContrast</string>
+	<key>ignoredBitrateDepth</key>
+	<string>riverpodBeyondInterpreter</string>
+	<key>intuitivePositionContrast</key>
+	<string>constHandlerAlignment</string>
+</dict>
+</plist>

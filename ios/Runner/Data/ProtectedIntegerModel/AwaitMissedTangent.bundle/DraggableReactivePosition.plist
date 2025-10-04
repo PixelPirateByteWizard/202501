@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animatedUsecaseBehavior</key>
+	<string>transitionChainSkewx</string>
+	<key>containerInsideWork</key>
+	<string>layoutDuringCycle</string>
+	<key>hardDelegateName</key>
+	<string>reactiveListviewMomentum</string>
+	<key>localIntensityState</key>
+	<string>sustainableQueryMode</string>
+	<key>persistentHistogramEdge</key>
+	<string>menuOrMode</string>
+	<key>pinchableFrameDistance</key>
+	<string>promiseThanOperation</string>
+	<key>promiseForVar</key>
+	<string>singletonThroughTier</string>
+	<key>symmetricCupertinoDelay</key>
+	<string>scrollableNavigatorRotation</string>
+</dict>
+</plist>

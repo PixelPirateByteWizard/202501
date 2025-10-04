@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>chartObserverAppearance</key>
+	<string>cartesianGramFormat</string>
+	<key>promiseExceptComposite</key>
+	<string>resourceOutsideValue</string>
+	<key>resolverMediatorBottom</key>
+	<string>resourceVariableMode</string>
+	<key>rowBeyondCommand</key>
+	<string>hierarchicalCubitShade</string>
+	<key>sliderSinceLayer</key>
+	<string>buttonObserverTag</string>
+	<key>spriteForTier</key>
+	<string>taskVariableTension</string>
+	<key>tweenCompositeDuration</key>
+	<string>textPlatformHue</string>
+</dict>
+</plist>

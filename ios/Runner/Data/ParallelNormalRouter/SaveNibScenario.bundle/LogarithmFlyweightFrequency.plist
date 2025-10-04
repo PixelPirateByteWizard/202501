@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contractionParamFormat</key>
+	<string>completionFlyweightPadding</string>
+	<key>criticalSizeTag</key>
+	<string>accessibleKernelFrequency</string>
+	<key>ignoredAnimationSkewx</key>
+	<string>gesturedetectorBesideFacade</string>
+	<key>mediumCurveValidation</key>
+	<string>disparateSingletonFeedback</string>
+	<key>prismaticConstraintSize</key>
+	<string>mediaqueryVarKind</string>
+	<key>tabviewParameterCount</key>
+	<string>callbackCompositeVisible</string>
+	<key>tappableBehaviorTransparency</key>
+	<string>alphaChainDensity</string>
+	<key>ternaryBesidePlatform</key>
+	<string>backwardBoxPressure</string>
+</dict>
+</plist>

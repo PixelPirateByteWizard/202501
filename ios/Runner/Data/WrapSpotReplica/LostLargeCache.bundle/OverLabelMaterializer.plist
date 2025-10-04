@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>certificateInsideActivity</key>
+	<string>enabledLocalizationOrientation</string>
+	<key>channelForMemento</key>
+	<string>interfaceAdapterLeft</string>
+	<key>collectionCommandBorder</key>
+	<string>stackInSystem</string>
+	<key>concurrentTitleVisibility</key>
+	<string>coordinatorOrFramework</string>
+	<key>displayableObserverMomentum</key>
+	<string>imperativeManagerTint</string>
+	<key>effectParamVisible</key>
+	<string>decorationWithoutPattern</string>
+	<key>layoutChainInterval</key>
+	<string>platePhaseMode</string>
+	<key>modalStyleLocation</key>
+	<string>immediateConfigurationBottom</string>
+	<key>particleAlongNumber</key>
+	<string>metadataByPlatform</string>
+</dict>
+</plist>

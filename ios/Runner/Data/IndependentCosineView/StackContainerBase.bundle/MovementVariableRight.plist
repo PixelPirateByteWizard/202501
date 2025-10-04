@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>constraintByMediator</key>
+	<string>commandAboutFramework</string>
+	<key>interactiveChartInset</key>
+	<string>activityKindInset</string>
+	<key>interactorOfFacade</key>
+	<string>tableFromTemple</string>
+	<key>materialGridAcceleration</key>
+	<string>responseSingletonDensity</string>
+	<key>offsetBeyondValue</key>
+	<string>scrollableEffectOrigin</string>
+	<key>permissiveOffsetScale</key>
+	<string>intuitiveIsolateSize</string>
+	<key>resultOutsideKind</key>
+	<string>elasticProjectFlags</string>
+	<key>semanticButtonFlags</key>
+	<string>statefulValueBrightness</string>
+	<key>webCurveCoord</key>
+	<string>responsiveSensorForce</string>
+</dict>
+</plist>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptiveProviderInset</key>
+	<string>mobxInLayer</string>
+	<key>capsuleEnvironmentInset</key>
+	<string>nibAtStyle</string>
+	<key>globalZoneTension</key>
+	<string>asyncOrForm</string>
+	<key>immutableIndicatorForce</key>
+	<string>resourceParameterSpacing</string>
+	<key>promiseParamShape</key>
+	<string>errorDecoratorDensity</string>
+	<key>sinkCommandAcceleration</key>
+	<string>numericalMemberStatus</string>
+</dict>
+</plist>

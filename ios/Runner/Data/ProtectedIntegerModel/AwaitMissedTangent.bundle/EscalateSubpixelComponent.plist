@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>alphaOperationFormat</key>
+	<string>commonRowFrequency</string>
+	<key>commandIncludeType</key>
+	<string>functionalThreadFormat</string>
+	<key>completerWithoutObserver</key>
+	<string>boxshadowAtEnvironment</string>
+	<key>completionExceptPlatform</key>
+	<string>durationAtType</string>
+	<key>curveProcessAlignment</key>
+	<string>commonProviderMode</string>
+	<key>easyBrushScale</key>
+	<string>exceptionThroughTier</string>
+	<key>ephemeralEffectPressure</key>
+	<string>delicateSliderMode</string>
+	<key>handlerActivityPadding</key>
+	<string>commandOrFlyweight</string>
+	<key>menuLayerSpeed</key>
+	<string>movementAwayPattern</string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>batchDuringActivity</key>
+	<string>actionIncludeFacade</string>
+	<key>captionParamSpeed</key>
+	<string>intuitiveConstraintFeedback</string>
+	<key>cartesianVariantContrast</key>
+	<string>requestFrameworkShape</string>
+	<key>constErrorOrigin</key>
+	<string>permissiveSpriteVisibility</string>
+	<key>criticalMemberCount</key>
+	<string>swiftActionTag</string>
+	<key>enabledResourceCenter</key>
+	<string>requestTaskFlags</string>
+	<key>explicitTaskInteraction</key>
+	<string>listenerSystemEdge</string>
+	<key>keyInterfaceStatus</key>
+	<string>significantAppbarMargin</string>
+	<key>overlayBridgeHead</key>
+	<string>euclideanCompleterAppearance</string>
+	<key>sortedEntityDuration</key>
+	<string>documentModeVisible</string>
+</dict>
+</plist>

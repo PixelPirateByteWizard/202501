@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>flexibleDecorationInteraction</key>
+	<string>bufferForMediator</string>
+	<key>methodNearPhase</key>
+	<string>associatedNodeContrast</string>
+	<key>missedStreamFrequency</key>
+	<string>euclideanActivityOpacity</string>
+	<key>positionAwayActivity</key>
+	<string>entityByOperation</string>
+	<key>richtextBesideActivity</key>
+	<string>logVarTop</string>
+</dict>
+</plist>

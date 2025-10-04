@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>criticalBorderTop</key>
+	<string>rapidLabelAlignment</string>
+	<key>gridNearBuffer</key>
+	<string>challengeModeFrequency</string>
+	<key>indicatorLayerAppearance</key>
+	<string>storeAboutLayer</string>
+	<key>invisiblePreviewState</key>
+	<string>listviewCommandOffset</string>
+	<key>requiredReducerAppearance</key>
+	<string>sustainableCompleterInteraction</string>
+	<key>semanticLogarithmRate</key>
+	<string>hierarchicalSliderKind</string>
+	<key>sizeAtLayer</key>
+	<string>sinkDuringObserver</string>
+	<key>statefulEventBrightness</key>
+	<string>frameFormDepth</string>
+	<key>tweenStructureHue</key>
+	<string>mapJobTint</string>
+</dict>
+</plist>

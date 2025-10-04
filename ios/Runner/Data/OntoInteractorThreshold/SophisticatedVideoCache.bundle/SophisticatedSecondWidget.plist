@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animationAgainstVariable</key>
+	<string>curveBridgeDuration</string>
+	<key>euclideanSubscriptionMode</key>
+	<string>characterAroundShape</string>
+	<key>imperativeIconRight</key>
+	<string>effectBeyondFacade</string>
+	<key>intuitiveContainerStatus</key>
+	<string>priorDocumentPosition</string>
+	<key>permissiveSizedboxInteraction</key>
+	<string>interpolationBesidePrototype</string>
+</dict>
+</plist>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>checkboxAboutFunction</key>
+	<string>intuitiveSceneDuration</string>
+	<key>mediaThanMethod</key>
+	<string>pinchableViewTheme</string>
+	<key>robustContainerPosition</key>
+	<string>materialDelegateShape</string>
+	<key>switchContainVisitor</key>
+	<string>viewInsideBuffer</string>
+</dict>
+</plist>

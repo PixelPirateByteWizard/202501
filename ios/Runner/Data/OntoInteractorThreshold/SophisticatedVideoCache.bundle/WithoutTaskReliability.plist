@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptiveMenuOffset</key>
+	<string>playbackOutsideValue</string>
+	<key>associatedScaleMargin</key>
+	<string>exponentBesideLayer</string>
+	<key>constraintFacadeFlags</key>
+	<string>granularWidgetShape</string>
+	<key>descriptionPerVar</key>
+	<string>clipperDecoratorContrast</string>
+	<key>mainStateDistance</key>
+	<string>reducerProcessMargin</string>
+	<key>requiredBaseMargin</key>
+	<string>smartSizeMargin</string>
+	<key>reusableReducerTag</key>
+	<string>taskContextDelay</string>
+</dict>
+</plist>

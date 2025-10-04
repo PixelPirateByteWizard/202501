@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoCosineCoord</key>
+	<string>navigationMediatorOffset</string>
+	<key>fixedGrainMargin</key>
+	<string>previewProcessOpacity</string>
+	<key>gradientTypeColor</key>
+	<string>modelFacadeCount</string>
+	<key>layoutStateDepth</key>
+	<string>semanticsStageSize</string>
+	<key>optimizerExceptMediator</key>
+	<string>interactiveClipperInset</string>
+	<key>parallelReducerKind</key>
+	<string>radiusMediatorSaturation</string>
+	<key>protectedEqualizationFrequency</key>
+	<string>instructionDecoratorBrightness</string>
+	<key>rowByPrototype</key>
+	<string>stepActivityRight</string>
+	<key>unactivatedUsecaseDuration</key>
+	<string>cardByPattern</string>
+</dict>
+</plist>

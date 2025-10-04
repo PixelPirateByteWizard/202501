@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>advancedDurationValidation</key>
+	<string>handlerAndDecorator</string>
+	<key>capsuleObserverStatus</key>
+	<string>delegateEnvironmentTop</string>
+	<key>exceptionShapeStatus</key>
+	<string>originalTransitionDelay</string>
+	<key>notifierLikeWork</key>
+	<string>specifierKindVelocity</string>
+	<key>positionedMediatorFlags</key>
+	<string>smallChartBottom</string>
+	<key>segmentValueBound</key>
+	<string>liteMobxInset</string>
+</dict>
+</plist>

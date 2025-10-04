@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>alphaCompositeBorder</key>
+	<string>textInEnvironment</string>
+	<key>controllerStructureTheme</key>
+	<string>observerDespiteScope</string>
+	<key>coordinatorScopeRight</key>
+	<string>deferredSliderColor</string>
+	<key>declarativeMetadataRight</key>
+	<string>descriptorLayerValidation</string>
+	<key>decorationIncludeWork</key>
+	<string>layoutMementoAlignment</string>
+	<key>gesturedetectorParamHead</key>
+	<string>textureAmongVisitor</string>
+	<key>groupCommandVisibility</key>
+	<string>drawerSinceTier</string>
+	<key>normalDecorationDistance</key>
+	<string>capsulePerTask</string>
+</dict>
+</plist>

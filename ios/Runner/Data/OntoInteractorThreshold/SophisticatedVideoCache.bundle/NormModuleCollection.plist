@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animationAwaySingleton</key>
+	<string>intensityPatternStyle</string>
+	<key>appbarStrategyOrigin</key>
+	<string>layerAndAdapter</string>
+	<key>inactiveNotificationShape</key>
+	<string>segueActionDistance</string>
+	<key>symbolPerPrototype</key>
+	<string>delegateNearMethod</string>
+	<key>timerVarVelocity</key>
+	<string>decorationPatternMode</string>
+	<key>usecaseBesideStage</key>
+	<string>navigationCompositeDepth</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>allocatorStrategyFlags</key>
+	<string>popupAndState</string>
+	<key>buttonFrameworkVelocity</key>
+	<string>borderNearFlyweight</string>
+	<key>convolutionStageLocation</key>
+	<string>constraintBesideShape</string>
+	<key>delicateDrawerStatus</key>
+	<string>resourceByAdapter</string>
+	<key>fixedInterfaceMode</key>
+	<string>titleProcessBehavior</string>
+	<key>localizationFormAlignment</key>
+	<string>sizedboxInsideMode</string>
+	<key>queueDespitePhase</key>
+	<string>radiusStateInterval</string>
+	<key>streamBufferFormat</key>
+	<string>textfieldPhaseMode</string>
+</dict>
+</plist>

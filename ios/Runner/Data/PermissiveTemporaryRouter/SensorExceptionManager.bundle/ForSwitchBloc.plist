@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bufferUntilEnvironment</key>
+	<string>independentParticleTail</string>
+	<key>localScrollTension</key>
+	<string>sortedCompleterFrequency</string>
+	<key>monsterAtFlyweight</key>
+	<string>queryPerAdapter</string>
+	<key>precisionPerSingleton</key>
+	<string>associatedStoryboardStyle</string>
+	<key>radioBySingleton</key>
+	<string>reactiveSinePressure</string>
+	<key>scaffoldCycleResponse</key>
+	<string>usedFramePressure</string>
+	<key>swiftSingletonSkewy</key>
+	<string>entityFrameworkStatus</string>
+	<key>tangentExceptStrategy</key>
+	<string>enabledListviewDepth</string>
+</dict>
+</plist>

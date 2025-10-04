@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>asyncByAdapter</key>
+	<string>previewFacadeDuration</string>
+	<key>coordinatorOperationSpeed</key>
+	<string>singleChecklistValidation</string>
+	<key>masterBufferInterval</key>
+	<string>signatureThroughProxy</string>
+	<key>normalInteractorColor</key>
+	<string>listenerActionBrightness</string>
+	<key>smartDecorationType</key>
+	<string>firstChapterDuration</string>
+	<key>statelessGemRate</key>
+	<string>dimensionBufferBound</string>
+	<key>stepKindSkewy</key>
+	<string>crucialSinkTop</string>
+	<key>storageDecoratorLeft</key>
+	<string>explicitTextureOrientation</string>
+</dict>
+</plist>

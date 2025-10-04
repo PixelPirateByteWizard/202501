@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>convolutionUntilObserver</key>
+	<string>protocolStructureTail</string>
+	<key>interpolationBridgeCoord</key>
+	<string>typicalSymbolScale</string>
+	<key>mainConvolutionDelay</key>
+	<string>baseCycleContrast</string>
+	<key>mediumProviderCenter</key>
+	<string>actionVarSize</string>
+	<key>modelWithPhase</key>
+	<string>lostOffsetFormat</string>
+	<key>sequentialCommandVisibility</key>
+	<string>exceptionVariableHue</string>
+</dict>
+</plist>

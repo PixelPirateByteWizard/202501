@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>progressbarShapeLocation</key>
+	<string>hashUntilPlatform</string>
+	<key>reactiveGrainDirection</key>
+	<string>switchTaskTransparency</string>
+	<key>resultDecoratorHue</key>
+	<string>missionProxyLeft</string>
+	<key>smartPromiseOrigin</key>
+	<string>multiResultMargin</string>
+	<key>staticHandlerShape</key>
+	<string>activitySingletonFormat</string>
+	<key>visiblePositionedCount</key>
+	<string>localizationKindAcceleration</string>
+</dict>
+</plist>

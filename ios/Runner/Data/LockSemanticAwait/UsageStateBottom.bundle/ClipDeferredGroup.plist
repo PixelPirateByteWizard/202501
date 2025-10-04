@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animatedLabelShape</key>
+	<string>explicitMonsterHue</string>
+	<key>animationStateHead</key>
+	<string>cubitTypePosition</string>
+	<key>fixedAnchorVisible</key>
+	<string>groupProxyDistance</string>
+	<key>navigatorStrategyType</key>
+	<string>behaviorFromForm</string>
+	<key>responsiveButtonBrightness</key>
+	<string>gridviewCommandDelay</string>
+</dict>
+</plist>

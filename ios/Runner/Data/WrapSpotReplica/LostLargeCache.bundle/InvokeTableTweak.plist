@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>containerBeyondPhase</key>
+	<string>taskLayerOrientation</string>
+	<key>drawerDespiteCycle</key>
+	<string>directCompletionOpacity</string>
+	<key>easyNodeHue</key>
+	<string>bitrateOutsideMode</string>
+	<key>sampleAdapterTheme</key>
+	<string>containerLayerMode</string>
+	<key>standaloneCoordinatorLeft</key>
+	<string>asyncBitratePadding</string>
+	<key>uniformEntityShape</key>
+	<string>fusedCaptionAppearance</string>
+</dict>
+</plist>

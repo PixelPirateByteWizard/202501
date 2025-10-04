@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animatedcontainerScopeRight</key>
+	<string>controllerShapeSkewy</string>
+	<key>deferredListviewForce</key>
+	<string>exceptionVariableLocation</string>
+	<key>errorIncludeValue</key>
+	<string>lazyScreenFlags</string>
+	<key>popupViaVariable</key>
+	<string>routeStageScale</string>
+	<key>prismaticActivityKind</key>
+	<string>multiIntensityResponse</string>
+	<key>smartOffsetTop</key>
+	<string>entityCommandSpeed</string>
+	<key>topicUntilMode</key>
+	<string>signCompositeState</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>containerViaValue</key>
+	<string>localizationParamPosition</string>
+	<key>cubitParamIndex</key>
+	<string>opaqueTextureMode</string>
+	<key>pageviewPrototypeForce</key>
+	<string>resolverAlongLevel</string>
+	<key>resourceMediatorBorder</key>
+	<string>constStatelessSize</string>
+	<key>tableVarVisibility</key>
+	<string>interpolationPhaseInset</string>
+</dict>
+</plist>

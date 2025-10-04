@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>builderAgainstPhase</key>
+	<string>directlyPresenterResponse</string>
+	<key>eventSinceAction</key>
+	<string>hyperbolicTabviewBehavior</string>
+	<key>independentQueueBehavior</key>
+	<string>lastBinaryStyle</string>
+	<key>sizeSystemShade</key>
+	<string>chapterJobSize</string>
+</dict>
+</plist>

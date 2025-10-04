@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptiveTabbarMode</key>
+	<string>storageStructureSaturation</string>
+	<key>coordinatorEnvironmentType</key>
+	<string>cyclePerFlyweight</string>
+	<key>cycleExceptContext</key>
+	<string>taskBridgeInterval</string>
+	<key>opaqueCheckboxInteraction</key>
+	<string>handlerAtMediator</string>
+	<key>protocolAdapterSkewy</key>
+	<string>singletonChainDepth</string>
+	<key>rapidCubeLeft</key>
+	<string>tabviewOrJob</string>
+	<key>spriteBesideComposite</key>
+	<string>resourceBeyondType</string>
+	<key>tensorAccessoryLocation</key>
+	<string>dedicatedChecklistState</string>
+	<key>usedPresenterShape</key>
+	<string>sizedboxAlongCommand</string>
+</dict>
+</plist>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ignoredProgressbarBottom</key>
+	<string>symmetricAspectCoord</string>
+	<key>layoutFromFacade</key>
+	<string>basicSpriteFlags</string>
+	<key>providerTypePosition</key>
+	<string>loopDuringBuffer</string>
+	<key>resizableSingletonStatus</key>
+	<string>opaqueActionInterval</string>
+	<key>textDecoratorBehavior</key>
+	<string>statelessPreviewDuration</string>
+	<key>titleWithParameter</key>
+	<string>momentumProcessTransparency</string>
+</dict>
+</plist>

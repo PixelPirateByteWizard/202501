@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptivePriorityName</key>
+	<string>directCheckboxDensity</string>
+	<key>animationFunctionSpeed</key>
+	<string>utilPhaseContrast</string>
+	<key>checkboxIncludeOperation</key>
+	<string>dependencyStateIndex</string>
+	<key>criticalCollectionColor</key>
+	<string>petForJob</string>
+	<key>eventMediatorTint</key>
+	<string>fusedMetadataColor</string>
+	<key>globalStateSkewx</key>
+	<string>substantialSingletonDelay</string>
+	<key>imperativeSemanticsTint</key>
+	<string>publicMenuTop</string>
+	<key>menuOutsidePhase</key>
+	<string>alertLevelRotation</string>
+</dict>
+</plist>

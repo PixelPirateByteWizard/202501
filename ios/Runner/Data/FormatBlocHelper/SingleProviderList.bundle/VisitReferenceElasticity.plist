@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cubitAndParam</key>
+	<string>materialPositionKind</string>
+	<key>interactiveFutureInset</key>
+	<string>appbarWithoutContext</string>
+	<key>interactorKindBound</key>
+	<string>titleAwayBuffer</string>
+	<key>methodFromValue</key>
+	<string>frameNearAction</string>
+	<key>progressbarPhaseDuration</key>
+	<string>scaleViaFramework</string>
+	<key>queryDuringForm</key>
+	<string>widgetScopeOrigin</string>
+	<key>resilientSpotDelay</key>
+	<string>coordinatorOutsideBridge</string>
+	<key>scaleAsJob</key>
+	<string>textureAroundSingleton</string>
+	<key>spriteAboutInterpreter</key>
+	<string>mapFromChain</string>
+	<key>sustainableCommandBound</key>
+	<string>substantialScreenOpacity</string>
+</dict>
+</plist>

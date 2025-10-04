@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>associatedTickerVisible</key>
+	<string>crudeParticleInteraction</string>
+	<key>cubitViaVar</key>
+	<string>vectorVisitorType</string>
+	<key>disabledVectorResponse</key>
+	<string>descriptionStrategyOrientation</string>
+	<key>kernelInMethod</key>
+	<string>alignmentWithoutState</string>
+</dict>
+</plist>

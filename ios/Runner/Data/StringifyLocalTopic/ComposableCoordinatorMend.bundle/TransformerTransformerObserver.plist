@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>effectViaFramework</key>
+	<string>responseLikeCycle</string>
+	<key>entropyTempleValidation</key>
+	<string>errorCompositeBound</string>
+	<key>interactiveActionTransparency</key>
+	<string>extensionParameterColor</string>
+	<key>interactiveWidgetOrigin</key>
+	<string>previewWithLevel</string>
+	<key>menuPrototypeResponse</key>
+	<string>graphicVariablePosition</string>
+	<key>projectionFormInteraction</key>
+	<string>reusableCatalystSkewy</string>
+	<key>semanticEquipmentTension</key>
+	<string>getxStrategyVelocity</string>
+	<key>symbolProcessDirection</key>
+	<string>convolutionAsInterpreter</string>
+</dict>
+</plist>

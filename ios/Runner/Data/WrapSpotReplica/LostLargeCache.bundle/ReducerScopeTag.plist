@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>borderViaStructure</key>
+	<string>constraintPatternTail</string>
+	<key>cubitParamPressure</key>
+	<string>inactiveTableSkewx</string>
+	<key>fixedScrollCenter</key>
+	<string>backwardErrorCoord</string>
+	<key>inactiveGrayscaleDepth</key>
+	<string>topicStateColor</string>
+	<key>sustainableSubscriptionValidation</key>
+	<string>singleTweenOrientation</string>
+</dict>
+</plist>

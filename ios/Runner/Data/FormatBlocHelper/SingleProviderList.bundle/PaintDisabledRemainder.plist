@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>channelContextFlags</key>
+	<string>utilBridgeRate</string>
+	<key>disabledApertureRight</key>
+	<string>resultPatternRotation</string>
+	<key>invisibleDescriptionDepth</key>
+	<string>nodePerVar</string>
+	<key>managerBufferColor</key>
+	<string>densePromiseSpacing</string>
+	<key>missedTextStatus</key>
+	<string>skinPlatformTint</string>
+	<key>reducerIncludeOperation</key>
+	<string>utilContainVar</string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>batchExceptCycle</key>
+	<string>declarativePrecisionBehavior</string>
+	<key>blocLayerAlignment</key>
+	<string>segmentOperationValidation</string>
+	<key>customScaleRight</key>
+	<string>easyGestureTint</string>
+	<key>deferredUsageBottom</key>
+	<string>mobxAdapterInteraction</string>
+	<key>dependencyLikeScope</key>
+	<string>usecaseVersusPhase</string>
+	<key>geometricPositionInteraction</key>
+	<string>rowInMethod</string>
+	<key>numericalInstructionTension</key>
+	<string>blocAtCycle</string>
+	<key>sliderCycleContrast</key>
+	<string>significantTaskInset</string>
+	<key>ternaryWithBuffer</key>
+	<string>declarativeBufferInteraction</string>
+	<key>unaryOperationMode</key>
+	<string>popupTaskOffset</string>
+</dict>
+</plist>

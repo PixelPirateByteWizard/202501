@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aspectAboutContext</key>
+	<string>captionNumberDepth</string>
+	<key>descriptionAndScope</key>
+	<string>errorVarCoord</string>
+	<key>queryInParam</key>
+	<string>positionedVarInset</string>
+	<key>radiusMethodDelay</key>
+	<string>accessibleTechniqueBrightness</string>
+	<key>scaffoldModeType</key>
+	<string>channelProcessColor</string>
+	<key>sinkFromForm</key>
+	<string>permanentBuilderContrast</string>
+	<key>streamLayerEdge</key>
+	<string>bitrateWithoutState</string>
+	<key>timerSingletonFrequency</key>
+	<string>displayableRectBehavior</string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>controllerProxyBrightness</key>
+	<string>canvasByShape</string>
+	<key>documentTempleDirection</key>
+	<string>newestDocumentFrequency</string>
+	<key>drawerMediatorDensity</key>
+	<string>spineMediatorCenter</string>
+	<key>gridNearObserver</key>
+	<string>cellStrategyLeft</string>
+	<key>iterativeBorderFlags</key>
+	<string>clipperOperationShade</string>
+	<key>localizationDuringMethod</key>
+	<string>loopKindShade</string>
+	<key>logarithmExceptAction</key>
+	<string>frameWithoutScope</string>
+	<key>managerAndAdapter</key>
+	<string>integerPatternFrequency</string>
+	<key>navigationOrVariable</key>
+	<string>ignoredPrioritySpeed</string>
+	<key>sensorScopeVisibility</key>
+	<string>widgetValueVelocity</string>
+</dict>
+</plist>

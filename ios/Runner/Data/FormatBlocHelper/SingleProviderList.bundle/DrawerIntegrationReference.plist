@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>buttonProcessMargin</key>
+	<string>cupertinoStatefulMargin</string>
+	<key>extensionAroundType</key>
+	<string>projectionCommandContrast</string>
+	<key>layoutAndCommand</key>
+	<string>nextNormInteraction</string>
+	<key>staticBaseMode</key>
+	<string>reusableStorageDepth</string>
+	<key>viewChainFlags</key>
+	<string>screenFlyweightState</string>
+</dict>
+</plist>

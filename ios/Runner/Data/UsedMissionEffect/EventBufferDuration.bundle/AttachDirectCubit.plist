@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cubitAsAction</key>
+	<string>basicArithmeticDirection</string>
+	<key>descriptorSystemMargin</key>
+	<string>apertureIncludeState</string>
+	<key>effectIncludeState</key>
+	<string>stateBeyondDecorator</string>
+	<key>parallelCoordinatorAlignment</key>
+	<string>coordinatorPhaseSize</string>
+	<key>radiusUntilFramework</key>
+	<string>captionFromFunction</string>
+	<key>roleStrategyDelay</key>
+	<string>fixedStatelessCoord</string>
+	<key>spotPerStyle</key>
+	<string>visibleSubscriptionPressure</string>
+</dict>
+</plist>

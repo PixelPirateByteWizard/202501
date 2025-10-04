@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>criticalRequestInteraction</key>
+	<string>singletonAgainstVar</string>
+	<key>directlyGramDepth</key>
+	<string>blocOrComposite</string>
+	<key>permissivePopupRate</key>
+	<string>certificateAboutPhase</string>
+	<key>stateVariableValidation</key>
+	<string>reactiveCatalystStatus</string>
+	<key>zoneAgainstVar</key>
+	<string>resourceThroughNumber</string>
+</dict>
+</plist>

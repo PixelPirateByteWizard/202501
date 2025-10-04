@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessibleChapterBehavior</key>
+	<string>oldStatefulContrast</string>
+	<key>allocatorBufferContrast</key>
+	<string>skinCompositeInteraction</string>
+	<key>effectInComposite</key>
+	<string>compositionAtFacade</string>
+	<key>globalCharacterRate</key>
+	<string>sharedMusicAcceleration</string>
+	<key>grayscaleAgainstFramework</key>
+	<string>gateStageTop</string>
+	<key>mediaquerySinceFramework</key>
+	<string>navigatorDespiteFramework</string>
+	<key>methodViaInterpreter</key>
+	<string>transitionStateInteraction</string>
+	<key>modelLikeFacade</key>
+	<string>tensorMenuName</string>
+	<key>nextParticleScale</key>
+	<string>primaryFactoryDistance</string>
+	<key>respectiveLossSaturation</key>
+	<string>observerParameterVisibility</string>
+</dict>
+</plist>

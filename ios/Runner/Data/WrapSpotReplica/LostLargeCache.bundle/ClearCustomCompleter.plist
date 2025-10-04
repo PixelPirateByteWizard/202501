@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contractionObserverVelocity</key>
+	<string>reusablePreviewForce</string>
+	<key>delegateVersusFlyweight</key>
+	<string>ephemeralMenuIndex</string>
+	<key>entityFacadeDensity</key>
+	<string>factoryAsFacade</string>
+	<key>expandedVisitorVisibility</key>
+	<string>futureCycleVisibility</string>
+	<key>imageBufferVelocity</key>
+	<string>specifierWithProcess</string>
+	<key>inkwellTierCenter</key>
+	<string>overlayFacadeStyle</string>
+	<key>invisibleMenuDensity</key>
+	<string>captionInterpreterSpacing</string>
+	<key>modelThroughMediator</key>
+	<string>taskSinceState</string>
+	<key>queueContainOperation</key>
+	<string>activityAlongTier</string>
+	<key>sinkFormPadding</key>
+	<string>invisibleResponseVisibility</string>
+</dict>
+</plist>

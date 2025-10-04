@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>compositionalAwaitFormat</key>
+	<string>dialogsActionRate</string>
+	<key>expandedMediatorForce</key>
+	<string>groupAndVariable</string>
+	<key>layerAndSystem</key>
+	<string>easyAwaitOpacity</string>
+	<key>widgetVariableScale</key>
+	<string>grainContextName</string>
+</dict>
+</plist>

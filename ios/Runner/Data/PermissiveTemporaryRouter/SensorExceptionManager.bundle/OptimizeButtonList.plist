@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseFunctionHue</key>
+	<string>slashThanBuffer</string>
+	<key>columnFromEnvironment</key>
+	<string>chartIncludeSingleton</string>
+	<key>criticalReducerSaturation</key>
+	<string>cupertinoGridviewSaturation</string>
+	<key>cubitStateTint</key>
+	<string>masterExceptFacade</string>
+	<key>euclideanAllocatorDirection</key>
+	<string>textCompositeState</string>
+	<key>isolatePhaseInset</key>
+	<string>routeTypeMargin</string>
+	<key>mobxContainKind</key>
+	<string>builderLikeShape</string>
+</dict>
+</plist>

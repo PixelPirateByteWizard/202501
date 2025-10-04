@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cellOutsideVariable</key>
+	<string>inactiveIntensityBottom</string>
+	<key>exceptionActionOrigin</key>
+	<string>constLogLeft</string>
+	<key>gemTypeName</key>
+	<string>usageAlongTask</string>
+	<key>nativeStorageState</key>
+	<string>scrollableSkinTint</string>
+	<key>semanticsOfMethod</key>
+	<string>materialParamName</string>
+	<key>skinPrototypeCoord</key>
+	<string>notificationByDecorator</string>
+	<key>sophisticatedModelFlags</key>
+	<string>mutableInteractorPressure</string>
+	<key>spineAsPlatform</key>
+	<string>persistentResolverEdge</string>
+	<key>unsortedStepInteraction</key>
+	<string>storyboardAgainstPattern</string>
+</dict>
+</plist>

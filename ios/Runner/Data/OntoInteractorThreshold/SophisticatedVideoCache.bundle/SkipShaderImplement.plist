@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessibleInterfaceOrigin</key>
+	<string>providerIncludeLayer</string>
+	<key>capacitiesAsContext</key>
+	<string>cartesianGrainTheme</string>
+	<key>inheritedCursorFormat</key>
+	<string>interactorBesideWork</string>
+	<key>reductionFacadeDensity</key>
+	<string>scaffoldEnvironmentMargin</string>
+	<key>requiredTaskKind</key>
+	<string>collectionMediatorBorder</string>
+	<key>singletonThroughProcess</key>
+	<string>customResolverCoord</string>
+</dict>
+</plist>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>agileGroupHead</key>
+	<string>animatedGrainTint</string>
+	<key>constOffsetKind</key>
+	<string>sliderSingletonAppearance</string>
+	<key>effectFlyweightAcceleration</key>
+	<string>sizeAtTask</string>
+	<key>listenerLikeStructure</key>
+	<string>subtlePlaybackDistance</string>
+	<key>prevStreamPressure</key>
+	<string>observerActionEdge</string>
+	<key>scrollVarCoord</key>
+	<string>gesturedetectorBufferFormat</string>
+	<key>seamlessStoreVisibility</key>
+	<string>threadModeDuration</string>
+</dict>
+</plist>

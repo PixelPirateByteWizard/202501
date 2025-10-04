@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dialogsAgainstChain</key>
+	<string>dynamicQueueVelocity</string>
+	<key>diversifiedLabelStyle</key>
+	<string>matrixValueStyle</string>
+	<key>imperativePrecisionFlags</key>
+	<string>memberKindBehavior</string>
+	<key>stateAlongComposite</key>
+	<string>hashAtSystem</string>
+	<key>tappableAspectVisibility</key>
+	<string>allocatorChainDistance</string>
+</dict>
+</plist>

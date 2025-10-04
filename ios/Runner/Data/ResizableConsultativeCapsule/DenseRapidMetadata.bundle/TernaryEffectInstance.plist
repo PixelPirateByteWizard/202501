@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessibleTransitionPosition</key>
+	<string>segueChainVisibility</string>
+	<key>batchStrategyFeedback</key>
+	<string>callbackWithoutAction</string>
+	<key>dimensionDuringMediator</key>
+	<string>delegateStructureSaturation</string>
+	<key>displayableManagerShape</key>
+	<string>mobilePhaseIndex</string>
+	<key>flexibleCurvePosition</key>
+	<string>skirtOrType</string>
+	<key>futureAtProcess</key>
+	<string>effectStyleColor</string>
+	<key>presenterAlongStyle</key>
+	<string>oldObserverKind</string>
+	<key>repositoryAmongCycle</key>
+	<string>declarativeGesturedetectorAlignment</string>
+	<key>segueInTask</key>
+	<string>rectViaFlyweight</string>
+	<key>transitionAgainstState</key>
+	<string>monsterDuringComposite</string>
+</dict>
+</plist>

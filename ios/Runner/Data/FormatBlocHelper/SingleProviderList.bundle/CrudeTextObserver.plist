@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>batchPatternOrigin</key>
+	<string>reactiveCubitLocation</string>
+	<key>cellAboutObserver</key>
+	<string>navigatorMediatorPadding</string>
+	<key>sizeUntilBuffer</key>
+	<string>autoGrayscaleRate</string>
+	<key>standaloneQueryTail</key>
+	<string>granularNavigatorOffset</string>
+	<key>tickerAboutPattern</key>
+	<string>cacheParamRotation</string>
+	<key>titleScopeOffset</key>
+	<string>interactiveQueryType</string>
+</dict>
+</plist>

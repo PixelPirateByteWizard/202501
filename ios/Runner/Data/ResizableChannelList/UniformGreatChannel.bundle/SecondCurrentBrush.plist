@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>missedStorageFeedback</key>
+	<string>temporaryViewPressure</string>
+	<key>particleSystemFlags</key>
+	<string>sensorInPlatform</string>
+	<key>robustPresenterStatus</key>
+	<string>toolDuringVisitor</string>
+	<key>screenFrameworkSaturation</key>
+	<string>unaryPrototypeIndex</string>
+	<key>tickerCompositeRight</key>
+	<string>serviceByChain</string>
+	<key>timerByMediator</key>
+	<string>tappableDescriptorBottom</string>
+	<key>timerViaProcess</key>
+	<string>exponentInsideContext</string>
+	<key>topicObserverPosition</key>
+	<string>positionFormSkewy</string>
+</dict>
+</plist>

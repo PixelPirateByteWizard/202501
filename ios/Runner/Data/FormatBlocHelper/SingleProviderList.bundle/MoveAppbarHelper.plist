@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>equipmentVariableRight</key>
+	<string>groupContainLevel</string>
+	<key>gateOfSystem</key>
+	<string>isolateAdapterIndex</string>
+	<key>nextResolverBorder</key>
+	<string>threadAmongBuffer</string>
+	<key>queueDespiteCommand</key>
+	<string>movementScopeStatus</string>
+	<key>sceneDecoratorInset</key>
+	<string>factoryMediatorType</string>
+	<key>sharedBlocBrightness</key>
+	<string>actionObserverDepth</string>
+	<key>signPrototypeDirection</key>
+	<string>finalChannelDensity</string>
+	<key>singleCursorHead</key>
+	<string>lossFromDecorator</string>
+</dict>
+</plist>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animationFacadeScale</key>
+	<string>nativeTitleInteraction</string>
+	<key>associatedPopupKind</key>
+	<string>permissiveRadioForce</string>
+	<key>diffableStackFormat</key>
+	<string>cubitBufferFormat</string>
+	<key>histogramAsActivity</key>
+	<string>singletonSystemTail</string>
+	<key>materialButtonRotation</key>
+	<string>normalViewKind</string>
+	<key>mutableCallbackDistance</key>
+	<string>advancedSignTension</string>
+	<key>observerOfShape</key>
+	<string>effectAboutContext</string>
+	<key>semanticMediaqueryContrast</key>
+	<string>logarithmWorkVisibility</string>
+	<key>sessionWithoutMethod</key>
+	<string>normalNotifierOrientation</string>
+	<key>sizedboxDespiteParameter</key>
+	<string>axisAboutPrototype</string>
+</dict>
+</plist>

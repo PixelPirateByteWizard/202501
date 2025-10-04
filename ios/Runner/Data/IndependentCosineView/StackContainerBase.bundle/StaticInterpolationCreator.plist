@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>agileSemanticsShape</key>
+	<string>storeOrForm</string>
+	<key>animatedContractionOpacity</key>
+	<string>uniformLoopOrientation</string>
+	<key>completerActionOrientation</key>
+	<string>sinkProxyHue</string>
+	<key>constraintOperationDepth</key>
+	<string>curveModeDuration</string>
+	<key>convolutionParameterSpeed</key>
+	<string>logBufferState</string>
+	<key>hashWithoutStructure</key>
+	<string>containerIncludePattern</string>
+	<key>intensityActivityVelocity</key>
+	<string>presenterThanState</string>
+	<key>textParamTint</key>
+	<string>opaqueAspectName</string>
+</dict>
+</plist>

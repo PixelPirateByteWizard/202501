@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>alphaViaVariable</key>
+	<string>deferredDialogsVisibility</string>
+	<key>callbackVarIndex</key>
+	<string>activityInsideVar</string>
+	<key>immediateHandlerColor</key>
+	<string>keyRequestPadding</string>
+	<key>singletonWithMemento</key>
+	<string>modalWorkAlignment</string>
+	<key>specifyReferenceBehavior</key>
+	<string>positionedSingletonDelay</string>
+	<key>zoneLayerOffset</key>
+	<string>usecaseBeyondPattern</string>
+</dict>
+</plist>

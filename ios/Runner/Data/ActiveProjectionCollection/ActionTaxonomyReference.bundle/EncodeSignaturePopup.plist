@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baselineFunctionPosition</key>
+	<string>interactiveDelegateAcceleration</string>
+	<key>elasticBufferBehavior</key>
+	<string>offsetThroughMediator</string>
+	<key>functionalInjectionAcceleration</key>
+	<string>textfieldPerActivity</string>
+	<key>localCubitMode</key>
+	<string>grayscaleSystemLeft</string>
+	<key>sampleScopeTension</key>
+	<string>titleAlongVariable</string>
+	<key>signKindMomentum</key>
+	<string>inactiveTaskTransparency</string>
+	<key>textKindStyle</key>
+	<string>constSensorRate</string>
+</dict>
+</plist>

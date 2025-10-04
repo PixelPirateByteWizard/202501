@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cupertinoGridVisible</key>
+	<string>ephemeralMatrixSize</string>
+	<key>elasticTangentLocation</key>
+	<string>rowContextVisible</string>
+	<key>instructionFormShape</key>
+	<string>cycleFormMargin</string>
+	<key>mediaPatternOpacity</key>
+	<string>robustAnimationScale</string>
+	<key>reusableTableOffset</key>
+	<string>segueInterpreterMargin</string>
+	<key>transformerSinceEnvironment</key>
+	<string>pivotalReducerHue</string>
+</dict>
+</plist>

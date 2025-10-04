@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cacheOfMethod</key>
+	<string>dedicatedThreadBehavior</string>
+	<key>extensionAmongPattern</key>
+	<string>sinkInFramework</string>
+	<key>logModePosition</key>
+	<string>allocatorFromProxy</string>
+	<key>normalCompositionKind</key>
+	<string>imageAdapterValidation</string>
+	<key>permissiveCubitEdge</key>
+	<string>storagePlatformMargin</string>
+	<key>sustainableAssetScale</key>
+	<string>deferredExceptionSkewy</string>
+</dict>
+</plist>

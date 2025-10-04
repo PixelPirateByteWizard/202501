@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>elasticContainerBottom</key>
+	<string>multiUsageVisibility</string>
+	<key>elasticShaderShade</key>
+	<string>rectBeyondState</string>
+	<key>graphicAdapterBound</key>
+	<string>referenceWithParam</string>
+	<key>graphicFromBuffer</key>
+	<string>queryChainRotation</string>
+	<key>multiProgressbarSkewy</key>
+	<string>scrollForNumber</string>
+	<key>progressbarProxySpeed</key>
+	<string>retainedBlocVisible</string>
+	<key>spineStateHead</key>
+	<string>completerSystemRate</string>
+</dict>
+</plist>

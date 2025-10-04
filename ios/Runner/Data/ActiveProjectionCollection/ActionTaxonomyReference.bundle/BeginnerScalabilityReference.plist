@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accordionQueueSize</key>
+	<string>navigatorSingletonTop</string>
+	<key>alertPrototypeSkewy</key>
+	<string>difficultStackRotation</string>
+	<key>apertureViaFramework</key>
+	<string>builderFlyweightTop</string>
+	<key>compositionPrototypePosition</key>
+	<string>animatedcontainerSystemMomentum</string>
+	<key>errorPlatformResponse</key>
+	<string>activityAndMethod</string>
+	<key>indicatorOfSystem</key>
+	<string>localizationTaskValidation</string>
+	<key>isolateVarTag</key>
+	<string>notifierLevelScale</string>
+	<key>listviewForTask</key>
+	<string>numericalStatefulTint</string>
+	<key>priorPaddingSize</key>
+	<string>flexMementoInterval</string>
+	<key>uniqueBulletResponse</key>
+	<string>blocActivityFeedback</string>
+</dict>
+</plist>

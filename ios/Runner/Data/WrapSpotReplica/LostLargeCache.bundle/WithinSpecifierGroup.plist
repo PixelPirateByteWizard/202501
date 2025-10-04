@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>configurationPerAdapter</key>
+	<string>reductionWithContext</string>
+	<key>diffableCardStyle</key>
+	<string>commonVectorSpacing</string>
+	<key>gridAdapterSize</key>
+	<string>observerForStructure</string>
+	<key>textStrategyPadding</key>
+	<string>radioWorkTop</string>
+</dict>
+</plist>

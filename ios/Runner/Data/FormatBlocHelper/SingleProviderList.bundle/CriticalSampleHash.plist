@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animatedTextureFormat</key>
+	<string>gridStyleDensity</string>
+	<key>constraintAlongStyle</key>
+	<string>groupPerScope</string>
+	<key>cubitNumberDirection</key>
+	<string>layoutAtLayer</string>
+	<key>localizationProcessLeft</key>
+	<string>transformerStrategyResponse</string>
+	<key>optionAmongFunction</key>
+	<string>keyFactoryFeedback</string>
+	<key>responseFacadeOrigin</key>
+	<string>tabviewFlyweightInset</string>
+	<key>routeOperationColor</key>
+	<string>integerAtInterpreter</string>
+</dict>
+</plist>

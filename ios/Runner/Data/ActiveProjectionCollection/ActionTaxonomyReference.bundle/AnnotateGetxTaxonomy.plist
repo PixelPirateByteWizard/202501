@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessibleTextfieldOpacity</key>
+	<string>standaloneCompositionShade</string>
+	<key>beginnerMovementForce</key>
+	<string>imageActivityTransparency</string>
+	<key>buttonAdapterResponse</key>
+	<string>resolverLayerKind</string>
+	<key>marginParamRight</key>
+	<string>nextGateDistance</string>
+	<key>normalPlateDepth</key>
+	<string>characterAsForm</string>
+	<key>providerDecoratorShade</key>
+	<string>controllerViaShape</string>
+	<key>stampTaskTail</key>
+	<string>layerStateState</string>
+</dict>
+</plist>

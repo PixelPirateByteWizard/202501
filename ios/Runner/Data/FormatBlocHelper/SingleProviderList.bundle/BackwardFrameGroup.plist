@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>adaptiveConfigurationRate</key>
+	<string>eagerMissionSkewx</string>
+	<key>asyncBridgeAcceleration</key>
+	<string>dedicatedPointRate</string>
+	<key>gatePerTask</key>
+	<string>commandMediatorDistance</string>
+	<key>immediateLayerInteraction</key>
+	<string>presenterFunctionSize</string>
+	<key>nextTickerIndex</key>
+	<string>cupertinoMobileHead</string>
+	<key>respectiveQueryDepth</key>
+	<string>sortedAlphaHue</string>
+	<key>subscriptionSingletonCenter</key>
+	<string>tweenStageInset</string>
+</dict>
+</plist>

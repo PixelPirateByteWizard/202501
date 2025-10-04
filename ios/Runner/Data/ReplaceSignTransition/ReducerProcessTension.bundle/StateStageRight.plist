@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>builderDespiteContext</key>
+	<string>scrollParameterMargin</string>
+	<key>captionExceptPattern</key>
+	<string>channelIncludeMediator</string>
+	<key>errorPhaseFeedback</key>
+	<string>viewAtProcess</string>
+	<key>lostTextInteraction</key>
+	<string>descriptorAlongProxy</string>
+	<key>mobileSliderBehavior</key>
+	<string>viewStateAppearance</string>
+	<key>newestRequestSize</key>
+	<string>profileBufferBorder</string>
+	<key>presenterAgainstLevel</key>
+	<string>nativeStorePadding</string>
+</dict>
+</plist>

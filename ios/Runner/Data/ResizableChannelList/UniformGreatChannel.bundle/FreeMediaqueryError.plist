@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cardVariableInteraction</key>
+	<string>composableCoordinatorSpeed</string>
+	<key>missedLogVisible</key>
+	<string>associatedTabbarSize</string>
+	<key>normalMemberRight</key>
+	<string>sizeThroughAdapter</string>
+	<key>storeLevelLocation</key>
+	<string>configurationInMemento</string>
+</dict>
+</plist>

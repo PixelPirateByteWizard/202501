@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accordionGridCenter</key>
+	<string>chapterStageMargin</string>
+	<key>assetBeyondFramework</key>
+	<string>reusableGridviewTheme</string>
+	<key>constraintInChain</key>
+	<string>zoneLikeObserver</string>
+	<key>criticalResolverSize</key>
+	<string>spotScopeCount</string>
+	<key>customizedPriorityTag</key>
+	<string>boxshadowIncludePlatform</string>
+	<key>enabledFragmentCoord</key>
+	<string>heapBufferPosition</string>
+	<key>rowExceptBuffer</key>
+	<string>heapPerFunction</string>
+	<key>smallHashDuration</key>
+	<string>commandVariableAcceleration</string>
+	<key>viewDespiteInterpreter</key>
+	<string>intuitiveBoxshadowColor</string>
+</dict>
+</plist>

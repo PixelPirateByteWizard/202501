@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>activeCubitBehavior</key>
+	<string>gramKindSkewy</string>
+	<key>controllerAboutProxy</key>
+	<string>draggableWidgetStyle</string>
+	<key>controllerNearCycle</key>
+	<string>sequentialConsumerDistance</string>
+	<key>presenterPlatformSkewx</key>
+	<string>plateValueContrast</string>
+	<key>subpixelByVar</key>
+	<string>customizedWidgetVelocity</string>
+</dict>
+</plist>

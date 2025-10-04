@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>diffableGrainAppearance</key>
+	<string>rowWithVisitor</string>
+	<key>mediumCheckboxSize</key>
+	<string>actionDespiteObserver</string>
+	<key>momentumParamStyle</key>
+	<string>resourceMementoSize</string>
+	<key>serviceOutsideBridge</key>
+	<string>advancedNotificationVisible</string>
+	<key>synchronousPreviewSize</key>
+	<string>liteCubitVisible</string>
+	<key>widgetPhaseScale</key>
+	<string>richtextAdapterHue</string>
+</dict>
+</plist>

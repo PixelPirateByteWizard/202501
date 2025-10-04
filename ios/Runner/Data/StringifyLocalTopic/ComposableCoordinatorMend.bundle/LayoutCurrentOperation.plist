@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoIsolateFormat</key>
+	<string>layoutLayerBottom</string>
+	<key>binaryStageOpacity</key>
+	<string>curveLikeSingleton</string>
+	<key>compositionalTaskPosition</key>
+	<string>standaloneQueryStatus</string>
+	<key>consumerProcessScale</key>
+	<string>alphaAtJob</string>
+	<key>missedCoordinatorPosition</key>
+	<string>temporaryModelOpacity</string>
+	<key>sceneOfCommand</key>
+	<string>hierarchicalProviderDuration</string>
+	<key>sophisticatedCommandTransparency</key>
+	<string>explicitPositionedBorder</string>
+	<key>switchOfState</key>
+	<string>iterativeArithmeticPosition</string>
+	<key>uniqueRequestOrientation</key>
+	<string>signAtAdapter</string>
+</dict>
+</plist>

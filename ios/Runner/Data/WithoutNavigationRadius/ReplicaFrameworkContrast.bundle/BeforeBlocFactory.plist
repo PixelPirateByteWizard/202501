@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>accessibleRouterBrightness</key>
+	<string>streamByVariable</string>
+	<key>alertVisitorBorder</key>
+	<string>indicatorStateStatus</string>
+	<key>animatedcontainerMediatorOffset</key>
+	<string>observerAwayOperation</string>
+	<key>directlyFeatureBorder</key>
+	<string>cardBufferEdge</string>
+	<key>documentFunctionStyle</key>
+	<string>delegateVarRate</string>
+	<key>responsiveTimerBrightness</key>
+	<string>priorStreamVelocity</string>
+	<key>seamlessStateDelay</key>
+	<string>zoneUntilParameter</string>
+	<key>singleParticleContrast</key>
+	<string>advancedDelegateOrientation</string>
+</dict>
+</plist>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>aspectratioInFlyweight</key>
+	<string>menuAgainstVariable</string>
+	<key>diffableEffectShade</key>
+	<string>smallTransformerTheme</string>
+	<key>lossFunctionOrientation</key>
+	<string>descriptionStrategyStyle</string>
+	<key>menuTaskBrightness</key>
+	<string>resultMediatorShade</string>
+	<key>missedAppbarCenter</key>
+	<string>smallResponseBorder</string>
+	<key>missedFactoryLeft</key>
+	<string>requestStrategyShape</string>
+	<key>stateChainFeedback</key>
+	<string>shaderShapeInset</string>
+	<key>stateScopeDuration</key>
+	<string>sortedFutureForce</string>
+	<key>toolProxyBottom</key>
+	<string>handlerInsideParameter</string>
+</dict>
+</plist>

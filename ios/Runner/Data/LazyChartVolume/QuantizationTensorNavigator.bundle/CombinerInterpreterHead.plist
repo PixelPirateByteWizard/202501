@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>callbackVarName</key>
+	<string>scaffoldCycleInset</string>
+	<key>commandTierDirection</key>
+	<string>pinchableClipperAppearance</string>
+	<key>cursorProxyScale</key>
+	<string>hardTaskForce</string>
+	<key>remainderAroundSystem</key>
+	<string>responsiveRectShape</string>
+	<key>sharedRectLeft</key>
+	<string>sceneTierVelocity</string>
+	<key>skirtUntilFramework</key>
+	<string>projectionProcessVelocity</string>
+	<key>streamBeyondBuffer</key>
+	<string>textFormTail</string>
+	<key>visibleNavigatorState</key>
+	<string>responsiveTickerContrast</string>
+</dict>
+</plist>

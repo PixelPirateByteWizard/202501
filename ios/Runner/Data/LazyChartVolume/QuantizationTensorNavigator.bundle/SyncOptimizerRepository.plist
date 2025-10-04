@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>capsuleAroundObserver</key>
+	<string>coordinatorWithShape</string>
+	<key>completionBufferSpacing</key>
+	<string>criticalGrainVelocity</string>
+	<key>pointMethodVisible</key>
+	<string>tappablePositionCenter</string>
+	<key>scrollableOperationStyle</key>
+	<string>touchWithScope</string>
+	<key>statelessRichtextSpacing</key>
+	<string>tensorConsumerShade</string>
+</dict>
+</plist>

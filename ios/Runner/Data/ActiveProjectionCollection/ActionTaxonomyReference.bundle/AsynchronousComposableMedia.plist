@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>commandAdapterVisible</key>
+	<string>dialogsStageAppearance</string>
+	<key>draggableBlocBrightness</key>
+	<string>buttonFromOperation</string>
+	<key>greatSkirtSkewy</key>
+	<string>sizeStrategyColor</string>
+	<key>immediateAnimationRotation</key>
+	<string>progressbarStageFlags</string>
+	<key>matrixTaskRate</key>
+	<string>cacheActionMode</string>
+	<key>reactiveNotifierRotation</key>
+	<string>presenterOrAdapter</string>
+	<key>timerExceptDecorator</key>
+	<string>missedSizeType</string>
+	<key>unaryOrTemple</key>
+	<string>largeReducerDelay</string>
+</dict>
+</plist>
