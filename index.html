@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clockwork Legacy - 整合版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap');
+        
+        :root {
+            --bg-deep-navy: #0A192F;
+            --bg-slate-blue: #172A46;
+            --text-vintage-gold: #D4AF37;
+            --text-lavender-white: #E6E6FA;
+            --accent-rose-red: #E85D75;
+            --glass-bg: rgba(23, 42, 70, 0.6);
+            --glass-border: rgba(212, 175, 55, 0.2);
+        }
+        
+        body {
+            font-family: 'Source Code Pro', monospace;
+            background: var(--bg-deep-navy);
+            color: var(--text-lavender-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .font-title { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Source Code Pro', monospace; }
+        
+        .iphone-frame {
+            width: 390px;
+            height: 844px;
+            background: linear-gradient(135deg, var(--bg-deep-navy) 0%, var(--bg-slate-blue) 100%);
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+            border: 4px solid var(--bg-slate-blue);
+        }
+        
+        .status-bar {
+            height: 44px;
+            background-color: rgba(23, 42, 70, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .app-content {
+            height: calc(100% - 44px);
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: var(--text-vintage-gold);
+            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
+        }
+        
+        .main-button {
+            background: linear-gradient(135deg, var(--text-vintage-gold) 0%, #B8860B 100%);
+            color: var(--bg-deep-navy);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .main-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+        }
+        
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .feature-card:hover::before {
+            left: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--text-vintage-gold);
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.2);
+        }
+        
+        .resource-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(23, 42, 70, 0.8);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        
+        .resource-item:hover {
+            border-color: var(--text-vintage-gold);
+            transform: scale(1.05);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+        
+        .status-optimal { background-color: #10B981; box-shadow: 0 0 6px #10B981; }
+        .status-warning { background-color: #F59E0B; box-shadow: 0 0 6px #F59E0B; }
+        .status-error { background-color: #EF4444; box-shadow: 0 0 6px #EF4444; }
+        
+        .workstation-card {
+            min-width: 160px;
+            background: linear-gradient(135deg, var(--bg-slate-blue) 0%, #1E3A5F 100%);
+            border-radius: 12px;
+            padding: 12px;
+            margin-right: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .workstation-card:hover {
+            border-color: var(--text-vintage-gold);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-rotate { animation: rotate 4s linear infinite; }
+        .animate-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        .hidden { display: none !important; }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(23, 42, 70, 0.5);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-vintage-gold);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8860B;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-frame">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div>9:41</div>
+            <div class="flex space-x-1">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="app-content">
+            <!-- 启动画面 -->
+            <div id="launch-screen" class="screen h-full flex flex-col items-center justify-center relative" style="background: linear-gradient(135deg, var(--bg-deep-navy) 0%, var(--bg-slate-blue) 100%);">
+                <div class="relative mb-8">
+                    <div class="w-32 h-32 border-4 border-yellow-600 rounded-full animate-rotate" style="border-color: var(--text-vintage-gold);">
+                        <div class="absolute inset-4 border-2 border-yellow-500 rounded-full opacity-70" style="border-color: var(--text-vintage-gold);">
+                            <div class="absolute inset-4 border border-yellow-400 rounded-full opacity-50" style="border-color: var(--text-vintage-gold);"></div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-cog text-4xl animate-rotate" style="color: var(--text-vintage-gold); animation-duration: 8s;"></i>
+                    </div>
+                </div>
+                <h1 class="text-3xl font-title font-bold mb-2" style="color: var(--text-vintage-gold);">Clockwork Legacy</h1>
+                <p class="text-sm opacity-80 mb-8">"每一个齿轮都诉说着故事"</p>
+                <button onclick="showMainMenu()" class="main-button">
+                    <i class="fas fa-play"></i> 开始游戏
+                </button>
+                <div class="absolute bottom-8">
+                    <div class="w-2 h-2 bg-yellow-600 rounded-full animate-pulse" style="background: var(--text-vintage-gold);"></div>
+                </div>
+            </div>
+            
+            <!-- 主菜单 -->
+            <div id="main-menu" class="screen hidden">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl font-title font-bold mb-2" style="color: var(--text-vintage-gold);">主菜单</h1>
+                    <p class="text-sm opacity-70">选择你的目的地</p>
+                </div>
+                
+                <!-- 工坊入口 -->
+                <div class="feature-card" onclick="showWorkshop()">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-industry text-xl" style="color: var(--text-vintage-gold);"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">机械工坊</h3>
+                                <p class="text-xs opacity-70">建造和升级工作站</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right opacity-50"></i>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 text-xs">
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">247</div>
+                            <div class="opacity-70">齿轮</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">89</div>
+                            <div class="opacity-70">能源</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">98%</div>
+                            <div class="opacity-70">效率</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold text-green-500">4</div>
+                            <div class="opacity-70">工作站</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 档案馆入口 -->
+                <div class="feature-card" onclick="showArchive()">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-xl" style="color: var(--text-vintage-gold);"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">秘密档案馆</h3>
+                                <p class="text-xs opacity-70">收集和分析线索</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right opacity-50"></i>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 text-xs">
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">12</div>
+                            <div class="opacity-70">线索</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold text-red-500">3</div>
+                            <div class="opacity-70">新发现</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">68%</div>
+                            <div class="opacity-70">完成度</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">5</div>
+                            <div class="opacity-70">谜题</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 世界地图入口 -->
+                <div class="feature-card" onclick="showMap()">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-map text-xl" style="color: var(--text-vintage-gold);"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">世界探索</h3>
+                                <p class="text-xs opacity-70">派遣自动机探索未知</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right opacity-50"></i>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 text-xs">
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">3</div>
+                            <div class="opacity-70">探索中</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold text-green-500">2</div>
+                            <div class="opacity-70">已完成</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">12</div>
+                            <div class="opacity-70">区域</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold" style="color: var(--text-vintage-gold);">85%</div>
+                            <div class="opacity-70">成功率</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 快速操作 -->
+                <div class="grid grid-cols-3 gap-3 mt-6">
+                    <button onclick="showQuickCraft()" class="glass-card text-center p-3">
+                        <i class="fas fa-hammer text-lg mb-1" style="color: var(--text-vintage-gold);"></i>
+                        <div class="text-xs">快速制造</div>
+                    </button>
+                    <button onclick="showTruthTable()" class="glass-card text-center p-3">
+                        <i class="fas fa-compass text-lg mb-1" style="color: var(--text-vintage-gold);"></i>
+                        <div class="text-xs">真理之桌</div>
+                    </button>
+                    <button onclick="showProfile()" class="glass-card text-center p-3">
+                        <i class="fas fa-user text-lg mb-1" style="color: var(--text-vintage-gold);"></i>
+                        <div class="text-xs">个人档案</div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 工坊界面 -->
+            <div id="workshop-screen" class="screen hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <button onclick="showMainMenu()" class="text-sm opacity-70 hover:opacity-100">
+                        <i class="fas fa-arrow-left mr-2"></i>返回
+                    </button>
+                    <h2 class="text-xl font-title font-bold" style="color: var(--text-vintage-gold);">机械工坊</h2>
+                    <div class="w-8"></div>
+                </div>
+                
+                <!-- 资源栏 -->
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-4 gap-3">
+                        <div class="resource-item">
+                            <div class="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-cog text-sm" style="color: var(--bg-deep-navy);"></i>
+                            </div>
+                            <div class="text-xs">黄铜锭</div>
+                            <div class="text-xs font-bold" style="color: var(--text-vintage-gold);">1.2k</div>
+                        </div>
+                        <div class="resource-item">
+                            <div class="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-hourglass text-sm" style="color: var(--bg-deep-navy);"></i>
+                            </div>
+                            <div class="text-xs">石英砂</div>
+                            <div class="text-xs font-bold" style="color: var(--text-vintage-gold);">855</div>
+                        </div>
+                        <div class="resource-item">
+                            <div class="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-leaf text-sm" style="color: var(--bg-deep-navy);"></i>
+                            </div>
+                            <div class="text-xs">生橡胶</div>
+                            <div class="text-xs font-bold" style="color: var(--text-vintage-gold);">340</div>
+                        </div>
+                        <div class="resource-item">
+                            <div class="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-star text-sm" style="color: var(--bg-deep-navy);"></i>
+                            </div>
+                            <div class="text-xs">星尘</div>
+                            <div class="text-xs font-bold" style="color: var(--text-vintage-gold);">12</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生产线 -->
+                <div class="glass-card mb-4">
+                    <h3 class="text-lg font-title mb-3" style="color: var(--text-vintage-gold);">生产线</h3>
+                    <div class="flex overflow-x-auto pb-2" style="scrollbar-width: thin;">
+                        <div class="flex gap-4">
+                            <div class="workstation-card">
+                                <div class="status-indicator status-optimal"></div>
+                                <div class="workstation-title">1级熔炉</div>
+                                <div class="text-center my-3">
+                                    <i class="fas fa-fire text-2xl text-orange-500 animate-rotate"></i>
+                                </div>
+                                <div class="text-xs text-center mb-2">输入: 矿石</div>
+                                <div class="text-xs text-center font-bold" style="color: var(--text-vintage-gold);">产出: 锭</div>
+                                <div class="grid grid-cols-2 gap-1 mt-3">
+                                    <div class="w-full h-6 bg-deep-navy rounded flex items-center justify-center">
+                                        <i class="fas fa-tachometer-alt text-xs"></i>
+                                    </div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="workstation-card">
+                                <div class="status-indicator status-optimal"></div>
+                                <div class="workstation-title">齿轮切割机</div>
+                                <div class="text-center my-3">
+                                    <i class="fas fa-gear text-2xl text-gray-400 animate-rotate" style="animation-duration: 5s;"></i>
+                                </div>
+                                <div class="text-xs text-center mb-2">输入: 锭</div>
+                                <div class="text-xs text-center font-bold" style="color: var(--text-vintage-gold);">产出: 齿轮</div>
+                                <div class="grid grid-cols-2 gap-1 mt-3">
+                                    <div class="w-full h-6 bg-deep-navy rounded flex items-center justify-center">
+                                        <i class="fas fa-bolt text-xs"></i>
+                                    </div>
+                                    <div class="w-full h-6 bg-deep-navy rounded flex items-center justify-center">
+                                        <i class="fas fa-shield-alt text-xs"></i>
+                                    </div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="workstation-card border-red-500 animate-pulse">
+                                <div class="status-indicator status-error"></div>
+                                <div class="workstation-title text-red-500">蒸汽核心</div>
+                                <div class="text-center my-3">
+                                    <i class="fas fa-exclamation-triangle text-xl text-red-500"></i>
+                                </div>
+                                <div class="text-xs text-center mb-2">输入: 齿轮+杆</div>
+                                <div class="text-xs text-center font-bold text-red-500">原料不足</div>
+                                <div class="grid grid-cols-2 gap-1 mt-3">
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                    <div class="w-full h-6 bg-deep-navy rounded"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="workstation-card border-dashed border-gray-500 flex items-center justify-center">
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-plus text-3xl mb-2"></i>
+                                    <div class="text-xs">建造新站</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 工坊核心 -->
+                <div class="glass-card">
+                    <h3 class="text-lg font-title mb-3" style="color: var(--text-vintage-gold);">工坊核心</h3>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm">效率</div>
+                        <div class="text-sm font-bold" style="color: var(--text-vintage-gold);">78%</div>
+                    </div>
+                    <div class="w-full bg-slate-blue rounded-full h-2.5 mb-4 relative overflow-hidden">
+                        <div class="bg-yellow-600 h-2.5 rounded-full animate-shimmer" style="width: 78%; background: var(--text-vintage-gold);"></div>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm">能源输出</div>
+                        <div class="text-sm font-bold" style="color: var(--accent-rose-red);">42/50 MW</div>
+                    </div>
+                    <div class="w-full bg-slate-blue rounded-full h-2.5 relative overflow-hidden">
+                        <div class="bg-red-500 h-2.5 rounded-full animate-shimmer" style="width: 84%; background: var(--accent-rose-red);"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 其他界面可以通过类似方式实现 -->
+            <!-- 为了简洁，这里只展示工坊界面作为示例 -->
+        </div>
+    </div>
+
+    <script>
+        // 界面切换函数
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+        
+        function showMainMenu() {
+            showScreen('main-menu');
+        }
+        
+        function showWorkshop() {
+            showScreen('workshop-screen');
+        }
+        
+        function showArchive() {
+            // 实现档案馆界面
+            alert('档案馆功能开发中...');
+        }
+        
+        function showMap() {
+            // 实现地图界面
+            alert('地图功能开发中...');
+        }
+        
+        function showQuickCraft() {
+            alert('快速制造功能开发中...');
+        }
+        
+        function showTruthTable() {
+            alert('真理之桌功能开发中...');
+        }
+        
+        function showProfile() {
+            alert('个人档案功能开发中...');
+        }
+        
+        // 添加工作站点击交互
+        document.querySelectorAll('.workstation-card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (!this.querySelector('.fa-exclamation-triangle')) {
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            });
+        });
+        
+        // 添加资源项点击效果
+        document.querySelectorAll('.resource-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.05)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
