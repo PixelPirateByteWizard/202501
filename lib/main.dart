@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/launch_screen.dart';
 import 'theme/app_theme.dart';
+import 'screens/onboarding_screen.dart';
 
 void main() {
   runApp(const ClockworkLegacyApp());
@@ -20,7 +20,7 @@ class ClockworkLegacyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Clockwork Legacy',
       theme: AppTheme.darkTheme,
-      home: const LaunchScreen(),
+      home: const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
